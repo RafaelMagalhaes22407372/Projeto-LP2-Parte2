@@ -1,6 +1,14 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class GameManager {
+    ArrayList<Jogador> jogadores = new ArrayList<>();
+
+
+    public GameManager() {
+    }
 
     /* public boolean createInitialBoard(String[][] playerInfo, int worldSize) {}
 
