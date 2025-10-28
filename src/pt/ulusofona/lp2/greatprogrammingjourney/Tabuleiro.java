@@ -18,8 +18,11 @@ public class Tabuleiro {
         // ArrayListq que guarda os ids dos jogadores para depois verificar se há repetidos
         ArrayList<Integer> idsJogadores = new ArrayList<>();
 
-        // Ve se há numeros maiores que 2 ou 4
+        // Adiciona os IDs a um ArrayList para saber o tamanho de player's
         for (int i = 0; i < playerInfo.length; i++) {
+            if (playerInfo[i][0] == null) {
+                return false;
+            }
             int id = Integer.parseInt(playerInfo[i][0]);
             idsJogadores.add(id);
         }
@@ -59,6 +62,9 @@ public class Tabuleiro {
 
         // Percorre o playerInfo para ir buscar a informação das cores
         for (int i = 0; i < playerInfo.length; i++) {
+            if (playerInfo[i][3] == null) {
+                return false;
+            }
             String corJogador = playerInfo[i][3];
             boolean corValida = false;
 
