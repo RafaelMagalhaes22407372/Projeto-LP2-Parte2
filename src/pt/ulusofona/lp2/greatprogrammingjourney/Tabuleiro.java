@@ -31,7 +31,7 @@ public class Tabuleiro {
         // Ve se há numeros repetidos
         for (int i = 0; i < idsJogadores.size(); i++) {
             int num = idsJogadores.get(i);
-            for (int j = 1; j < idsJogadores.size(); j++) {
+            for (int j = i + 1; j < idsJogadores.size(); j++) {
                 if (num == idsJogadores.get(j)) {
                     return false;
                 }
@@ -59,12 +59,12 @@ public class Tabuleiro {
 
         // Percorre o playerInfo para ir buscar a informação das cores
         for (int i = 0; i < playerInfo.length; i++) {
-            String corJogador = playerInfo[i][2];
+            String corJogador = playerInfo[i][1];
             boolean corValida = false;
 
             // Faz a comparação das cores com o player
             for (int j = 0; j < coresDisponiveis.length; j++) {
-                if (playerInfo[i][2].equals(coresDisponiveis[j])) {
+                if (corJogador.equals(coresDisponiveis[j])) {
                     corValida = true;
                 }
             }

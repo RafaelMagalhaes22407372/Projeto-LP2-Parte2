@@ -2,6 +2,9 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class TestGameManager {
     @Test
     public void testGetProgrammerInfo(){
@@ -13,4 +16,23 @@ public class TestGameManager {
         jogadores[1] = jogador2;
         manager.getProgrammerInfo(1);
     }
+
+
+
+    @Test
+    public void testCreateTable() {
+        GameManager manager = new GameManager();
+
+        String[][] jogadores = new String[2][5];
+        String[] jogador =  {"1", "Blue", "bruh", "java", "1"};
+        String[] jogador2 =  {"2", "Purple", "bruh2", "java", "1"};
+        jogadores[0] =  jogador;
+        jogadores[1] = jogador2;
+
+        Tabuleiro tabuleiro = new Tabuleiro(jogadores);
+
+
+        assertTrue(manager.createInitialBoard(jogadores, 6));
+    }
+
 }
