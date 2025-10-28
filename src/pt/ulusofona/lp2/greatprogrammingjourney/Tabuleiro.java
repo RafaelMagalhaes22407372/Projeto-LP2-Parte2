@@ -36,10 +36,11 @@ public class Tabuleiro {
     }
 
     boolean verificaNomesValidos(String[][] playerInfo) {
-
         for (int i = 0; i < playerInfo.length; i++) {
-            int id = Integer.parseInt(playerInfo[i][0]);
-
+            if (playerInfo[i][1] == null || playerInfo[i][1].trim().isEmpty()) {
+                return false;
+            }
         }
+        return true;
     }
 }
