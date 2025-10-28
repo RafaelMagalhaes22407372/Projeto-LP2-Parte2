@@ -6,14 +6,24 @@ public class Jogador {
     int id;
     String corAvatar;
     String nome;
-    ArrayList<String> linguagensFavoritas;
+    String linguagensFavoritas;
     String posicaoAtual;
     Boolean estaEmJogo;
 
-    public Jogador(int id, String corAvatar) {
+    public Jogador(int id, String nome, String linguagensFavoritas, String corAvatar) {
         this.id = id;
+        this.nome = nome;
+        this.linguagensFavoritas = linguagensFavoritas;
         this.corAvatar = corAvatar;
     }
+
+
+    String formatarJogador() {
+        return id + " | " + nome + " | " + posicaoAtual + " | " + linguagensFavoritas + " | " + estaEmJogo;
+    }
+
+
+
 
     int getId(){
         return id;
@@ -30,4 +40,5 @@ public class Jogador {
     String getPosicaoAtual(){
         return posicaoAtual;
     }
+
 }
