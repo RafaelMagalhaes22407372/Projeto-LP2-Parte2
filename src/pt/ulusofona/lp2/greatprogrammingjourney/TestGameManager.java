@@ -32,7 +32,7 @@ public class TestGameManager {
         Tabuleiro tabuleiro = new Tabuleiro(jogadores);
 
 
-        assertTrue(manager.createInitialBoard(jogadores, 6));
+        assertTrue(manager.createInitialBoard(jogadores, 4));
     }
 
 }

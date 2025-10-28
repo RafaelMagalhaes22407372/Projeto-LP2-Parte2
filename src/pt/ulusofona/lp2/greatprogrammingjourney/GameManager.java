@@ -13,7 +13,7 @@ public class GameManager {
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo);
-        return (worldSize >= playerInfo.length) && tabuleiro.verificarCores(playerInfo) && tabuleiro.verificarNomesValidos(playerInfo) && tabuleiro.verificarIdsValidosERepetidos(playerInfo);
+        return (worldSize >= playerInfo.length * 2) && tabuleiro.verificarCores(playerInfo) && tabuleiro.verificarNomesValidos(playerInfo) && tabuleiro.verificarIdsValidosERepetidos(playerInfo);
     }
 
     public String getImagePng(int nrSquare) {
