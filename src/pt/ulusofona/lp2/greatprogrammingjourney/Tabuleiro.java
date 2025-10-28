@@ -2,6 +2,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Tabuleiro {
 
@@ -9,7 +10,11 @@ public class Tabuleiro {
     String[][] jogadores;
 
 
-    boolean verificaIdsValidosERepetidos(String[][] playerInfo) {
+    public Tabuleiro(String[][] jogadores) {
+        this.jogadores = jogadores;
+    }
+
+    boolean verificarIdsValidosERepetidos(String[][] playerInfo) {
         // ArrayListq que guarda os ids dos jogadores para depois verificar se há repetidos
         ArrayList<Integer> idsJogadores = new ArrayList<>();
 
@@ -35,7 +40,8 @@ public class Tabuleiro {
         return true;
     }
 
-    boolean verificaNomesValidos(String[][] playerInfo) {
+    boolean verificarNomesValidos(String[][] playerInfo) {
+        // Percorre o playerInfo e caso encontre algum nome invalido retorna false
         for (int i = 0; i < playerInfo.length; i++) {
             if (playerInfo[i][1] == null || playerInfo[i][1].trim().isEmpty()) {
                 return false;
@@ -43,4 +49,37 @@ public class Tabuleiro {
         }
         return true;
     }
+
+    boolean verificarCores(String[][] playerInfo) {
+        // Array das cores que são validas
+        String[] coresDisponiveis = {"Purple", "Green", "Brown", "Blue"};
+
+        // Guardas as cores para saber se há duplicados
+        HashSet<String> coresUsadas = new HashSet<>();
+
+        // Percorre o playerInfo para ir buscar a informação das cores
+        for (int i = 0; i < playerInfo.length; i++) {
+            String corJogador = playerInfo[i][2];
+            boolean corValida = false;
+
+            // Faz a comparação das cores com o player
+            for (int j = 0; j < coresDisponiveis.length; j++) {
+                if (playerInfo[i][2].equals(coresDisponiveis[j])) {
+                    corValida = true;
+                }
+            }
+
+            // Caso a cor não exista, ou não seja valida
+            if (!corValida) {
+                return false;
+            }
+
+            // Verifica se a cor já está no HashSet
+            if (!coresUsadas.add(corJogador)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
