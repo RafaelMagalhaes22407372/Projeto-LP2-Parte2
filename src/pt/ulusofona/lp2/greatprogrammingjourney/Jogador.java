@@ -7,6 +7,7 @@ public class Jogador {
     int corAvatar;
     String nome;
     ArrayList<String> linguagensFavoritas;
+    String posicaoAtual;
     Boolean estaEmJogo;
 
     public Jogador(int id, int corAvatar) {
