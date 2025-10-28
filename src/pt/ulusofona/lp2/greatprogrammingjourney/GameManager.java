@@ -1,16 +1,15 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class GameManager {
+    String[][] jogadores = new String[6][4];
 
 
     public GameManager() {
     }
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
-
 
     }
 
