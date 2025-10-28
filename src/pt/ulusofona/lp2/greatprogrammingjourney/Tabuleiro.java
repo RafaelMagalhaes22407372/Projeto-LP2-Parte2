@@ -59,7 +59,7 @@ public class Tabuleiro {
 
         // Percorre o playerInfo para ir buscar a informação das cores
         for (int i = 0; i < playerInfo.length; i++) {
-            String corJogador = playerInfo[i][1];
+            String corJogador = playerInfo[i][3];
             boolean corValida = false;
 
             // Faz a comparação das cores com o player

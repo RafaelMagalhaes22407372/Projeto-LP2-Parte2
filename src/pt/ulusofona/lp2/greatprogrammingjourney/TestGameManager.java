@@ -24,8 +24,8 @@ public class TestGameManager {
         GameManager manager = new GameManager();
 
         String[][] jogadores = new String[2][5];
-        String[] jogador =  {"1", "Blue", "bruh", "java", "1"};
-        String[] jogador2 =  {"2", "Purple", "bruh2", "java", "1"};
+        String[] jogador =  {"1", "Pedro", "Java", "Blue"};
+        String[] jogador2 =  {"2", "Bruh2", "Java2", "Purple"};
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
 
