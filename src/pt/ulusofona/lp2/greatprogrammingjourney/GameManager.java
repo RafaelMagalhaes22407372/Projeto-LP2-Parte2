@@ -1,36 +1,55 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameManager {
-    ArrayList<Jogador> jogadores = new ArrayList<>();
+    String[][] jogadores = new String[6][4];
 
 
     public GameManager() {
     }
 
-    /* public boolean createInitialBoard(String[][] playerInfo, int worldSize) {}
+    public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
 
-    public String getImagePng(int nrSquare) {}
+    }
 
-    public String[] getProgrammerInfo(int id) {}
+    public String getImagePng(int nrSquare) {
 
-    public String getProgrammerInfoAsStr(int id) {}
+    }
 
-    public String[] getSlotInfo(int position) {}
+    public String[] getProgrammerInfo(int id) {
 
-    public int getCurrentPlayerID() {}
+    }
 
-    public boolean moveCurrentPlayer(int nrSpaces) {}
+    public String getProgrammerInfoAsStr(int id) {
 
-    public boolean gameIsOver() {}
+    }
 
-    public ArrayList<String> getGameResults() {}
+    public String[] getSlotInfo(int position) {
 
-    public JPanel getAuthorsPanel() {}
+    }
 
-    public HashMap<String, String> customizeBoard() {}
+    public int getCurrentPlayerID() {
 
-     */
+    }
+
+    public boolean moveCurrentPlayer(int nrSpaces) {
+
+    }
+
+    public boolean gameIsOver() {
+
+    }
+
+    public ArrayList<String> getGameResults() {
+
+    }
+
+    public JPanel getAuthorsPanel() {
+
+    }
+
+    public HashMap<String, String> customizeBoard() {
+
+    }
 }
