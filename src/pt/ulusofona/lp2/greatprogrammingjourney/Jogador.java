@@ -1,14 +1,15 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Jogador {
     int id;
     String corAvatar;
     String nome;
     String linguagensFavoritas;
-    String posicaoAtual;
-    Boolean estaEmJogo;
+    int posicaoAtual = 1;
+    String estaEmJogo = "Em Jogo";
 
     public Jogador(int id, String nome, String linguagensFavoritas, String corAvatar) {
         this.id = id;
@@ -19,6 +20,11 @@ public class Jogador {
 
 
     String formatarJogador() {
+        String[] linguagens = linguagensFavoritas.split(";");
+
+        Arrays.sort(linguagens);
+        linguagensFavoritas = String.join("; ", linguagens);
+
         return id + " | " + nome + " | " + posicaoAtual + " | " + linguagensFavoritas + " | " + estaEmJogo;
     }
 
@@ -37,7 +43,7 @@ public class Jogador {
         return nome;
     }
 
-    String getPosicaoAtual(){
+    int getPosicaoAtual(){
         return posicaoAtual;
     }
 
