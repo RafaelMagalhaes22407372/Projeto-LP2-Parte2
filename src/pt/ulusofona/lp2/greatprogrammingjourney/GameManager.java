@@ -31,6 +31,7 @@ public class GameManager {
                 return jogador; // devolve o jogador encontrado
             }
         }
+
         return null;
     }
 
