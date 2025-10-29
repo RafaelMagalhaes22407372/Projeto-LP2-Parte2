@@ -11,11 +11,12 @@ public class Jogador {
     int posicaoAtual = 1;
     String estaEmJogo = "Em Jogo";
 
+
     public Jogador(int id, String nome, String linguagensFavoritas, String corAvatar) {
         this.id = id;
         this.nome = nome;
         this.linguagensFavoritas = linguagensFavoritas;
-        this.corAvatar = corAvatar;
+        this.corAvatar = corAvatar; // 3
     }
 
 

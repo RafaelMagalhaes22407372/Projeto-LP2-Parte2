@@ -10,8 +10,9 @@ public class Tabuleiro {
     String[][] jogadores;
 
 
-    public Tabuleiro(String[][] jogadores) {
+    public Tabuleiro(String[][] jogadores, int boardSize) {
         this.jogadores = jogadores;
+        this.boardSize = boardSize;
     }
 
     boolean verificarIdsValidosERepetidos(String[][] playerInfo) {

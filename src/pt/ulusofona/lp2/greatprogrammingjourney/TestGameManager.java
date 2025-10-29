@@ -29,7 +29,7 @@ public class TestGameManager {
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
 
-        Tabuleiro tabuleiro = new Tabuleiro(jogadores);
+        Tabuleiro tabuleiro = new Tabuleiro(jogadores, 10);
 
 
         assertTrue(manager.createInitialBoard(jogadores, 4));

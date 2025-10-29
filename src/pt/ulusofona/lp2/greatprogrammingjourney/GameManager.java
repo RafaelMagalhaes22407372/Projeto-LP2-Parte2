@@ -8,15 +8,26 @@ public class GameManager {
     String[][] jogadores = new String[4][6];
     int turno = 1;
     int indiceJogadorAtual = -1;
-
+    int tamanhoFinalTabuleiro;
 
     public GameManager() {
     }
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
-        Tabuleiro tabuleiro = new Tabuleiro(playerInfo);
+        Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificarCores(playerInfo) && tabuleiro.verificarNomesValidos(playerInfo) && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
-            jogadores = playerInfo;
+            for (int i = 0; i < jogadores.length; i++) {
+                for (int j = 0; j < jogadores[i].length; j++) {
+                    jogadores[i][j] = playerInfo[i][j];
+                    if (j == 4) {
+                        jogadores[i][j] = "1";
+                    }
+                    if (j == 5) {
+                        jogadores[i][j] = "Em Jogo";
+                    }
+                }
+            }
+            tamanhoFinalTabuleiro = worldSize;
             return true;
         }
         return false;
@@ -98,6 +109,8 @@ public class GameManager {
     }
 
     public boolean gameIsOver() {
+        Tabuleiro tabuleiro = new Tabuleiro(jogadores, tamanhoFinalTabuleiro);
+
         return false;
     }
 
