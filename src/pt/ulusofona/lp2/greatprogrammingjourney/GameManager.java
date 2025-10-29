@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 public class GameManager {
     String[][] jogadores = new String[4][6];
+    int turno = 1;
+    int indiceJogadorAtual = -1;
 
 
     public GameManager() {
@@ -57,11 +59,42 @@ public class GameManager {
     }
 
     public int getCurrentPlayerID() {
-        return 0;
+        //Registar o menor id no inicio do jogo
+        int menorId = 0;
+
+        //Se estivermos no inicio do jogo (turno 1)
+        if (turno == 1) {
+            //Percorre os jogadores para saber o menor id
+            for (int i = 0; i < jogadores.length; i++) {
+                if (Integer.parseInt(jogadores[i][0]) > menorId) {
+                    menorId = Integer.parseInt(jogadores[i][0]);
+                    indiceJogadorAtual = i;
+                }
+            }
+            //Retorna o menor id no inicio do jogo
+            return menorId;
+        } else {
+            return Integer.parseInt(jogadores[indiceJogadorAtual][0]);
+        }
     }
 
     public boolean moveCurrentPlayer(int nrSpaces) {
-        return false;
+        int posição_destino = 0;
+        if (nrSpaces < 1 || nrSpaces > 6) {
+            return false;
+        }
+
+        if (indiceJogadorAtual == -1) {
+            getCurrentPlayerID();
+        } else {
+            indiceJogadorAtual++;
+            if (indiceJogadorAtual >= jogadores.length) {
+                indiceJogadorAtual = 0;
+            }
+        }
+
+        posição_destino = Integer.parseInt(jogadores[indiceJogadorAtual][4]) + nrSpaces;
+        return true;
     }
 
     public boolean gameIsOver() {
