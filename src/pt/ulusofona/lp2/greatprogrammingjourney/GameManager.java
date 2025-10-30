@@ -105,6 +105,7 @@ public class GameManager {
         }
 
         posição_destino = Integer.parseInt(jogadores[indiceJogadorAtual][4]) + nrSpaces;
+        jogadores[indiceJogadorAtual][4] = posição_destino + "";
         return true;
     }
 
