@@ -19,13 +19,9 @@ public class GameManager {
             for (int i = 0; i < playerInfo.length; i++) {
                 for (int j = 0; j < playerInfo[i].length; j++) {
                     jogadores[i][j] = playerInfo[i][j];
-                    if (j == 4) {
-                        jogadores[i][j] = "1";
-                    }
-                    if (j == 5) {
-                        jogadores[i][j] = "Em Jogo";
-                    }
                 }
+                jogadores[i][4] = "1";
+                jogadores[i][5] = "Em Jogo";
             }
             tamanhoFinalTabuleiro = worldSize;
             return true;
