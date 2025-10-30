@@ -12,8 +12,8 @@ public class TestGameManager {
     public void testGetProgrammerInfo(){
         GameManager manager = new GameManager();
         String[][] jogadores = new String[2][6];
-        String[] jogador =  {"1", "Blue", "Pedro", "java", "2", "saS"};
-        String[] jogador2 =  {"2", "Brown", "Da", "java"};
+        String[] jogador =  {"1", "Pedro", "Java", "Blue"};
+        String[] jogador2 =  {"2", "Bruh2", "Java2", "Purple"};
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
         Tabuleiro tabuleiro = new Tabuleiro(jogadores, 20);
@@ -39,6 +39,7 @@ public class TestGameManager {
 
         Tabuleiro tabuleiro = new Tabuleiro(jogadores, 10);
 
+        System.out.println(manager.createInitialBoard(jogadores, 20));
 
         assertTrue(manager.createInitialBoard(jogadores, 4));
     }

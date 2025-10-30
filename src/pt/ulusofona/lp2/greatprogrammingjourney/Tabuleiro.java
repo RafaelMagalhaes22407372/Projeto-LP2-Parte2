@@ -47,7 +47,7 @@ public class Tabuleiro {
     boolean verificarNomesValidos(String[][] playerInfo) {
         // Percorre o playerInfo e caso encontre algum nome invalido retorna false
         for (int i = 0; i < playerInfo.length; i++) {
-            if (playerInfo[i][2] == null || playerInfo[i][2].trim().isEmpty()) {
+            if (playerInfo[i][1] == null || playerInfo[i][1].trim().isEmpty()) {
                 return false;
             }
         }
@@ -63,10 +63,10 @@ public class Tabuleiro {
 
         // Percorre o playerInfo para ir buscar a informação das cores
         for (int i = 0; i < playerInfo.length; i++) {
-            if (playerInfo[i][1] == null) {
+            if (playerInfo[i][3] == null) {
                 return false;
             }
-            String corJogador = playerInfo[i][1];
+            String corJogador = playerInfo[i][3];
             boolean corValida = false;
 
             // Faz a comparação das cores com o player
