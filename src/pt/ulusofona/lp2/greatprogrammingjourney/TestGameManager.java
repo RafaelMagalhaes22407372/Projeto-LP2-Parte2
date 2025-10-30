@@ -12,13 +12,15 @@ public class TestGameManager {
     public void testGetProgrammerInfo(){
         GameManager manager = new GameManager();
         String[][] jogadores = new String[2][6];
-        String[] jogador =  {"1", "blue", "Pedro", "java"};
-        String[] jogador2 =  {"2", "blue", "bruh", "java"};
+        String[] jogador =  {"1", "Blue", "Pedro", "java"};
+        String[] jogador2 =  {"2", "Brown", "Da", "java"};
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
-        manager.createInitialBoard(jogadores, 20);
+        Tabuleiro tabuleiro = new Tabuleiro(jogadores, 20);
+
+        System.out.println(manager.createInitialBoard(jogadores, 20));
         manager.getProgrammerInfo(1);
-        System.out.println(Arrays.toString(manager.getProgrammerInfo(1)));
+        //System.out.println(Arrays.toString(manager.getProgrammerInfo(1)));
 
     }
 
