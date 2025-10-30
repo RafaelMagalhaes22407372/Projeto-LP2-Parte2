@@ -15,15 +15,16 @@ public class GameManager {
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
-        for (int i = 0; i < playerInfo.length; i++) {
-            for (int j = 0; j < playerInfo[i].length; j++) {
-                jogadores[i][j] = playerInfo[i][j];
-            }
-            jogadores[i][4] = "1";
-            jogadores[i][5] = "Em Jogo";
-        }
-        tamanhoFinalTabuleiro = worldSize;
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificarCores(playerInfo) && tabuleiro.verificarNomesValidos(playerInfo) && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
+            /* for (int i = 0; i < playerInfo.length; i++) {
+                for (int j = 0; j < playerInfo[i].length; j++) {
+                    jogadores[i][j] = playerInfo[i][j];
+                }
+                jogadores[i][4] = "1";
+                jogadores[i][5] = "Em Jogo";
+            } */
+            jogadores = playerInfo;
+            tamanhoFinalTabuleiro = worldSize;
             return true;
         }
         return false;

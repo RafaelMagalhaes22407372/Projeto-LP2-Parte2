@@ -12,7 +12,7 @@ public class TestGameManager {
     public void testGetProgrammerInfo(){
         GameManager manager = new GameManager();
         String[][] jogadores = new String[2][6];
-        String[] jogador =  {"1", "Blue", "Pedro", "java"};
+        String[] jogador =  {"1", "Blue", "Pedro", "java", "2", "saS"};
         String[] jogador2 =  {"2", "Brown", "Da", "java"};
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
@@ -20,6 +20,7 @@ public class TestGameManager {
 
         System.out.println(manager.createInitialBoard(jogadores, 20));
         manager.getProgrammerInfo(1);
+        System.out.println(jogadores[0][5]);
         //System.out.println(Arrays.toString(manager.getProgrammerInfo(1)));
 
     }
