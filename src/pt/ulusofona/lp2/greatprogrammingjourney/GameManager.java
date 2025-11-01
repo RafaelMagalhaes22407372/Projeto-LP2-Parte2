@@ -2,10 +2,10 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class GameManager {
-    String[][] jogadores = new String[4][6]; // Ter de mudar isto para o array de player e não ficar em string pois sendo que temos uma classe de jogadores fazemos um array de player's
     Jogador[] players = new Jogador[4];
     int turno = 1;
     int indiceJogadorAtual = -1;
@@ -16,8 +16,11 @@ public class GameManager {
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
-        if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificarCores(playerInfo) && tabuleiro.verificarNomesValidos(playerInfo) && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
-            jogadores = playerInfo;
+        if ((worldSize >= playerInfo.length * 2)
+                && tabuleiro.verificarCores(playerInfo)
+                && tabuleiro.verificarNomesValidos(playerInfo)
+                && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
+            players = playerInfo;
             tamanhoFinalTabuleiro = worldSize;
             for (int i = 0; i < playerInfo.length; i++) {
                 int id = Integer.parseInt(playerInfo[i][0]);
@@ -60,51 +63,93 @@ public class GameManager {
     }
 
     public String[] getSlotInfo(int position) {
-        return new String[0];
+        String[] idNaPosicao = new String[1];
+        Boolean primeiroId = true;
+        String idsOrganizados = "";
+        if (position < 1 || position > tamanhoFinalTabuleiro) {
+            return null;
+        }
+
+        for (Jogador jogador : players) {
+            if (jogador.posicaoAtual == position) {
+                if (primeiroId) {
+                    idsOrganizados += "" + jogador;
+                    primeiroId = false;
+                } else {
+                    idsOrganizados += "," + jogador.id;
+                }
+            }
+        }
+
+        idNaPosicao[0] = idsOrganizados;
+        return idNaPosicao;
     }
 
     public int getCurrentPlayerID() {
-        //Se estivermos no inicio do jogo (turno 1)
-        if (turno == 1) {
-            //Registar o menor id no inicio do jogo
-            int menorId = players[0].getId();
-
-            //Percorre os jogadores para saber o menor id
-            for (int i = 1; i < players.length; i++) {
-                if (players[i] != null && players[i].getId() < menorId) {
-                    menorId = players[i].getId();
-                    indiceJogadorAtual = i;
-                }
-            }
-            turno = 2;
-            //Retorna o menor id no inicio do jogo
-            return menorId;
+        if (players == null || players.length == 0) {
+            return -1;
         }
-        return Integer.parseInt(jogadores[indiceJogadorAtual][0]);
+
+        // Criar um novo array com os mesmos jogadores
+        Jogador[] ordenados = new Jogador[players.length];
+        for (int i = 0; i < players.length; i++) {
+            ordenados[i] = players[i];
+        }
+
+        // Ordenar os jogadores por ID (ordem crescente)
+        java.util.Arrays.sort(ordenados, Comparator.comparingInt(Jogador::getId));
+
+        // começa com o menor ID
+        if (indiceJogadorAtual == -1) {
+            indiceJogadorAtual = 0;
+            return ordenados[0].getId();
+        }
+
+        // Passar ao próximo jogador (ordem circular)
+        indiceJogadorAtual++;
+        if (indiceJogadorAtual >= ordenados.length) {
+            indiceJogadorAtual = 0;
+        }
+
+        // Retornar o ID do jogador atual
+        return ordenados[indiceJogadorAtual].getId();
     }
 
+
     public boolean moveCurrentPlayer(int nrSpaces) {
-        int posição_destino = 0;
+        // Validação do número de casas
         if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
 
-        if (indiceJogadorAtual == -1) {
-            getCurrentPlayerID();
-        } else {
-            indiceJogadorAtual++;
-            if (indiceJogadorAtual >= jogadores.length) {
-                indiceJogadorAtual = 0;
+        // Obter o ID do jogador atual
+        int idAtual = getCurrentPlayerID();
+
+        // Encontrar o jogador correspondente ao ID atual
+        Jogador jogadorAtual = null;
+        for (Jogador jogador : players) {
+            if (jogador.getId() == idAtual) {
+                jogadorAtual = jogador;
+                break;
             }
         }
 
-        posição_destino = Integer.parseInt(jogadores[indiceJogadorAtual][4]) + nrSpaces;
-        jogadores[indiceJogadorAtual][4] = posição_destino + "";
+        if (jogadorAtual == null) {
+            return false;
+        }
+
+        // Mover o jogador
+        int novaPosicao = jogadorAtual.getPosicaoAtual() + nrSpaces;
+        jogadorAtual.setPosicaoAtual(novaPosicao);
+
+        turno++;
+
         return true;
     }
 
+
     public boolean gameIsOver() {
-        Tabuleiro tabuleiro = new Tabuleiro(jogadores, tamanhoFinalTabuleiro);
+        Tabuleiro tabuleiro = new Tabuleiro(players, tamanhoFinalTabuleiro);
 
         return false;
     }
