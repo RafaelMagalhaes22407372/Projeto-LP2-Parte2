@@ -1,6 +1,7 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -152,11 +153,62 @@ public class GameManager {
     }
 
     public ArrayList<String> getGameResults() {
-        return new ArrayList<>();
+        ArrayList<String> results = new ArrayList<>();
+        results.add("THE GREAT PROGRAMMING JOURNEY");
+        results.add("");
+        results.add(turno + "");
+        results.add("VENCEDOR");
+
+        String nomeVencedor = "";
+        for (Jogador jogador : players) {
+            if (jogador.getPosicaoAtual() == tamanhoFinalTabuleiro) {
+                nomeVencedor = jogador.getNome();
+            }
+        }
+        results.add(nomeVencedor);
+        results.add("");
+        results.add("RESTANTES");
+
+        int count = 0;
+        Jogador[] restantes = new Jogador[players.length];
+        for (Jogador jogador : players) {
+            if (jogador.getPosicaoAtual() == tamanhoFinalTabuleiro) {
+                continue;
+            }
+            restantes[count] = jogador;
+            count++;
+        }
+
+        java.util.Arrays.sort(restantes, Comparator.comparingInt(Jogador::getPosicaoAtual).reversed());
+
+        for (Jogador jogador : restantes) {
+            results.add(jogador.getNome() + " " + jogador.getPosicaoAtual());
+        }
+
+        return results;
     }
 
     public JPanel getAuthorsPanel() {
-        return new JPanel();
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(300, 300));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel titulo = new JLabel("CRÉDITOS", SwingConstants.CENTER);
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(titulo);
+
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        JLabel autor1 = new JLabel("Rafael Magalhães - a22407372");
+        JLabel autor2 = new JLabel("Diogo Alves - a22407372");
+
+        autor1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        autor2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(autor1);
+        panel.add(autor2);
+
+        return panel;
     }
 
     public HashMap<String, String> customizeBoard() {
