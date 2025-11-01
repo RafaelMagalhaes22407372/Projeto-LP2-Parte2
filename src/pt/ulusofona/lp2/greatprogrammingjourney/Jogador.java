@@ -44,6 +44,10 @@ public class Jogador {
         return nome;
     }
 
+    String getLinguagensFavoritas() {
+        return linguagensFavoritas;
+    }
+
     int getPosicaoAtual(){
         return posicaoAtual;
     }

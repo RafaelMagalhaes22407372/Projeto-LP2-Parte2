@@ -30,7 +30,6 @@ public class TestGameManager {
     @Test
     public void testCreateTable() {
         GameManager manager = new GameManager();
-
         String[][] jogadores = new String[2][5];
         String[] jogador =  {"1", "Pedro", "Java", "Blue"};
         String[] jogador2 =  {"2", "Bruh2", "Java2", "Purple"};
@@ -38,7 +37,6 @@ public class TestGameManager {
         jogadores[1] = jogador2;
 
         Tabuleiro tabuleiro = new Tabuleiro(jogadores, 10);
-
         System.out.println(manager.createInitialBoard(jogadores, 20));
 
         assertTrue(manager.createInitialBoard(jogadores, 4));

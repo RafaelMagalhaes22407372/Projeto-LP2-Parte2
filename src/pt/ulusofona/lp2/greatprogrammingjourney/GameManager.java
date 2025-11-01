@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameManager {
-    String[][] jogadores = new String[4][6];
+    String[][] jogadores = new String[4][6]; // Ter de mudar isto para o array de player e não ficar em string pois sendo que temos uma classe de jogadores fazemos um array de player's
+    Jogador[] players = new Jogador[4];
     int turno = 1;
     int indiceJogadorAtual = -1;
     int tamanhoFinalTabuleiro;
@@ -16,15 +17,16 @@ public class GameManager {
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificarCores(playerInfo) && tabuleiro.verificarNomesValidos(playerInfo) && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
-            /* for (int i = 0; i < playerInfo.length; i++) {
-                for (int j = 0; j < playerInfo[i].length; j++) {
-                    jogadores[i][j] = playerInfo[i][j];
-                }
-                jogadores[i][4] = "1";
-                jogadores[i][5] = "Em Jogo";
-            } */
             jogadores = playerInfo;
             tamanhoFinalTabuleiro = worldSize;
+            for (int i = 0; i < playerInfo.length; i++) {
+                int id = Integer.parseInt(playerInfo[i][0]);
+                String nome = playerInfo[i][1];
+                String linguagens = playerInfo[i][2];
+                String cor = playerInfo[i][3];
+
+                players[i] = new Jogador(id, nome, linguagens, cor);
+            }
             return true;
         }
         return false;
@@ -35,15 +37,14 @@ public class GameManager {
     }
 
     public String[] getProgrammerInfo(int id) {
-        String[] jogador = new String[6];
-
-        for (int i = 0; i < jogadores.length; i++) {
-            if (jogadores[i][0] != null && Integer.parseInt(jogadores[i][0]) == id) {
-                // Copia as informações do jogador encontrado
-                for (int j = 0; j < jogadores[i].length; j++) {
-                    jogador[j] = jogadores[i][j];
-                }
-                return jogador; // devolve o jogador encontrado
+        for (Jogador player : players) {
+            if (player != null && player.getId() == id) {
+                String[] info = new String[4];
+                info[0] = String.valueOf(player.getId());
+                info[1] = player.getNome();
+                info[2] = player.getLinguagensFavoritas();
+                info[3] = player.getCorAvatar();
+                return info;
             }
         }
         return null;
@@ -51,13 +52,11 @@ public class GameManager {
 
     public String getProgrammerInfoAsStr(int id) {
 
-        for (int i = 0; i < jogadores.length; i++) {
-            if (jogadores[i][0] != null && Integer.parseInt(jogadores[i][0]) == id) {
-                Jogador jogador = new Jogador(id, jogadores[i][1], jogadores[i][2], jogadores[i][3]);
-                return jogador.formatarJogador();
+        for (Jogador player : players) {
+            if (player != null && player.getId() == id) {
+                return player.formatarJogador();
             }
         }
-
         return null;
     }
 
