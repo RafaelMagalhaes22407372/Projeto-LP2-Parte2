@@ -16,20 +16,19 @@ public class GameManager {
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
+        for (int i = 0; i < playerInfo.length; i++) {
+            int id = Integer.parseInt(playerInfo[i][0]);
+            String nome = playerInfo[i][1];
+            String linguagens = playerInfo[i][2];
+            String cor = playerInfo[i][3];
+
+            players[i] = new Jogador(id, nome, linguagens, cor);
+        }
         if ((worldSize >= playerInfo.length * 2)
                 && tabuleiro.verificarCores(playerInfo)
                 && tabuleiro.verificarNomesValidos(playerInfo)
                 && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
-            players = playerInfo;
             tamanhoFinalTabuleiro = worldSize;
-            for (int i = 0; i < playerInfo.length; i++) {
-                int id = Integer.parseInt(playerInfo[i][0]);
-                String nome = playerInfo[i][1];
-                String linguagens = playerInfo[i][2];
-                String cor = playerInfo[i][3];
-
-                players[i] = new Jogador(id, nome, linguagens, cor);
-            }
             return true;
         }
         return false;
@@ -149,8 +148,6 @@ public class GameManager {
 
 
     public boolean gameIsOver() {
-        Tabuleiro tabuleiro = new Tabuleiro(players, tamanhoFinalTabuleiro);
-
         return false;
     }
 
