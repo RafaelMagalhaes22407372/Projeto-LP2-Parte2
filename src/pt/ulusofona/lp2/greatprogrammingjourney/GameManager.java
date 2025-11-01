@@ -51,7 +51,6 @@ public class GameManager {
     }
 
     public String getProgrammerInfoAsStr(int id) {
-
         for (Jogador player : players) {
             if (player != null && player.getId() == id) {
                 return player.formatarJogador();
@@ -65,23 +64,23 @@ public class GameManager {
     }
 
     public int getCurrentPlayerID() {
-        //Registar o menor id no inicio do jogo
-        int menorId = 0;
-
         //Se estivermos no inicio do jogo (turno 1)
         if (turno == 1) {
+            //Registar o menor id no inicio do jogo
+            int menorId = players[0].getId();
+
             //Percorre os jogadores para saber o menor id
-            for (int i = 0; i < jogadores.length; i++) {
-                if (Integer.parseInt(jogadores[i][0]) > menorId) {
-                    menorId = Integer.parseInt(jogadores[i][0]);
+            for (int i = 1; i < players.length; i++) {
+                if (players[i] != null && players[i].getId() < menorId) {
+                    menorId = players[i].getId();
                     indiceJogadorAtual = i;
                 }
             }
+            turno = 2;
             //Retorna o menor id no inicio do jogo
             return menorId;
-        } else {
-            return Integer.parseInt(jogadores[indiceJogadorAtual][0]);
         }
+        return Integer.parseInt(jogadores[indiceJogadorAtual][0]);
     }
 
     public boolean moveCurrentPlayer(int nrSpaces) {
