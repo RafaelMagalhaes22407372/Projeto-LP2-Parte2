@@ -36,7 +36,13 @@ public class GameManager {
     }
 
     public String getImagePng(int nrSquare) {
-        return "";
+        if (nrSquare > 1 && nrSquare < tamanhoFinalTabuleiro) {
+            return "blank.png";
+        }
+        if (nrSquare == tamanhoFinalTabuleiro) {
+            return "glory.png";
+        }
+        return null;
     }
 
     public String[] getProgrammerInfo(int id) {
@@ -64,7 +70,7 @@ public class GameManager {
 
     public String[] getSlotInfo(int position) {
         String[] idNaPosicao = new String[1];
-        Boolean primeiroId = true;
+        boolean primeiroId = true;
         String idsOrganizados = "";
         if (position < 1 || position > tamanhoFinalTabuleiro) {
             return null;
