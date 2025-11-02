@@ -16,38 +16,33 @@ public class Tabuleiro {
     }
 
     boolean verificarIdsValidosERepetidos(String[][] playerInfo) {
-        // Verifica quantidade válida de jogadores
-        if (playerInfo.length < 2 || playerInfo.length > 4) {
+        // ArrayListq que guarda os ids dos jogadores para depois verificar se há repetidos
+        ArrayList<Integer> idsJogadores = new ArrayList<>();
+
+        // Adiciona os IDs a um ArrayList para saber o tamanho de player's
+        for (int i = 0; i < playerInfo.length; i++) {
+            if (playerInfo[i][0] == null) {
+                return false;
+            }
+            int id = Integer.parseInt(playerInfo[i][0]);
+            idsJogadores.add(id);
+        }
+
+        if (idsJogadores.size() > 4 || idsJogadores.size() < 2) {
             return false;
         }
 
-        HashSet<Integer> idsUnicos = new HashSet<>();
-
-        for (String[] player : playerInfo) {
-            if (player[0] == null) {
-                return false;
-            }
-
-            int id;
-            try {
-                id = Integer.parseInt(player[0]);
-            } catch (NumberFormatException e) {
-                return false; // valor não numérico
-            }
-
-            if (id < 1) {
-                return false; // ID negativo ou zero
-            }
-
-            // Se não conseguir adicionar, é repetido
-            if (!idsUnicos.add(id)) {
-                return false;
+        // Ve se há numeros repetidos
+        for (int i = 0; i < idsJogadores.size(); i++) {
+            int num = idsJogadores.get(i);
+            for (int j = i + 1; j < idsJogadores.size(); j++) {
+                if (num == idsJogadores.get(j)) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
-
 
     boolean verificarNomesValidos(String[][] playerInfo) {
         // Percorre o playerInfo e caso encontre algum nome invalido retorna false
