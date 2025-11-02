@@ -22,6 +22,9 @@ public class Jogador {
 
     String formatarJogador() {
         String[] linguagens = linguagensFavoritas.split(";");
+        for (int i = 0; i < linguagens.length; i++) {
+            linguagens[i] = linguagens[i].trim();
+        }
 
         Arrays.sort(linguagens);
 

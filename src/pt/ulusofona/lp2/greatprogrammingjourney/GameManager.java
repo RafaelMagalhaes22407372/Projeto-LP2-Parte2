@@ -96,55 +96,46 @@ public class GameManager {
             return -1;
         }
 
-        // Copiar jogadores válidos
+        // construir lista apenas com jogadores não nulos
         ArrayList<Jogador> lista = new ArrayList<>();
         for (Jogador jogador : players) {
             lista.add(jogador);
         }
 
-        // Ordenar por ID
+        // ordenar por ID crescente
         lista.sort(Comparator.comparingInt(Jogador::getId));
 
-        // Se for o início do jogo começa com o menor ID
-        if (indiceJogadorAtual == -1) {
-            indiceJogadorAtual = 0;
-        } else {
-            // Avançar para o próximo jogador
-            indiceJogadorAtual++;
-
-            // Voltar ao início se passar o último
-            if (indiceJogadorAtual >= lista.size()) {
-                indiceJogadorAtual = 0;
-            }
+        // calcular índice baseado no turno
+        int ordIndex = turno - 1;
+        while (ordIndex >= lista.size()) {
+            ordIndex -= lista.size();
         }
 
-        // Jogador atual
-        Jogador atual = lista.get(indiceJogadorAtual);
-        int id = atual.getId();
-
-        // Atualizar o índice correspondente no ArrayList original
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i) != null && players.get(i).getId() == id) {
-                indiceJogadorAtual = i;
-            }
-        }
-
-        return id;
+        // devolver o ID correspondente
+        return lista.get(ordIndex).getId();
     }
 
 
 
+
     public boolean moveCurrentPlayer(int nrSpaces) {
+        // validação do número de casas
         if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
 
+        // obter o ID do jogador actual
         int idAtual = getCurrentPlayerID();
-        Jogador jogadorAtual = null;
+        if (idAtual == -1) return false;
 
-        for (Jogador jogador : players) {
-            if (jogador != null && jogador.getId() == idAtual) {
-                jogadorAtual = jogador;
+        // encontrar o jogador no ArrayList players
+        Jogador jogadorAtual = null;
+        int indiceOriginal = -1;
+        for (int i = 0; i < players.size(); i++) {
+            Jogador player = players.get(i);
+            if (player != null && player.getId() == idAtual) {
+                jogadorAtual = player;
+                indiceOriginal = i;
                 break;
             }
         }
@@ -153,11 +144,18 @@ public class GameManager {
             return false;
         }
 
-        jogadorAtual.setPosicaoAtual(jogadorAtual.getPosicaoAtual() + nrSpaces);
+        // mover o jogador
+        int novaPosicao = jogadorAtual.getPosicaoAtual() + nrSpaces;
+        jogadorAtual.setPosicaoAtual(novaPosicao);
+
+        indiceJogadorAtual = indiceOriginal;
+
+        // avançar o turno
         turno++;
 
         return true;
     }
+
 
 
 
