@@ -72,8 +72,8 @@ public class TestGameManager {
     public void testMoveCurrentPlayer() {
         GameManager gm = new GameManager();
         String[][] jogadores = new String[2][5];
-        String[] jogador = {"1", "Alice", "Java; C++", "vermelho"};
-        String[] jogador2 = {"2", "Bob", "Python; JS", "azul"};
+        String[] jogador = {"1", "Alice", "Java; C++", "Green"};
+        String[] jogador2 = {"2", "Bob", "Python; JS", "Blue"};
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
 
