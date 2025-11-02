@@ -174,6 +174,7 @@ public class GameManager {
         ArrayList<String> results = new ArrayList<>();
         results.add("THE GREAT PROGRAMMING JOURNEY");
         results.add("");
+        results.add("NR. DE TURNOS");
         results.add(turno + "");
         results.add("VENCEDOR");
 
