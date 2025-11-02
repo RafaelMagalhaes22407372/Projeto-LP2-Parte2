@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class GameManager {
-    ArrayList<Jogador> players = new ArrayList<>();
+    ArrayList<Jogador> players;
     int turno = 1;
     int tamanhoFinalTabuleiro;
 
@@ -15,6 +15,7 @@ public class GameManager {
     }
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
+        players = new ArrayList<>();
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
         if ((worldSize >= playerInfo.length * 2)
                 && tabuleiro.verificarCores(playerInfo)
