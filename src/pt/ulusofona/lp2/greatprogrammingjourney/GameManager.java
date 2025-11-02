@@ -176,6 +176,7 @@ public class GameManager {
         results.add("");
         results.add("NR. DE TURNOS");
         results.add(turno + "");
+        results.add("");
         results.add("VENCEDOR");
 
         String nomeVencedor = "";

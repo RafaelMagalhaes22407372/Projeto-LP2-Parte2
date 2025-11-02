@@ -2,27 +2,54 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestGameManager {
+
     @Test
-    public void testGetProgrammerInfo(){
-        GameManager manager = new GameManager();
-        String[][] jogadores = new String[2][6];
-        String[] jogador =  {"1", "Pedro", "Java", "Blue"};
-        String[] jogador2 =  {"2", "Bruh2", "Java2", "Purple"};
-        jogadores[0] =  jogador;
-        jogadores[1] = jogador2;
-        Tabuleiro tabuleiro = new Tabuleiro(jogadores, 20);
+    public void testGetGameResults_basicScenario() {
+        GameManager gm = new GameManager();
 
-        System.out.println(manager.createInitialBoard(jogadores, 20));
-        manager.getProgrammerInfo(1);
-        System.out.println(jogadores[0][5]);
-        //System.out.println(Arrays.toString(manager.getProgrammerInfo(1)));
+        gm.tamanhoFinalTabuleiro = 10;
+        gm.turno = 4;
 
+        Jogador p1 = new Jogador(1, "Bruninho", "Common Lisp; PHP", "red");
+        Jogador p2 = new Jogador(2, "Vencedor", "Java; Python", "blue");
+        Jogador p3 = new Jogador(3, "Player3", "Clojure; D", "green");
+
+        p1.setPosicaoAtual(2);
+        p2.setPosicaoAtual(10);
+        p3.setPosicaoAtual(5);
+
+        gm.players = new ArrayList<>();
+        gm.players.add(p1);
+        gm.players.add(p2);
+        gm.players.add(p3);
+
+        ArrayList<String> results = gm.getGameResults();
+
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("THE GREAT PROGRAMMING JOURNEY");
+        expected.add("");
+        expected.add("NR. DE TURNOS");
+        expected.add(gm.turno + "");
+        expected.add("");
+        expected.add("VENCEDOR");
+        expected.add("Vencedor");
+        expected.add("");
+        expected.add("RESTANTES");
+        expected.add("Player3 5");
+        expected.add("Bruninho 2");
+
+        assertEquals(expected.size(), results.size());
+
+        for (int i = 0; i < expected.size(); i++) {
+            assertEquals(expected.get(i), results.get(i));
+        }
     }
 
 
