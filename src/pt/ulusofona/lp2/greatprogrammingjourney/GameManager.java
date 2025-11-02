@@ -9,7 +9,6 @@ import java.util.HashMap;
 public class GameManager {
     ArrayList<Jogador> players = new ArrayList<>();
     int turno = 1;
-    int indiceJogadorAtual = -1;
     int tamanhoFinalTabuleiro;
 
     public GameManager() {
@@ -149,8 +148,6 @@ public class GameManager {
         // mover o jogador
         int novaPosicao = jogadorAtual.getPosicaoAtual() + nrSpaces;
         jogadorAtual.setPosicaoAtual(novaPosicao);
-
-        indiceJogadorAtual = indiceOriginal;
 
         // avançar o turno
         turno++;
