@@ -52,7 +52,7 @@ public class Jogador {
         return posicaoAtual;
     }
 
-    public void setPosicaoAtual(int novaPosicao) {
+    void setPosicaoAtual(int novaPosicao) {
         posicaoAtual = novaPosicao;
     }
 }

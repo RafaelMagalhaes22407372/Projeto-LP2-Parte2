@@ -155,6 +155,11 @@ public class GameManager {
 
 
     public boolean gameIsOver() {
+        for (Jogador player : players) {
+            if (player.posicaoAtual == tamanhoFinalTabuleiro) {
+                return true;
+            }
+        }
         return false;
     }
 
