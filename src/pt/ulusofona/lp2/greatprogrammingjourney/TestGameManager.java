@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGameManager {
 
@@ -67,6 +66,44 @@ public class TestGameManager {
         System.out.println(manager.createInitialBoard(jogadores, 20));
 
         assertTrue(manager.createInitialBoard(jogadores, 4));
+    }
+
+    @Test
+    public void testMoveCurrentPlayer() {
+        GameManager gm = new GameManager();
+        String[][] jogadores = new String[2][5];
+        String[] jogador = {"1", "Alice", "Java; C++", "vermelho"};
+        String[] jogador2 = {"2", "Bob", "Python; JS", "azul"};
+        jogadores[0] =  jogador;
+        jogadores[1] = jogador2;
+
+        boolean created = gm.createInitialBoard(jogadores, 20);
+        assertTrue(created);
+
+        int idInicial = gm.getCurrentPlayerID();
+        assertEquals(1, idInicial);
+
+        boolean moved = gm.moveCurrentPlayer(3);
+        assertTrue(moved);
+        assertEquals(2, gm.turno);
+
+        String[] infoAlice = gm.getProgrammerInfo(1);
+        assertNotNull(infoAlice);
+        Jogador j1 = gm.players.get(0);
+        assertEquals(3, j1.getPosicaoAtual());
+
+        int idAtual = gm.getCurrentPlayerID();
+        assertEquals(2, idAtual);
+
+        boolean invalid = gm.moveCurrentPlayer(0);
+        assertFalse(invalid);
+
+        boolean moved2 = gm.moveCurrentPlayer(6);
+        assertTrue(moved2);
+        Jogador j2 = gm.players.get(1);
+        assertEquals(6, j2.getPosicaoAtual());
+
+        assertEquals(3, gm.turno);
     }
 
 }
