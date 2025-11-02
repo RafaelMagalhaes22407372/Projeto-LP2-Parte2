@@ -71,23 +71,23 @@ public class GameManager {
     public String[] getSlotInfo(int position) {
         String[] idNaPosicao = new String[1];
         boolean primeiroId = true;
-        String idsOrganizados = "";
+        StringBuilder idsOrganizados = new StringBuilder();
         if (position < 1 || position > tamanhoFinalTabuleiro) {
             return null;
         }
 
         for (Jogador jogador : players) {
-            if (jogador.posicaoAtual == position) {
+            if (jogador.getPosicaoAtual() == position) {
                 if (primeiroId) {
-                    idsOrganizados += "" + jogador;
+                    idsOrganizados.append(jogador.getId());
                     primeiroId = false;
                 } else {
-                    idsOrganizados += "," + jogador.id;
+                    idsOrganizados.append(",").append(jogador.getId());
                 }
             }
         }
 
-        idNaPosicao[0] = idsOrganizados;
+        idNaPosicao[0] = idsOrganizados.toString();
         return idNaPosicao;
     }
 
