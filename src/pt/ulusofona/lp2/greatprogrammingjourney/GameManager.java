@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class GameManager {
     ArrayList<Jogador> players;
-    int turno = 1;
+    int turno;
     int tamanhoFinalTabuleiro;
 
     public GameManager() {
@@ -16,6 +16,8 @@ public class GameManager {
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         players = new ArrayList<>();
+        turno = 1;
+        tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
         if ((worldSize >= playerInfo.length * 2)
                 && tabuleiro.verificarCores(playerInfo)
@@ -29,7 +31,6 @@ public class GameManager {
 
                 players.add(new Jogador(id, nome, linguagens, cor));
             }
-            tamanhoFinalTabuleiro = worldSize;
             return true;
         }
         return false;
