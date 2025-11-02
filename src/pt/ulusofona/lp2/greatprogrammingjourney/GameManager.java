@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class GameManager {
-    Jogador[] players = new Jogador[4];
+    ArrayList<Jogador> players = new ArrayList<>();
     int turno = 1;
     int indiceJogadorAtual = -1;
     int tamanhoFinalTabuleiro;
@@ -27,7 +27,7 @@ public class GameManager {
                 String linguagens = playerInfo[i][2];
                 String cor = playerInfo[i][3];
 
-                players[i] = new Jogador(id, nome, linguagens, cor);
+                players.add(new Jogador(id, nome, linguagens, cor));
             }
             tamanhoFinalTabuleiro = worldSize;
             return true;
@@ -86,14 +86,14 @@ public class GameManager {
     }
 
     public int getCurrentPlayerID() {
-        if (players == null || players.length == 0) {
+        if (players == null || players.isEmpty()) {
             return -1;
         }
 
         // Criar um novo array com os mesmos jogadores
-        Jogador[] ordenados = new Jogador[players.length];
-        for (int i = 0; i < players.length; i++) {
-            ordenados[i] = players[i];
+        Jogador[] ordenados = new Jogador[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            ordenados[i] = players.get(i);
         }
 
         // Ordenar os jogadores por ID (ordem crescente)
@@ -170,7 +170,7 @@ public class GameManager {
         results.add("RESTANTES");
 
         int count = 0;
-        Jogador[] restantes = new Jogador[players.length];
+        Jogador[] restantes = new Jogador[players.size()];
         for (Jogador jogador : players) {
             if (jogador.getPosicaoAtual() == tamanhoFinalTabuleiro) {
                 continue;
