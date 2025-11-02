@@ -96,45 +96,54 @@ public class GameManager {
             return -1;
         }
 
-        // Criar um novo array com os mesmos jogadores
-        Jogador[] ordenados = new Jogador[players.size()];
-        for (int i = 0; i < players.size(); i++) {
-            ordenados[i] = players.get(i);
+        // Copiar jogadores válidos
+        ArrayList<Jogador> lista = new ArrayList<>();
+        for (Jogador jogador : players) {
+            lista.add(jogador);
         }
 
-        // Ordenar os jogadores por ID (ordem crescente)
-        java.util.Arrays.sort(ordenados, Comparator.comparingInt(Jogador::getId));
+        // Ordenar por ID
+        lista.sort(Comparator.comparingInt(Jogador::getId));
 
-        // começa com o menor ID
+        // Se for o início do jogo começa com o menor ID
         if (indiceJogadorAtual == -1) {
             indiceJogadorAtual = 0;
-            return ordenados[0].getId();
+        } else {
+            // Avançar para o próximo jogador
+            indiceJogadorAtual++;
+
+            // Voltar ao início se passar o último
+            if (indiceJogadorAtual >= lista.size()) {
+                indiceJogadorAtual = 0;
+            }
         }
 
-        // Passar ao próximo jogador (ordem circular)
-        indiceJogadorAtual++;
-        if (indiceJogadorAtual >= ordenados.length) {
-            indiceJogadorAtual = 0;
+        // Jogador atual
+        Jogador atual = lista.get(indiceJogadorAtual);
+        int id = atual.getId();
+
+        // Atualizar o índice correspondente no ArrayList original
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i) != null && players.get(i).getId() == id) {
+                indiceJogadorAtual = i;
+            }
         }
 
-        // Retornar o ID do jogador atual
-        return ordenados[indiceJogadorAtual].getId();
+        return id;
     }
 
 
+
     public boolean moveCurrentPlayer(int nrSpaces) {
-        // Validação do número de casas
         if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
 
-        // Obter o ID do jogador atual
         int idAtual = getCurrentPlayerID();
-
-        // Encontrar o jogador correspondente ao ID atual
         Jogador jogadorAtual = null;
+
         for (Jogador jogador : players) {
-            if (jogador.getId() == idAtual) {
+            if (jogador != null && jogador.getId() == idAtual) {
                 jogadorAtual = jogador;
                 break;
             }
@@ -144,14 +153,12 @@ public class GameManager {
             return false;
         }
 
-        // Mover o jogador
-        int novaPosicao = jogadorAtual.getPosicaoAtual() + nrSpaces;
-        jogadorAtual.setPosicaoAtual(novaPosicao);
-
+        jogadorAtual.setPosicaoAtual(jogadorAtual.getPosicaoAtual() + nrSpaces);
         turno++;
 
         return true;
     }
+
 
 
     public boolean gameIsOver() {

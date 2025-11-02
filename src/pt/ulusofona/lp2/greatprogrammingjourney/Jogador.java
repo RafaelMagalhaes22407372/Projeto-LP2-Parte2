@@ -24,6 +24,7 @@ public class Jogador {
         String[] linguagens = linguagensFavoritas.split(";");
 
         Arrays.sort(linguagens);
+
         linguagensFavoritas = String.join("; ", linguagens);
 
         return id + " | " + nome + " | " + posicaoAtual + " | " + linguagensFavoritas + " | " + estaEmJogo;
