@@ -126,7 +126,9 @@ public class GameManager {
 
         // obter o ID do jogador actual
         int idAtual = getCurrentPlayerID();
-        if (idAtual == -1) return false;
+        if (idAtual == -1) {
+            return false;
+        }
 
         // encontrar o jogador no ArrayList players
         Jogador jogadorAtual = null;
@@ -177,7 +179,7 @@ public class GameManager {
 
         String nomeVencedor = "";
         for (Jogador jogador : players) {
-            if (jogador.getPosicaoAtual() == tamanhoFinalTabuleiro) {
+            if (jogador != null && jogador.getPosicaoAtual() == tamanhoFinalTabuleiro) {
                 nomeVencedor = jogador.getNome();
             }
         }
@@ -185,17 +187,15 @@ public class GameManager {
         results.add("");
         results.add("RESTANTES");
 
-        int count = 0;
-        Jogador[] restantes = new Jogador[players.size()];
+        ArrayList<Jogador> restantes = new ArrayList<>();
         for (Jogador jogador : players) {
             if (jogador.getPosicaoAtual() == tamanhoFinalTabuleiro) {
                 continue;
             }
-            restantes[count] = jogador;
-            count++;
+            restantes.add(jogador);
         }
 
-        java.util.Arrays.sort(restantes, Comparator.comparingInt(Jogador::getPosicaoAtual).reversed());
+        restantes.sort(Comparator.comparingInt(Jogador::getPosicaoAtual).reversed());
 
         for (Jogador jogador : restantes) {
             results.add(jogador.getNome() + " " + jogador.getPosicaoAtual());
