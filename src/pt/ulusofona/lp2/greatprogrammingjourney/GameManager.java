@@ -2,6 +2,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -36,6 +37,10 @@ public class GameManager {
         return false;
     }
 
+    public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
+        return false;
+    }
+
     public String getImagePng(int nrSquare) {
         if (nrSquare > 1 && nrSquare < tamanhoFinalTabuleiro) {
             return "blank.png";
@@ -67,6 +72,10 @@ public class GameManager {
             }
         }
         return null;
+    }
+
+    public String getProgrammersInfo() {
+        return "";
     }
 
     public String[] getSlotInfo(int position) {
@@ -157,8 +166,9 @@ public class GameManager {
         return true;
     }
 
-
-
+    public String reactToAbyssOrTool() {
+        return "";
+    }
 
     public boolean gameIsOver() {
         for (Jogador player : players) {
@@ -203,6 +213,14 @@ public class GameManager {
         }
 
         return results;
+    }
+
+    public void loadGame(File file) throws InvalidFileException, FileNotFoundException {
+
+    }
+
+    public boolean saveGame(File file) {
+        return false;
     }
 
     public JPanel getAuthorsPanel() {
