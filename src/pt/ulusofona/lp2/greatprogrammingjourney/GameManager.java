@@ -37,9 +37,6 @@ public class GameManager {
     }
 
     public String getImagePng(int nrSquare) {
-        if (nrSquare > 1 && nrSquare < tamanhoFinalTabuleiro) {
-            return "blank.png";
-        }
         if (nrSquare == tamanhoFinalTabuleiro) {
             return "glory.png";
         }
@@ -148,8 +145,13 @@ public class GameManager {
         }
 
         // mover o jogador
-        int novaPosicao = jogadorAtual.getPosicaoAtual() + nrSpaces;
-        jogadorAtual.setPosicaoAtual(novaPosicao);
+        int posTentativa = jogadorAtual.getPosicaoAtual() + nrSpaces;
+
+        if (posTentativa > tamanhoFinalTabuleiro) {
+            int excesso = posTentativa - tamanhoFinalTabuleiro;
+            posTentativa = tamanhoFinalTabuleiro - excesso; // volta para trás
+        }
+        jogadorAtual.setPosicaoAtual(posTentativa);
 
         // avançar o turno
         turno++;
