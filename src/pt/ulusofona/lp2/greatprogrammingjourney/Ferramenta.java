@@ -1,4 +1,4 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
-public class CasaFerramenta {
+public class Ferramenta {
 }

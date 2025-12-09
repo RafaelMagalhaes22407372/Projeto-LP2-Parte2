@@ -10,6 +10,8 @@ public class Jogador {
     String linguagensFavoritas;
     int posicaoAtual = 1;
     String estaEmJogo = "Em Jogo";
+    Boolean isAlive = true;
+    ArrayList<Ferramenta> ferramentas = new ArrayList<>();
 
 
     public Jogador(int id, String nome, String linguagensFavoritas, String corAvatar) {
@@ -52,8 +54,16 @@ public class Jogador {
         return linguagensFavoritas;
     }
 
+    public Boolean getAlive() {
+        return isAlive;
+    }
+
     int getPosicaoAtual(){
         return posicaoAtual;
+    }
+
+    public ArrayList<Ferramenta> getFerramentas() {
+        return ferramentas;
     }
 
     void setPosicaoAtual(int novaPosicao) {

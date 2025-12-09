@@ -62,6 +62,19 @@ public class GameManager {
         return null;
     }
 
+    public String getProgrammersInfo() {
+        String info = "";
+        for (Jogador player : players) {
+            if (player != null && player.getAlive()) {
+                info += player.getNome() + " : ";
+                for (Ferramenta ferramenta : player.getFerramentas()) {
+                    info += ferramenta + ";";
+                }
+            }
+        }
+        return info;
+    }
+
     public String getProgrammerInfoAsStr(int id) {
         for (Jogador player : players) {
             if (player != null && player.getId() == id) {
@@ -69,10 +82,6 @@ public class GameManager {
             }
         }
         return null;
-    }
-
-    public String getProgrammersInfo() {
-        return "";
     }
 
     public String[] getSlotInfo(int position) {
