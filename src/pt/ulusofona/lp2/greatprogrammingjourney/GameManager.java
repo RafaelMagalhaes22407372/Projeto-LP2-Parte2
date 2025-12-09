@@ -12,19 +12,18 @@ public class GameManager {
     ArrayList<Jogador> players;
     int turno;
     int tamanhoFinalTabuleiro;
+    ArrayList<Casa> abimosEFerramentas;
 
     public GameManager() {
     }
 
-    public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
+    public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
         players = new ArrayList<>();
         turno = 1;
         tamanhoFinalTabuleiro = worldSize;
-        Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize);
-        if ((worldSize >= playerInfo.length * 2)
-                && tabuleiro.verificarCores(playerInfo)
-                && tabuleiro.verificarNomesValidos(playerInfo)
-                && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
+        abimosEFerramentas = new ArrayList<>();
+        Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, abyssesAndTools);
+        if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificaTabuleiroValido()) {
             for (int i = 0; i < playerInfo.length; i++) {
                 int id = Integer.parseInt(playerInfo[i][0]);
                 String nome = playerInfo[i][1];
@@ -38,9 +37,6 @@ public class GameManager {
         return false;
     }
 
-    public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
-        return false;
-    }
 
     public String getImagePng(int nrSquare) {
         if (nrSquare == tamanhoFinalTabuleiro) {

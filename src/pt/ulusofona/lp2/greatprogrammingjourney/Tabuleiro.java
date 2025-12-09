@@ -8,11 +8,13 @@ public class Tabuleiro {
 
     int boardSize;
     String[][] jogadores;
+    String[][] abismosEFerramentas;
 
 
-    public Tabuleiro(String[][] jogadores, int boardSize) {
+    public Tabuleiro(String[][] jogadores, int boardSize, String[][] abismosEFerramentas) {
         this.jogadores = jogadores;
         this.boardSize = boardSize;
+        this.abismosEFerramentas = abismosEFerramentas;
     }
 
     boolean verificarIdsValidosERepetidos(String[][] playerInfo) {
@@ -89,4 +91,45 @@ public class Tabuleiro {
         return true;
     }
 
+    boolean verificaTiposValidos() {
+        for (int i = 0; i < abismosEFerramentas.length; i++) {
+            int temp = Integer.parseInt(abismosEFerramentas[i][0]);
+            if (temp != 0 && temp != 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean  verificaIdsValidos() {
+        for (int i = 0; i < abismosEFerramentas.length; i++) {
+            int temp = Integer.parseInt(abismosEFerramentas[i][0]);
+            if (Integer.parseInt(abismosEFerramentas[i][0]) == 1) {
+                if (temp < 0  || temp > 9) {
+                    return false;
+                }
+            } else {
+                if (temp < 0 || temp > 5) {
+                    return false;
+                }
+            }
+
+        }
+        return true;
+    }
+
+    boolean verificaPosicoesInvalidas() {
+        for (int i = 0; i < abismosEFerramentas.length; i++) {
+            if (Integer.parseInt(abismosEFerramentas[i][2]) > boardSize || Integer.parseInt(abismosEFerramentas[i][2]) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean verificaTabuleiroValido() {
+        return verificarCores(jogadores) && verificarNomesValidos(jogadores)
+                && verificarIdsValidosERepetidos(jogadores) && verificaIdsValidos()
+                && verificaTiposValidos() && verificaPosicoesInvalidas();
+    }
 }
