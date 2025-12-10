@@ -69,4 +69,8 @@ public class Jogador {
     void setPosicaoAtual(int novaPosicao) {
         posicaoAtual = novaPosicao;
     }
+
+    public void setAlive(Boolean alive) {
+        isAlive = alive;
+    }
 }
