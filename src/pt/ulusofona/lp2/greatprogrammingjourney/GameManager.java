@@ -2,6 +2,10 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -224,11 +228,129 @@ public class GameManager {
     }
 
     public void loadGame(File file) throws InvalidFileException, FileNotFoundException {
+        if (!file.exists()) {
+            throw new FileNotFoundException("Ficheiro não encontrado.");
+        }
 
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+
+            String linha = br.readLine();
+            if (linha == null) {
+                throw new InvalidFileException("Ficheiro inválido (turno).");
+            }
+            turno = Integer.parseInt(linha.trim());
+
+            linha = br.readLine();
+            if (linha == null) {
+                throw new InvalidFileException("Ficheiro inválido (tamanho).");
+            }
+            tamanhoFinalTabuleiro = Integer.parseInt(linha.trim());
+
+            linha = br.readLine();
+            if (linha == null) {
+                throw new InvalidFileException("Ficheiro inválido (num jogadores).");
+            }
+            int nJogadores = Integer.parseInt(linha.trim());
+
+            players = new ArrayList<>();
+
+            for (int i = 0; i < nJogadores; i++) {
+                linha = br.readLine();
+                if (linha == null) {
+                    throw new InvalidFileException("Dados de jogador em falta.");
+                }
+
+                String[] p = linha.split(";");
+                if (p.length < 6) {
+                    throw new InvalidFileException("Formato de jogador inválido.");
+                }
+
+                int id = Integer.parseInt(p[0]);
+                String nome = p[1];
+                String linguagens = p[2];
+                String cor = p[3];
+                int pos = Integer.parseInt(p[4]);
+                boolean alive = Boolean.parseBoolean(p[5]);
+
+                Jogador j = new Jogador(id, nome, linguagens, cor);
+                j.setPosicaoAtual(pos);
+                j.setAlive(alive);
+
+                players.add(j);
+            }
+
+            linha = br.readLine();
+            if (linha == null) {
+                throw new InvalidFileException("Número de casas em falta.");
+            }
+            int nCasas = Integer.parseInt(linha.trim());
+
+            abimosEFerramentas = new ArrayList<>();
+
+            for (int i = 0; i < nCasas; i++) {
+                linha = br.readLine();
+                if (linha == null) {
+                    throw new InvalidFileException("Casa em falta.");
+                }
+
+                String[] c = linha.split(";");
+                if (c.length < 3) {
+                    throw new InvalidFileException("Formato de casa inválido.");
+                }
+
+                int pos = Integer.parseInt(c[0]);
+                String tipo = c[1];
+                String extra = c[2];
+
+                Casa casa = new Casa(pos, tipo, extra); // adapta à tua classe real
+                abimosEFerramentas.add(casa);
+            }
+
+        } catch (NumberFormatException e) {
+            throw new InvalidFileException("Erro a interpretar números.");
+        } catch (InvalidFileException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InvalidFileException("Erro genérico: " + e.getMessage());
+        }
     }
 
     public boolean saveGame(File file) {
-        return false;
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+
+            bw.write(String.valueOf(turno));
+            bw.newLine();
+
+            bw.write(String.valueOf(tamanhoFinalTabuleiro));
+            bw.newLine();
+
+            // Jogadores
+            bw.write(String.valueOf(players.size()));
+            bw.newLine();
+
+            for (Jogador jogador : players) {
+                String linha = jogador.formatarJogador();
+                bw.write(linha);
+                bw.newLine();
+            }
+
+            // Casas
+            bw.write(String.valueOf(abimosEFerramentas.size()));
+            bw.newLine();
+
+            for (Casa casa : abimosEFerramentas) {
+                String linha =
+                        casa.getPosicao() + ";" +
+                                casa.getTipo() + ";";
+                bw.write(linha);
+                bw.newLine();
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public JPanel getAuthorsPanel() {
