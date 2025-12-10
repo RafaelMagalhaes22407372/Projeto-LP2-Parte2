@@ -14,6 +14,7 @@ public class GameManager {
     int tamanhoFinalTabuleiro;
     ArrayList<Casa> abimosEFerramentas;
 
+
     public GameManager() {
     }
 
@@ -21,7 +22,6 @@ public class GameManager {
         players = new ArrayList<>();
         turno = 1;
         tamanhoFinalTabuleiro = worldSize;
-        abimosEFerramentas = new ArrayList<>();
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, abyssesAndTools);
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificaTabuleiroValido()) {
             for (int i = 0; i < playerInfo.length; i++) {
@@ -31,6 +31,26 @@ public class GameManager {
                 String cor = playerInfo[i][3];
 
                 players.add(new Jogador(id, nome, linguagens, cor));
+            }
+
+            // Cria casas do tabuleiro
+            abimosEFerramentas = new ArrayList<>();
+            for (int i = 1; i <= worldSize; i++) {
+                abimosEFerramentas.add(new Casa(i)); // criamos uma casa "normal"
+            }
+
+            for (String[] item : abyssesAndTools) {
+                int tipo = Integer.parseInt(item[0]); // 0 = Abismo, 1 = Ferramenta
+                int id = Integer.parseInt(item[1]);
+                int posicao = Integer.parseInt(item[2]);
+
+                Casa casa = abimosEFerramentas.get(posicao);
+
+                if (tipo == 0) {
+                    casa.setAbismo(id);
+                } else if (tipo == 1) {
+                    casa.setFerramenta(id);
+                }
             }
             return true;
         }

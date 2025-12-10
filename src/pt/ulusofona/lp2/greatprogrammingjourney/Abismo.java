@@ -1,16 +1,17 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
-public abstract class Abismo extends Casa {
-    protected String nome;
+public abstract class Abismo {
+    protected int id;
 
-    public Abismo(String[][] abyssesAndTools, int posicao) {
-        super(abyssesAndTools ,posicao);
-        this.nome = nome;
+    public Abismo(int id, String nome) {
+        this.id = id;
     }
 
-    public String getNome() { return nome; }
+    public int getId() {
+        return id;
+    }
 
-    @Override
-    public abstract void acao(Jogador jogador);
+
+    public abstract void aplicarEfeito(Jogador jogador);
+
 }
-

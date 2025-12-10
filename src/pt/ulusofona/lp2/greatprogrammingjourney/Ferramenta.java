@@ -1,16 +1,21 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
-public abstract class Ferramenta extends Casa {
+public abstract class Ferramenta {
+    protected int id;
     protected String nome;
 
-    public Ferramenta(int posicao, String[][] abyssesAndTools) {
-        super(abyssesAndTools,posicao);
+    public Ferramenta(int id, String nome) {
+        this.id = id;
         this.nome = nome;
     }
 
-    public String getNome() { return nome; }
+    public int getId() {
+        return id;
+    }
 
-    @Override
-    public abstract void acao(Jogador jogador);
+    public String getNome() {
+        return nome;
+    }
+
+    public abstract void usar(Jogador jogador);
 }
-
