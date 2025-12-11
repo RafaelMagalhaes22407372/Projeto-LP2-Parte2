@@ -3,7 +3,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 public abstract class Abismo {
     protected int id;
 
-    public Abismo(int id, String nome) {
+    public Abismo(int id) {
         this.id = id;
     }
 
@@ -11,7 +11,6 @@ public abstract class Abismo {
         return id;
     }
 
-
-    public abstract void aplicarEfeito(Jogador jogador);
+    abstract void aplicarEfeito(Jogador jogador);
 
 }

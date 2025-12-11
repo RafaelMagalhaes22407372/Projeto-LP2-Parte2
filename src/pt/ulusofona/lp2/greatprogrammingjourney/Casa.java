@@ -21,32 +21,12 @@ public class Casa {
         return ferramenta != null;
     }
 
-    public void setAbismo(int id) {
-        this.abismo = switch (id) {
-            case 0 -> new AbismoErroSintaxe();
-            case 1 -> new AbismoErroLogica();
-            case 2 -> new AbismoException();
-            case 3 -> new AbismoFileNotFoundException();
-            case 4 -> new AbismoCrash();
-            case 5 -> new AbismoCodigoDuplicado();
-            case 6 -> new AbismoEfeitosSecundarios();
-            case 7 -> new AbismoBlueScreenofDeath();
-            case 8 -> new AbismoCicloInfinito();
-            case 9 -> new AbismoSegmentationFault();
-            default -> null;
-        };
+    public void setAbismo(int id, CriacaoAbismos abismos) {
+        this.abismo = abismos.criarAbismo(id);
     }
 
-    public void setFerramenta(int id) {
-        this.ferramenta = switch (id) {
-            case 0 -> new FerramentaHeranca();
-            case 1 ->  new FerramentaProgramacaoFuncional();
-            case 2 ->  new FerramentaTestesUnitarios();
-            case 3 ->  new FerramentaTratamentoExcepcoes();
-            case 4 ->  new FerramentaIDE();
-            case 5 ->  new FerramentaAjudaDoProfessor();
-            default -> null;
-        };
+    public void setFerramenta(int id, CriacaoFerramentas ferramentas) {
+        this.ferramenta = ferramentas.criarFerramenta(id);
     }
 
     public Abismo getAbismo() {

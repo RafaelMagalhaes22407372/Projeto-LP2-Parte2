@@ -49,11 +49,12 @@ public class GameManager {
                 int posicao = Integer.parseInt(item[2]);
 
                 Casa casa = abimosEFerramentas.get(posicao);
-
+                CriacaoAbismos abismos = new CriacaoAbismos();
+                CriacaoFerramentas ferramentas = new CriacaoFerramentas();
                 if (tipo == 0) {
-                    casa.setAbismo(id);
+                    casa.setAbismo(id, abismos);
                 } else if (tipo == 1) {
-                    casa.setFerramenta(id);
+                    casa.setFerramenta(id, ferramentas);
                 }
             }
             return true;
