@@ -255,18 +255,21 @@ public class GameManager {
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
+            // 1. Ler turno
             String linha = br.readLine();
             if (linha == null) {
                 throw new InvalidFileException("Ficheiro inválido (turno).");
             }
             turno = Integer.parseInt(linha.trim());
 
+            // 2. Ler tamanho tabuleiro
             linha = br.readLine();
             if (linha == null) {
                 throw new InvalidFileException("Ficheiro inválido (tamanho).");
             }
             tamanhoFinalTabuleiro = Integer.parseInt(linha.trim());
 
+            // 3. Jogadores
             linha = br.readLine();
             if (linha == null) {
                 throw new InvalidFileException("Ficheiro inválido (num jogadores).");
@@ -281,25 +284,25 @@ public class GameManager {
                     throw new InvalidFileException("Dados de jogador em falta.");
                 }
 
-                String[] p = linha.split(";");
-                if (p.length < 6) {
+                String[] p = linha.split("\\|");
+                if (p.length < 5) {
                     throw new InvalidFileException("Formato de jogador inválido.");
                 }
 
-                int id = Integer.parseInt(p[0]);
-                String nome = p[1];
-                String linguagens = p[2];
-                String cor = p[3];
-                int pos = Integer.parseInt(p[4]);
-                boolean alive = Boolean.parseBoolean(p[5]);
+                int id = Integer.parseInt(p[0].trim());
+                String nome = p[1].trim();
+                int pos = Integer.parseInt(p[2].trim());
+                String linguagens = p[3].trim();
+                String estado = p[4].trim();
 
-                Jogador j = new Jogador(id, nome, linguagens, cor);
+                Jogador j = new Jogador(id, nome, linguagens, "none"); // cor não é guardada
                 j.setPosicaoAtual(pos);
-                j.setAlive(alive);
+                j.setAlive(estado.equals("Em Jogo"));
 
                 players.add(j);
             }
 
+            // 4. Abismos e Ferramentas
             linha = br.readLine();
             if (linha == null) {
                 throw new InvalidFileException("Número de casas em falta.");
@@ -307,6 +310,8 @@ public class GameManager {
             int nCasas = Integer.parseInt(linha.trim());
 
             abimosEFerramentas = new ArrayList<>();
+            CriacaoAbismos criadorAbismos = new CriacaoAbismos();
+            CriacaoFerramentas criadorFerramentas = new CriacaoFerramentas(); // se existir
 
             for (int i = 0; i < nCasas; i++) {
                 linha = br.readLine();
@@ -319,11 +324,22 @@ public class GameManager {
                     throw new InvalidFileException("Formato de casa inválido.");
                 }
 
-                int pos = Integer.parseInt(c[0]);
-                String tipo = c[1];
-                String extra = c[2];
+                int pos = Integer.parseInt(c[0].trim());
+                int idAbismo = Integer.parseInt(c[1].trim());
+                int idFerramenta = Integer.parseInt(c[2].trim());
 
-                Casa casa = new Casa(pos, tipo, extra); // adapta à tua classe real
+                Casa casa = new Casa(pos);
+
+                // Criar abismo se existir
+                if (idAbismo != -1) {
+                    casa.setAbismo(idAbismo, criadorAbismos);
+                }
+
+                // Criar ferramenta se existir
+                if (idFerramenta != -1) {
+                    casa.setFerramenta(idFerramenta, criadorFerramentas);
+                }
+
                 abimosEFerramentas.add(casa);
             }
 
@@ -335,6 +351,9 @@ public class GameManager {
             throw new InvalidFileException("Erro genérico: " + e.getMessage());
         }
     }
+
+
+
 
     public boolean saveGame(File file) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
@@ -362,7 +381,8 @@ public class GameManager {
             for (Casa casa : abimosEFerramentas) {
                 String linha =
                         casa.getPosicao() + ";" +
-                                casa.getTipo() + ";";
+                                casa.getAbismo() + ";" +
+                                casa.getFerramenta();
                 bw.write(linha);
                 bw.newLine();
             }
