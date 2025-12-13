@@ -62,12 +62,26 @@ public class GameManager {
         return false;
     }
 
+    public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
+        players = new ArrayList<>();
+        turno = 1;
+        tamanhoFinalTabuleiro = worldSize;
+        Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, null);
+        if ((worldSize >= playerInfo.length * 2)
+                && tabuleiro.verificarCores(playerInfo)
+                && tabuleiro.verificarNomesValidos(playerInfo)
+                && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
+            for (int i = 0; i < playerInfo.length; i++) {
+                int id = Integer.parseInt(playerInfo[i][0]);
+                String nome = playerInfo[i][1];
+                String linguagens = playerInfo[i][2];
+                String cor = playerInfo[i][3];
 
-    public String getImagePng(int nrSquare) {
-        if (nrSquare == tamanhoFinalTabuleiro) {
-            return "glory.png";
+                players.add(new Jogador(id, nome, linguagens, cor));
+            }
+            return true;
         }
-        return null;
+        return false;
     }
 
     public String[] getProgrammerInfo(int id) {
