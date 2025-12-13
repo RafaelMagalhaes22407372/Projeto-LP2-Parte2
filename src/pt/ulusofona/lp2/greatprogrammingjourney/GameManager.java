@@ -84,6 +84,13 @@ public class GameManager {
         return false;
     }
 
+    public String getImagePng(int nrSquare) {
+        if (nrSquare == tamanhoFinalTabuleiro) {
+            return "glory.png";
+        }
+        return null;
+    }
+
     public String[] getProgrammerInfo(int id) {
         for (Jogador player : players) {
             if (player != null && player.getId() == id) {
