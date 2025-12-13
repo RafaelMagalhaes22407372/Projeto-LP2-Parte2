@@ -61,10 +61,11 @@ public class TestGameManager {
         String[] jogador2 =  {"2", "Bruh2", "Java2", "Purple"};
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
+        String[][] vazio = new String[0][0];
 
-        System.out.println(manager.createInitialBoard(jogadores, 20));
+        System.out.println(manager.createInitialBoard(jogadores, 20, vazio));
 
-        assertTrue(manager.createInitialBoard(jogadores, 4));
+        assertTrue(manager.createInitialBoard(jogadores, 4, vazio));
     }
 
     @Test
@@ -76,7 +77,9 @@ public class TestGameManager {
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
 
-        boolean created = gm.createInitialBoard(jogadores, 20);
+        String[][] vazio = new String[0][0];
+
+        boolean created = gm.createInitialBoard(jogadores, 20, vazio);
         assertTrue(created);
 
         int idInicial = gm.getCurrentPlayerID();
@@ -93,7 +96,9 @@ public class TestGameManager {
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
 
-        boolean created = gm.createInitialBoard(jogadores, 20);
+        String[][] vazio = new String[0][0];
+
+        boolean created = gm.createInitialBoard(jogadores, 20, vazio);
         assertTrue(created);
         assertEquals("1 | Alice | 1 | C++; Java | Em Jogo", gm.getProgrammerInfoAsStr(1));
     }
