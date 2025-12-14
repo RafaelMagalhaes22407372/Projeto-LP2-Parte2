@@ -74,6 +74,14 @@ public class Jogador {
         return estaEmJogo;
     }
 
+    public void adicionarFerramenta(Ferramenta ferramenta) {
+        this.ferramentas.add(ferramenta);
+    }
+
+    public void removerFerramenta(Ferramenta ferramenta) {
+        this.ferramentas.remove(ferramenta);
+    }
+
     void setPosicaoAtual(int novaPosicao) {
         posicaoAtual = novaPosicao;
     }

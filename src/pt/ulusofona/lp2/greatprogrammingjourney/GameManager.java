@@ -246,7 +246,89 @@ public class GameManager {
     }
 
     public String reactToAbyssOrTool() {
-        return "";
+        int idJogadorAtual = getCurrentPlayerID();
+        if (idJogadorAtual == -1) {
+            return "Não há jogadores no jogo";
+        }
+
+        Jogador jogadorAtual = null;
+        for (Jogador jogador : players) {
+            if (jogador.getId() == idJogadorAtual && jogador.getEstaEmJogo().equals("Em jogo")) {
+                jogadorAtual = jogador;
+                break;
+            }
+        }
+
+        if (jogadorAtual == null) {
+            return "Jogador não encontrado ou não está em jogo";
+        }
+
+        int posicaoAtual = jogadorAtual.getPosicaoAtual();
+        Casa casaAtual = null;
+
+        for (Casa casa : abimosEFerramentas) {
+            if (casa.getPosicao() == posicaoAtual) {
+                casaAtual = casa;
+                break;
+            }
+        }
+
+        String mensagem = "";
+
+        if (casaAtual != null && casaAtual.temFerramenta()) {
+            Ferramenta ferramenta = casaAtual.getFerramenta();
+            int tipoFerramenta = ferramenta.getId();
+
+            boolean jaTemEsteTipo = false;
+            for (Ferramenta f : jogadorAtual.getFerramentas()) {
+                if (f.getId() == tipoFerramenta) {
+                    jaTemEsteTipo = true;
+                    break;
+                }
+            }
+
+            if (jaTemEsteTipo) {
+                mensagem = "O jogador " + jogadorAtual.getNome() +
+                        " já tem uma ferramenta do tipo " + tipoFerramenta +
+                        ", não pode recolher outra";
+            } else {
+                jogadorAtual.adicionarFerramenta(ferramenta);
+                mensagem = "O jogador " + jogadorAtual.getNome() +
+                        " recolheu a ferramenta: " + ferramenta.getNome();
+            }
+        }
+        else if (casaAtual != null && casaAtual.temAbismo()) {
+            Abismo abismo = casaAtual.getAbismo();
+
+            boolean abismoNeutralizado = false;
+            ArrayList<Ferramenta> ferramentasDoJogador = jogadorAtual.getFerramentas();
+
+            /*for (Ferramenta ferramenta : ferramentasDoJogador) {
+                if (ferramenta.podeNeutralizar(abismo.getId())) {
+                    jogadorAtual.removerFerramenta(ferramenta);
+                    mensagem = "O jogador " + jogadorAtual.getNome() +
+                            " usou " + ferramenta.getNome() +
+                            " para neutralizar " + abismo.getTitulo();
+                    abismoNeutralizado = true;
+                    break;
+                }
+            }*/
+
+            if (!abismoNeutralizado) {
+                abismo.aplicarEfeito(jogadorAtual);
+                mensagem = "O jogador " + jogadorAtual.getNome() +
+                        " caiu no abismo: " + abismo.getTitulo() +
+                        " e sofreu seu efeito";
+            }
+        }
+        else {
+            mensagem = "O jogador " + jogadorAtual.getNome() +
+                    " não encontrou nada na casa " + posicaoAtual;
+        }
+
+        turno++;
+
+        return mensagem;
     }
 
     public boolean gameIsOver() {
