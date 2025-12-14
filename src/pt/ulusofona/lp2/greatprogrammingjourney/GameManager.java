@@ -16,7 +16,7 @@ public class GameManager {
     ArrayList<Jogador> players;
     int turno;
     int tamanhoFinalTabuleiro;
-    ArrayList<Casa> abimosEFerramentas;
+    ArrayList<Casa> abimosEFerramentas = new ArrayList<>();
 
 
     public GameManager() {
