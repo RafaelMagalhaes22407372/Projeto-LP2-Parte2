@@ -132,28 +132,47 @@ public class GameManager {
             return null;
         }
 
-        int count = 0;
+        String[] slotInfo = new String[3];
+
+        StringBuilder idsBuilder = new StringBuilder();
+        boolean primeiro = true;
+
         for (Jogador jogador : players) {
-            if (jogador.getPosicaoAtual() == position) {
-                count++;
+            if (jogador.getPosicaoAtual() == position && jogador.getEstaEmJogo().equals("Em jogo")) {
+                if (!primeiro) {
+                    idsBuilder.append(",");
+                }
+                idsBuilder.append(jogador.getId());
+                primeiro = false;
+            }
+        }
+        slotInfo[0] = idsBuilder.toString();
+
+        slotInfo[1] = "";
+        slotInfo[2] = "";
+
+        Casa casaNaPosicao = null;
+
+        for (Casa casa : abimosEFerramentas) {
+            if (casa.getPosicao() == position) {
+                casaNaPosicao = casa;
             }
         }
 
-        if (count == 0) {
-            return new String[0];
-        }
-
-        String[] idsNaPosicao = new String[count];
-
-        int index = 0;
-        for (Jogador jogador : players) {
-            if (jogador.getPosicaoAtual() == position) {
-                idsNaPosicao[index] = String.valueOf(jogador.getId());
-                index++;
+        if (casaNaPosicao != null) {
+            if (casaNaPosicao.temAbismo()) {
+                Abismo abismo = casaNaPosicao.getAbismo();
+                slotInfo[1] = abismo.getTitulo();
+                slotInfo[2] = "A:" + abismo.getId();
+            }
+            else if (casaNaPosicao.temFerramenta()) {
+                Ferramenta ferramenta = casaNaPosicao.getFerramenta();
+                slotInfo[1] = ferramenta.getNome();
+                slotInfo[2] = "T:" + ferramenta.getId();
             }
         }
 
-        return idsNaPosicao;
+        return slotInfo;
     }
 
     public int getCurrentPlayerID() {

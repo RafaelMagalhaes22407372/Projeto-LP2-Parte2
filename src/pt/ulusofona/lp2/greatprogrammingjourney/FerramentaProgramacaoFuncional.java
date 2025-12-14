@@ -4,7 +4,7 @@ public class FerramentaProgramacaoFuncional extends Ferramenta {
 
 
     public FerramentaProgramacaoFuncional() {
-        super(1, "ProgramacaoFuncional");
+        super(1, "Programacao Funcional");
     }
 
     @Override

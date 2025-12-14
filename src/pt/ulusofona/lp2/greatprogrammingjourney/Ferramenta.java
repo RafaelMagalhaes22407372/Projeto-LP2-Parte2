@@ -1,8 +1,8 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
 public abstract class Ferramenta {
-    protected int id;
-    protected String nome;
+    private int id;
+    private String nome;
 
     public Ferramenta(int id, String nome) {
         this.id = id;

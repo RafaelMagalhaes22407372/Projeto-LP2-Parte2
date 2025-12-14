@@ -70,6 +70,10 @@ public class Jogador {
         return ferramentas;
     }
 
+    public String getEstaEmJogo() {
+        return estaEmJogo;
+    }
+
     void setPosicaoAtual(int novaPosicao) {
         posicaoAtual = novaPosicao;
     }
