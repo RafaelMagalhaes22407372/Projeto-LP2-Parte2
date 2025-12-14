@@ -266,7 +266,7 @@ public class GameManager {
         }
 
         if (jogadorAtual == null) {
-            return "Jogador não encontrado";
+            return null;
         }
 
         int posicaoAtual = jogadorAtual.getPosicaoAtual();
@@ -302,8 +302,7 @@ public class GameManager {
                 mensagem = "O jogador " + jogadorAtual.getNome() +
                         " recolheu a ferramenta: " + ferramenta.getNome();
             }
-        }
-        else if (casaAtual != null && casaAtual.temAbismo()) {
+        } else if (casaAtual != null && casaAtual.temAbismo()) {
             Abismo abismo = casaAtual.getAbismo();
 
             // Verificar se o jogador tem ferramenta para neutralizar este abismo
@@ -322,95 +321,7 @@ public class GameManager {
             }
 
             // Se não neutralizou, aplicar efeito específico baseado no tipo de abismo
-            if (!abismoNeutralizado) {
-                int idAbismo = abismo.getId();
 
-                switch(idAbismo) {
-                    case 0: // Erro de Sintaxe
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    case 1: // Erro de Lógica
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    case 2: // Exception
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    case 3: // FileNotFoundException
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    case 4: // Crash
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    case 5: // Código Duplicado
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    case 6: // Efeitos Secundários
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    case 7: // Blue Screen of Death
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " foi derrotado pelo " + abismo.getTitulo();
-                        break;
-
-                    case 8: // Ciclo Infinito
-                        // Verificar se já há um jogador preso nesta posição
-                        Jogador jogadorPreso = null;
-                        for (Jogador jogador : players) {
-                            if (jogador != jogadorAtual &&
-                                    "Preso".equals(jogador.getEstaEmJogo()) &&
-                                    jogador.getPosicaoAtual() == posicaoAtual) {
-                                jogadorPreso = jogador;
-                                break;
-                            }
-                        }
-
-                        if (jogadorPreso != null) {
-                            // Libertar o preso anterior
-                            jogadorPreso.setEstaEmJogo("Em jogo");
-                            // Prender o novo jogador
-                            jogadorAtual.setEstaEmJogo("Preso");
-                            mensagem = "O jogador " + jogadorAtual.getNome() +
-                                    " libertou " + jogadorPreso.getNome() +
-                                    " mas ficou preso no " + abismo.getTitulo();
-                        } else {
-                            // Apenas prender o jogador
-                            jogadorAtual.setEstaEmJogo("Preso");
-                            mensagem = "O jogador " + jogadorAtual.getNome() +
-                                    " ficou preso no " + abismo.getTitulo();
-                        }
-                        break;
-                    case 9: // Segmentation Fault
-                        abismo.aplicarEfeito(jogadorAtual);
-                        mensagem = "O jogador " + jogadorAtual.getNome() +
-                                " caiu no abismo: " + abismo.getTitulo() +
-                                " e sofreu seu efeito";
-                        break;
-                    default:
-                        mensagem = "";
-                }
-            }
         } else {
             mensagem = "O jogador " + jogadorAtual.getNome() +
                     " não encontrou nada na casa " + posicaoAtual;
