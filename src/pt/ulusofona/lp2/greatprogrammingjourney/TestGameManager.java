@@ -100,7 +100,7 @@ public class TestGameManager {
 
         boolean created = gm.createInitialBoard(jogadores, 20, vazio);
         assertTrue(created);
-        assertEquals("1 | Alice | 1 | C++; Java | Em Jogo", gm.getProgrammerInfoAsStr(1));
+        assertEquals("1 | Alice | 1 | No tools | C++; Java | Em Jogo", gm.getProgrammerInfoAsStr(1));
     }
 
 }

@@ -128,26 +128,32 @@ public class GameManager {
     }
 
     public String[] getSlotInfo(int position) {
-        String[] idNaPosicao = new String[1];
-        boolean primeiroId = true;
-        StringBuilder idsOrganizados = new StringBuilder();
         if (position < 1 || position > tamanhoFinalTabuleiro) {
             return null;
         }
 
+        int count = 0;
         for (Jogador jogador : players) {
             if (jogador.getPosicaoAtual() == position) {
-                if (primeiroId) {
-                    idsOrganizados.append(jogador.getId());
-                    primeiroId = false;
-                } else {
-                    idsOrganizados.append(",").append(jogador.getId());
-                }
+                count++;
             }
         }
 
-        idNaPosicao[0] = idsOrganizados.toString();
-        return idNaPosicao;
+        if (count == 0) {
+            return new String[0];
+        }
+
+        String[] idsNaPosicao = new String[count];
+
+        int index = 0;
+        for (Jogador jogador : players) {
+            if (jogador.getPosicaoAtual() == position) {
+                idsNaPosicao[index] = String.valueOf(jogador.getId());
+                index++;
+            }
+        }
+
+        return idsNaPosicao;
     }
 
     public int getCurrentPlayerID() {
