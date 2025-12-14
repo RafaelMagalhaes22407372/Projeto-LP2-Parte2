@@ -32,11 +32,15 @@ public class Jogador {
 
         linguagensFavoritas = String.join("; ", linguagens);
 
-        return id + " | " + nome + " | " + posicaoAtual + " | " + linguagensFavoritas + " | " + estaEmJogo;
+        String ferramentasStr;
+        if (ferramentas == null || ferramentas.isEmpty()) {
+            ferramentasStr = "No tools";
+        } else {
+            ferramentasStr = ferramentas.toString();
+        }
+
+        return id + " | " + nome + " | " + posicaoAtual + " | " + ferramentasStr + " | " + linguagensFavoritas + " | " + estaEmJogo;
     }
-
-
-
 
     int getId(){
         return id;
