@@ -7,7 +7,7 @@ public class FerramentaAjudaDoProfessor extends Ferramenta{
     }
 
     @Override
-    public void usar(Jogador jogador) {
-
+    public Boolean podeNeutralizarAbismo(int id) {
+        return false;
     }
 }

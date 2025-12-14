@@ -12,6 +12,7 @@ public class Jogador {
     String estaEmJogo = "Em Jogo";
     Boolean isAlive = true;
     ArrayList<Ferramenta> ferramentas = new ArrayList<>();
+    Boolean estaPreso = false;
 
 
     public Jogador(int id, String nome, String linguagensFavoritas, String corAvatar) {
@@ -88,5 +89,13 @@ public class Jogador {
 
     public void setAlive(Boolean alive) {
         isAlive = alive;
+    }
+
+    public void setEstaEmJogo(String estaEmJogo) {
+        this.estaEmJogo = estaEmJogo;
+    }
+
+    public void setEstaPreso(Boolean estaPreso) {
+        this.estaPreso = estaPreso;
     }
 }

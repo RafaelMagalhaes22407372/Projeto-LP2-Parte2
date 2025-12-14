@@ -7,6 +7,6 @@ public class AbismoCicloInfinito extends Abismo{
 
     @Override
     void aplicarEfeito(Jogador jogador) {
-
+        jogador.setEstaPreso(true);
     }
 }

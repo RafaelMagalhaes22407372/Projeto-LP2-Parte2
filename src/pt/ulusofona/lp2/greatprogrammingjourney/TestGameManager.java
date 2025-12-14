@@ -102,5 +102,4 @@ public class TestGameManager {
         assertTrue(created);
         assertEquals("1 | Alice | 1 | No tools | C++; Java | Em Jogo", gm.getProgrammerInfoAsStr(1));
     }
-
 }

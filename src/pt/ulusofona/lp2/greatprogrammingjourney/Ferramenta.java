@@ -17,5 +17,5 @@ public abstract class Ferramenta {
         return nome;
     }
 
-    public abstract void usar(Jogador jogador);
+    public abstract Boolean podeNeutralizarAbismo(int id);
 }
