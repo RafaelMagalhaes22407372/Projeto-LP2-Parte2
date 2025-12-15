@@ -131,22 +131,16 @@ public class GameManager {
     }
 
     public String[] getSlotInfo(int position) {
-        // 1. Verificação de limites
         if (position < 1 || position > tamanhoFinalTabuleiro) {
             return null;
         }
 
-        // Inicializa o array de resultado com 3 elementos, conforme exigido.
         String[] resultado = new String[3];
-
-        // --- 2. Encontrar e Organizar os IDs dos Jogadores na Posição (Elemento [0]) ---
 
         StringBuilder idsBuilder = new StringBuilder();
         boolean primeiroId = true;
 
         for (Jogador jogador : players) {
-            // Verifica se o jogador existe e se a sua posição atual corresponde à casa.
-            // Assume-se que jogadores inativos não são considerados, mas não há verificação explícita do estado "Em Jogo"
             if (jogador != null && jogador.getPosicaoAtual() == position) {
                 if (primeiroId) {
                     idsBuilder.append(jogador.getId());
@@ -156,12 +150,9 @@ public class GameManager {
                 }
             }
         }
-        resultado[0] = idsBuilder.toString(); // [0]: IDs dos jogadores (ex: "1,3,5" ou "")
-
-        // --- 3. Encontrar a Casa e seu Conteúdo (Abismo/Ferramenta) ---
+        resultado[0] = idsBuilder.toString();
 
         Casa casa = null;
-        // Percorre a lista de casas (abimosEFerramentas) para encontrar a casa na 'position'
         for (Casa casa1 : abimosEFerramentas) {
             if (casa1 != null && casa1.getPosicao() == position) {
                 casa = casa1;
@@ -169,22 +160,17 @@ public class GameManager {
             }
         }
 
-        // --- 4. Determinar os Elementos [1] (Descrição) e [2] (Tipo/ID) ---
-
         if (casa == null || (!casa.temAbismo() && !casa.temFerramenta())) {
-            // Casa não encontrada (erro de inicialização) ou Casa normal/vazia
-            resultado[1] = ""; // [1]: Descrição vazia
-            resultado[2] = ""; // [2]: Tipo/ID vazio
+            resultado[1] = "";
+            resultado[2] = "";
 
         } else if (casa.temAbismo()) {
             Abismo abismo = casa.getAbismo();
-            // Assume-se que Abismo tem getTitulo() e getId()
             resultado[1] = abismo.getTitulo();
             resultado[2] = "A:" + abismo.getId();
 
-        } else { // casa.temFerramenta()
+        } else {
             Ferramenta ferramenta = casa.getFerramenta();
-            // Assume-se que Ferramenta tem getNome() e getId()
             resultado[1] = ferramenta.getNome();
             resultado[2] = "T:" + ferramenta.getId();
         }

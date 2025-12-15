@@ -4,7 +4,7 @@ public class FerramentaHeranca extends Ferramenta {
 
 
     public FerramentaHeranca() {
-        super(0, "Heranca");
+        super(0, "Herança");
     }
 
     @Override

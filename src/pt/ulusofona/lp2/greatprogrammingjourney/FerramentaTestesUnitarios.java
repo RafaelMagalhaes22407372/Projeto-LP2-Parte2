@@ -3,7 +3,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 public class FerramentaTestesUnitarios extends Ferramenta {
 
     public FerramentaTestesUnitarios() {
-        super(2, "Testes Unitarios");
+        super(2, "Testes Unitários");
     }
 
     @Override
