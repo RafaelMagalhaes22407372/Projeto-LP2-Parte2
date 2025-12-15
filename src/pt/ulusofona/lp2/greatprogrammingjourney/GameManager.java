@@ -266,7 +266,7 @@ public class GameManager {
         Jogador jogadorAtual = null;
         for (Jogador jogador : players) {
             if (jogador.getId() == idJogadorAtual &&
-                    ("Em jogo".equals(jogador.getEstaEmJogo()))) {
+                    ("Em Jogo".equals(jogador.getEstaEmJogo()))) {
                 jogadorAtual = jogador;
                 break;
             }
@@ -286,9 +286,13 @@ public class GameManager {
             }
         }
 
+        if (casaAtual == null || (!casaAtual.temFerramenta() && !casaAtual.temAbismo())) {
+            return null;
+        }
+
         String mensagem = "";
 
-        if (casaAtual != null && casaAtual.temFerramenta()) {
+        if (casaAtual.temFerramenta()) {
             Ferramenta ferramenta = casaAtual.getFerramenta();
             int tipoFerramenta = ferramenta.getId();
 
@@ -309,10 +313,10 @@ public class GameManager {
                 mensagem = "O jogador " + jogadorAtual.getNome() +
                         " recolheu a ferramenta: " + ferramenta.getNome();
             }
-        } else if (casaAtual != null && casaAtual.temAbismo()) {
+
+        } else {
             Abismo abismo = casaAtual.getAbismo();
 
-            // Verificar se o jogador tem ferramenta para neutralizar este abismo
             boolean abismoNeutralizado = false;
             ArrayList<Ferramenta> ferramentasDoJogador = jogadorAtual.getFerramentas();
 
@@ -326,17 +330,22 @@ public class GameManager {
                     break;
                 }
             }
-
-            // Se não neutralizou, aplicar efeito do abismo
             if (!abismoNeutralizado) {
-                if (abismo.getId() == 1) {
+                int valorDoDado = 0;
+                try {
+                    if (turno > 0 && valoresDoDado.size() >= turno) {
+                        valorDoDado = valoresDoDado.get(turno - 1);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    valorDoDado = 0;
+                }
 
-                    int recuo = valoresDoDado.get(turno) / 2; // Arredondamento para baixo (floor)
+                if (abismo.getId() == 1) {
+                    int recuo = valorDoDado / 2;
                     int novaPosicao = jogadorAtual.getPosicaoAtual() - recuo;
                     if (novaPosicao < 1) {
                         novaPosicao = 1;
                     }
-
                     jogadorAtual.setPosicaoAtual(novaPosicao);
 
                     mensagem = "O jogador " + jogadorAtual.getNome() +
@@ -349,9 +358,6 @@ public class GameManager {
                             " caiu no abismo: " + abismo.getTitulo();
                 }
             }
-        } else {
-            mensagem = "O jogador " + jogadorAtual.getNome() +
-                    " não encontrou nada na casa " + posicaoAtual;
         }
 
         turno++;
