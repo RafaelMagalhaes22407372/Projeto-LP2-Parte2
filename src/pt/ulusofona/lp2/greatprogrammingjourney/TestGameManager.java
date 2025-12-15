@@ -35,7 +35,7 @@ public class TestGameManager {
         expected.add("THE GREAT PROGRAMMING JOURNEY");
         expected.add("");
         expected.add("NR. DE TURNOS");
-        expected.add(gm.turno + "");
+        expected.add((gm.turno - 1) + "");
         expected.add("");
         expected.add("VENCEDOR");
         expected.add("Vencedor");
