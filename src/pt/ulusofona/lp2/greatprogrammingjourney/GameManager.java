@@ -147,9 +147,9 @@ public class GameManager {
         String idsStr = idsBuilder.toString();
 
         Casa casa = null;
-        for (Casa c : abimosEFerramentas) {
-            if (c.getPosicao() == position) {
-                casa = c;
+        for (Casa casa1 : abimosEFerramentas) {
+            if (casa1.getPosicao() == position) {
+                casa = casa1;
                 break;
             }
         }
@@ -259,7 +259,7 @@ public class GameManager {
         Jogador jogadorAtual = null;
         for (Jogador jogador : players) {
             if (jogador.getId() == idJogadorAtual &&
-                    ("Em jogo".equals(jogador.getEstaEmJogo()) || "Preso".equals(jogador.getEstaEmJogo()))) {
+                    ("Em jogo".equals(jogador.getEstaEmJogo()))) {
                 jogadorAtual = jogador;
                 break;
             }
