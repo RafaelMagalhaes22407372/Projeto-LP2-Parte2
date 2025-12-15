@@ -9,6 +9,7 @@ public class Jogador {
     String nome;
     String linguagensFavoritas;
     int posicaoAtual = 1;
+    ArrayList<Integer> historicoPosicoes = new ArrayList<>();
     String estaEmJogo = "Em Jogo";
     Boolean isAlive = true;
     ArrayList<Ferramenta> ferramentas = new ArrayList<>();
@@ -20,6 +21,7 @@ public class Jogador {
         this.nome = nome;
         this.linguagensFavoritas = linguagensFavoritas;
         this.corAvatar = corAvatar; // 3
+        this.historicoPosicoes.add(1);
     }
 
 
@@ -75,6 +77,14 @@ public class Jogador {
         return estaEmJogo;
     }
 
+    public int getPosicaoNTurnosAtras(int n) {
+        int size = historicoPosicoes.size();
+        if (size > n) {
+            return historicoPosicoes.get(size - n - 1);
+        }
+        return 1;
+    }
+
     public void adicionarFerramenta(Ferramenta ferramenta) {
         this.ferramentas.add(ferramenta);
     }
@@ -85,6 +95,7 @@ public class Jogador {
 
     void setPosicaoAtual(int novaPosicao) {
         posicaoAtual = novaPosicao;
+        historicoPosicoes.add(novaPosicao);
     }
 
     public void setAlive(Boolean alive) {

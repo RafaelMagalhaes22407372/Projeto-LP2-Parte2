@@ -7,8 +7,9 @@ public class AbismoErroSintaxe extends Abismo{
     }
 
     @Override
-    public void aplicarEfeito(Jogador jogador) {
-        // efeito específico
+    void aplicarEfeito(Jogador jogador) {
+        int recuarPosicao = jogador.getPosicaoAtual() - 1;
+        jogador.setPosicaoAtual(recuarPosicao);
     }
 
 }

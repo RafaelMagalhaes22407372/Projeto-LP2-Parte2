@@ -7,6 +7,7 @@ public class AbismoFileNotFoundException extends Abismo{
 
     @Override
     void aplicarEfeito(Jogador jogador) {
-
+        int recuarPosicao = jogador.getPosicaoAtual() - 3;
+        jogador.setPosicaoAtual(recuarPosicao);
     }
 }

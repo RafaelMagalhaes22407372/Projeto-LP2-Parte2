@@ -7,6 +7,6 @@ public class AbismoCrash extends Abismo{
 
     @Override
     void aplicarEfeito(Jogador jogador) {
-
+        jogador.setPosicaoAtual(1);
     }
 }

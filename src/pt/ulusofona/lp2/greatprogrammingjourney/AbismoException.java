@@ -7,6 +7,7 @@ public class AbismoException extends Abismo{
 
     @Override
     void aplicarEfeito(Jogador jogador) {
-
+        int recuarPosicao = jogador.getPosicaoAtual() - 2;
+        jogador.setPosicaoAtual(recuarPosicao);
     }
 }
