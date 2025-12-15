@@ -129,51 +129,26 @@ public class GameManager {
     }
 
     public String[] getSlotInfo(int position) {
+        String[] idNaPosicao = new String[1];
+        boolean primeiroId = true;
+        StringBuilder idsOrganizados = new StringBuilder();
         if (position < 1 || position > tamanhoFinalTabuleiro) {
             return null;
         }
 
-        String[] resultado = new String[3];
-
-        // IDs dos jogadores
-        StringBuilder idsBuilder = new StringBuilder();
         for (Jogador jogador : players) {
-            if (jogador != null && jogador.getPosicaoAtual() == position &&
-                    "Em jogo".equals(jogador.getEstaEmJogo())) {
-                if (!idsBuilder.isEmpty()) {
-                    idsBuilder.append(",");
+            if (jogador.getPosicaoAtual() == position) {
+                if (primeiroId) {
+                    idsOrganizados.append(jogador.getId());
+                    primeiroId = false;
+                } else {
+                    idsOrganizados.append(",").append(jogador.getId());
                 }
-                idsBuilder.append(jogador.getId());
-            }
-        }
-        resultado[0] = idsBuilder.toString();
-
-        resultado[1] = "";
-        resultado[2] = "";
-
-        // Procurar casa na posição
-        Casa casa = null;
-        for (Casa casa1 : abimosEFerramentas) {
-            if (casa1.getPosicao() == position) {
-                casa = casa1;
-                break;
             }
         }
 
-        // Se encontrou casa com elemento, preencher informações
-        if (casa != null) {
-            if (casa.temAbismo()) {
-                Abismo abismo = casa.getAbismo();
-                resultado[1] = abismo.getTitulo();
-                resultado[2] = "A:" + abismo.getId();
-            } else if (casa.temFerramenta()) {
-                Ferramenta ferramenta = casa.getFerramenta();
-                resultado[1] = ferramenta.getNome();
-                resultado[2] = "T:" + ferramenta.getId();
-            }
-        }
-
-        return resultado;
+        idNaPosicao[0] = idsOrganizados.toString();
+        return idNaPosicao;
     }
 
     public int getCurrentPlayerID() {
