@@ -8,6 +8,6 @@ public class FerramentaTestesUnitarios extends Ferramenta {
 
     @Override
     public Boolean podeNeutralizarAbismo(int id) {
-        return false;
+        return id == 1;
     }
 }

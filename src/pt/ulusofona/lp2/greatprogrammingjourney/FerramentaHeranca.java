@@ -9,6 +9,6 @@ public class FerramentaHeranca extends Ferramenta {
 
     @Override
     public Boolean podeNeutralizarAbismo(int id) {
-        return false;
+        return id == 5;
     }
 }
