@@ -17,13 +17,14 @@ public class GameManager {
     int turno;
     int tamanhoFinalTabuleiro;
     ArrayList<Casa> abimosEFerramentas = new ArrayList<>();
-
+    ArrayList<Integer> valoresDoDado;
 
     public GameManager() {
     }
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
         players = new ArrayList<>();
+        valoresDoDado = new ArrayList<>();
         turno = 1;
         tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, abyssesAndTools);
@@ -65,6 +66,7 @@ public class GameManager {
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         players = new ArrayList<>();
+        valoresDoDado = new ArrayList<>();
         turno = 1;
         tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, null);
@@ -207,6 +209,9 @@ public class GameManager {
             return false;
         }
 
+        //Adiciona o numero do dado para depois ir buscar com numero do turno
+        valoresDoDado.add(nrSpaces);
+
         // obter o ID do jogador actual
         int idAtual = getCurrentPlayerID();
         if (idAtual == -1) {
@@ -322,9 +327,25 @@ public class GameManager {
 
             // Se não neutralizou, aplicar efeito do abismo
             if (!abismoNeutralizado) {
-                abismo.aplicarEfeito(jogadorAtual);
-                mensagem = "O jogador " + jogadorAtual.getNome() +
-                        " caiu no abismo: " + abismo.getTitulo();
+                if (abismo.getId() == 1) {
+
+                    int recuo = valoresDoDado.get(turno) / 2; // Arredondamento para baixo (floor)
+                    int novaPosicao = jogadorAtual.getPosicaoAtual() - recuo;
+                    if (novaPosicao < 1) {
+                        novaPosicao = 1;
+                    }
+
+                    jogadorAtual.setPosicaoAtual(novaPosicao);
+
+                    mensagem = "O jogador " + jogadorAtual.getNome() +
+                            " caiu no abismo: " + abismo.getTitulo() +
+                            ". Recuou " + recuo + " casa(s) para a posição " + novaPosicao;
+
+                } else {
+                    abismo.aplicarEfeito(jogadorAtual);
+                    mensagem = "O jogador " + jogadorAtual.getNome() +
+                            " caiu no abismo: " + abismo.getTitulo();
+                }
             }
         } else {
             mensagem = "O jogador " + jogadorAtual.getNome() +
