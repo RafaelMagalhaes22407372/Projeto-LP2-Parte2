@@ -36,5 +36,12 @@ public class Casa {
     public Ferramenta getFerramenta() {
         return ferramenta;
     }
+
+    @Override
+    public String toString() {
+        return "Casa " + posicao +
+                " | Abismo: " + (abismo != null ? abismo.getTitulo() : "Nenhum") +
+                " | Ferramenta: " + (ferramenta != null ? ferramenta.getNome() : "Nenhuma") + "\n";
+    }
 }
 

@@ -105,11 +105,11 @@ public class Tabuleiro {
         for (int i = 0; i < abismosEFerramentas.length; i++) {
             int tipo = Integer.parseInt(abismosEFerramentas[i][0]);
             int id = Integer.parseInt(abismosEFerramentas[i][1]);
-            if (tipo == 0) {
+            if (tipo == 1) {
                 if (id < 0 || id > 5) {
                     return false;
                 }
-            } else if (tipo == 1) {
+            } else if (tipo == 0) {
                 if (id < 0 || id > 9) {
                     return false;
                 }
@@ -122,7 +122,8 @@ public class Tabuleiro {
 
     boolean verificaPosicoesInvalidas() {
         for (int i = 0; i < abismosEFerramentas.length; i++) {
-            if (Integer.parseInt(abismosEFerramentas[i][2]) > boardSize || Integer.parseInt(abismosEFerramentas[i][2]) < 0) {
+            int pos = Integer.parseInt(abismosEFerramentas[i][2]);
+            if (pos < 0 || pos >= boardSize) {
                 return false;
             }
         }
