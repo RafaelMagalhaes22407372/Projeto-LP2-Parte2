@@ -254,7 +254,7 @@ public class GameManager {
     public String reactToAbyssOrTool() {
         int idJogadorAtual = getCurrentPlayerID();
         if (idJogadorAtual == -1) {
-            return "Não há jogadores no jogo";
+            return null;
         }
 
         Jogador jogadorAtual = null;
@@ -287,8 +287,8 @@ public class GameManager {
             int tipoFerramenta = ferramenta.getId();
 
             boolean jaTemEsteTipo = false;
-            for (Ferramenta f : jogadorAtual.getFerramentas()) {
-                if (f.getId() == tipoFerramenta) {
+            for (Ferramenta ferramenta1 : jogadorAtual.getFerramentas()) {
+                if (ferramenta1.getId() == tipoFerramenta) {
                     jaTemEsteTipo = true;
                     break;
                 }
@@ -321,8 +321,12 @@ public class GameManager {
                 }
             }
 
-            // Se não neutralizou, aplicar efeito específico baseado no tipo de abismo
-
+            // Se não neutralizou, aplicar efeito do abismo
+            if (!abismoNeutralizado) {
+                abismo.aplicarEfeito(jogadorAtual);
+                mensagem = "O jogador " + jogadorAtual.getNome() +
+                        " caiu no abismo: " + abismo.getTitulo();
+            }
         } else {
             mensagem = "O jogador " + jogadorAtual.getNome() +
                     " não encontrou nada na casa " + posicaoAtual;
