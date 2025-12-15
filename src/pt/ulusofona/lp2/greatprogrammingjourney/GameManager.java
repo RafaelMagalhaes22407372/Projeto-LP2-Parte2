@@ -129,26 +129,49 @@ public class GameManager {
     }
 
     public String[] getSlotInfo(int position) {
-        String[] idNaPosicao = new String[1];
-        boolean primeiroId = true;
-        StringBuilder idsOrganizados = new StringBuilder();
         if (position < 1 || position > tamanhoFinalTabuleiro) {
-            return null;
+            return new String[]{"", "", ""};
         }
 
+        // IDs dos jogadores
+        StringBuilder idsBuilder = new StringBuilder();
         for (Jogador jogador : players) {
-            if (jogador.getPosicaoAtual() == position) {
-                if (primeiroId) {
-                    idsOrganizados.append(jogador.getId());
-                    primeiroId = false;
-                } else {
-                    idsOrganizados.append(",").append(jogador.getId());
+            if (jogador != null && jogador.getPosicaoAtual() == position &&
+                    "Em jogo".equals(jogador.getEstaEmJogo())) {
+                if (!idsBuilder.isEmpty()) {
+                    idsBuilder.append(",");
                 }
+                idsBuilder.append(jogador.getId());
+            }
+        }
+        String playersCSV = idsBuilder.toString();
+
+        // Informações do elemento (abismo/ferramenta)
+        String objNameStr = "";
+        String tipoIdStr = "";
+
+        // Procurar casa na posição
+        Casa casa = null;
+        for (Casa c : abimosEFerramentas) {
+            if (c.getPosicao() == position) {
+                casa = c;
+                break;
             }
         }
 
-        idNaPosicao[0] = idsOrganizados.toString();
-        return idNaPosicao;
+        if (casa != null) {
+            if (casa.temAbismo()) {
+                Abismo abismo = casa.getAbismo();
+                objNameStr = abismo.getTitulo();
+                tipoIdStr = "A:" + abismo.getId();
+            } else if (casa.temFerramenta()) {
+                Ferramenta ferramenta = casa.getFerramenta();
+                objNameStr = ferramenta.getNome();
+                tipoIdStr = "T:" + ferramenta.getId();
+            }
+        }
+
+        return new String[]{playersCSV, objNameStr, tipoIdStr};
     }
 
     public int getCurrentPlayerID() {
