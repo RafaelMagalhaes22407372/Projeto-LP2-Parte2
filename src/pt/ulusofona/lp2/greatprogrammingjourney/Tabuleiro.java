@@ -101,19 +101,21 @@ public class Tabuleiro {
         return true;
     }
 
-    boolean  verificaIdsValidos() {
+    boolean verificaIdsValidos() {
         for (int i = 0; i < abismosEFerramentas.length; i++) {
-            int temp = Integer.parseInt(abismosEFerramentas[i][0]);
-            if (Integer.parseInt(abismosEFerramentas[i][0]) == 1) {
-                if (temp < 0  || temp > 9) {
+            int tipo = Integer.parseInt(abismosEFerramentas[i][0]);
+            int id = Integer.parseInt(abismosEFerramentas[i][1]);
+            if (tipo == 0) {
+                if (id < 0 || id > 5) {
+                    return false;
+                }
+            } else if (tipo == 1) {
+                if (id < 0 || id > 9) {
                     return false;
                 }
             } else {
-                if (temp < 0 || temp > 5) {
-                    return false;
-                }
+                return false;
             }
-
         }
         return true;
     }
