@@ -25,7 +25,7 @@ public class GameManager {
     public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
         players = new ArrayList<>();
         valoresDoDado = new ArrayList<>();
-        turno = 0;
+        turno = 1;
         tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, abyssesAndTools);
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificaTabuleiroValido()) {
@@ -67,7 +67,7 @@ public class GameManager {
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         players = new ArrayList<>();
         valoresDoDado = new ArrayList<>();
-        turno = 0;
+        turno = 1;
         tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, null);
         if ((worldSize >= playerInfo.length * 2)
@@ -238,7 +238,6 @@ public class GameManager {
 
         //Não se move caso esteja preso no abismo cicloInfinito
         if (jogadorAtual.estaPreso) {
-            turno++;
             return false;
         }
 
@@ -251,8 +250,6 @@ public class GameManager {
         }
         jogadorAtual.setPosicaoAtual(posTentativa);
 
-        // avançar o turno
-        turno++;
 
         return true;
     }
