@@ -44,6 +44,7 @@ public class GameManager {
             }
 
             for (String[] item : abyssesAndTools) {
+                if (item.length != 3) return false;
                 int tipo = Integer.parseInt(item[0]); // 0 = Abismo, 1 = Ferramenta
                 int id = Integer.parseInt(item[1]);
                 int posicao = Integer.parseInt(item[2]);
