@@ -132,8 +132,9 @@ public class GameManager {
             return null;
         }
 
-        String[] resultado;
+        String[] resultado = new String[3];
 
+        // IDs dos jogadores
         StringBuilder idsBuilder = new StringBuilder();
         for (Jogador jogador : players) {
             if (jogador != null && jogador.getPosicaoAtual() == position &&
@@ -144,8 +145,12 @@ public class GameManager {
                 idsBuilder.append(jogador.getId());
             }
         }
-        String idsStr = idsBuilder.toString();
+        resultado[0] = idsBuilder.toString();
 
+        resultado[1] = "";
+        resultado[2] = "";
+
+        // Procurar casa na posição
         Casa casa = null;
         for (Casa casa1 : abimosEFerramentas) {
             if (casa1.getPosicao() == position) {
@@ -154,13 +159,8 @@ public class GameManager {
             }
         }
 
-        if (casa == null || (!casa.temAbismo() && !casa.temFerramenta())) {
-            resultado = new String[1];
-            resultado[0] = idsStr;
-        } else {
-            resultado = new String[3];
-            resultado[0] = idsStr;
-
+        // Se encontrou casa com elemento, preencher informações
+        if (casa != null) {
             if (casa.temAbismo()) {
                 Abismo abismo = casa.getAbismo();
                 resultado[1] = abismo.getTitulo();

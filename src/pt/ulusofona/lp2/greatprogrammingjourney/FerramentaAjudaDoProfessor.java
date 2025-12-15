@@ -8,6 +8,6 @@ public class FerramentaAjudaDoProfessor extends Ferramenta{
 
     @Override
     public Boolean podeNeutralizarAbismo(int id) {
-        return false;
+        return id == 4;
     }
 }
