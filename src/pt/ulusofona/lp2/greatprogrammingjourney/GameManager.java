@@ -408,7 +408,11 @@ public class GameManager {
             restantes.add(jogador);
         }
 
-        restantes.sort(Comparator.comparingInt(Jogador::getPosicaoAtual).reversed());
+        restantes.sort(Comparator
+                .comparingInt(Jogador::getPosicaoAtual).reversed()
+                .thenComparing(Jogador::getNome)
+        );
+
 
         for (Jogador jogador : restantes) {
             results.add(jogador.getNome() + " " + jogador.getPosicaoAtual());
