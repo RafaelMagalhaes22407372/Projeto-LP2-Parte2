@@ -368,6 +368,7 @@ public class GameManager {
     }
 
     public ArrayList<String> getGameResults() {
+
         ArrayList<String> results = new ArrayList<>();
         results.add("THE GREAT PROGRAMMING JOURNEY");
         results.add("");
