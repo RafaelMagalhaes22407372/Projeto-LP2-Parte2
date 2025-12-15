@@ -368,21 +368,26 @@ public class GameManager {
     }
 
     public ArrayList<String> getGameResults() {
-
         ArrayList<String> results = new ArrayList<>();
         results.add("THE GREAT PROGRAMMING JOURNEY");
         results.add("");
         results.add("NR. DE TURNOS");
-        results.add(turno + "");
+        results.add((turno - 1) + "");
         results.add("");
+
         results.add("VENCEDOR");
 
-        String nomeVencedor = "";
+        ArrayList<Jogador> vencedores = new ArrayList<>();
         for (Jogador jogador : players) {
             if (jogador != null && jogador.getPosicaoAtual() == tamanhoFinalTabuleiro) {
-                nomeVencedor = jogador.getNome();
+                vencedores.add(jogador);
             }
         }
+
+        vencedores.sort(Comparator.comparing(Jogador::getNome));
+
+        String nomeVencedor = vencedores.isEmpty() ? "" : vencedores.get(0).getNome();
+
         results.add(nomeVencedor);
         results.add("");
         results.add("RESTANTES");
@@ -399,7 +404,6 @@ public class GameManager {
                 .comparingInt(Jogador::getPosicaoAtual).reversed()
                 .thenComparing(Jogador::getNome)
         );
-
 
         for (Jogador jogador : restantes) {
             results.add(jogador.getNome() + " " + jogador.getPosicaoAtual());
