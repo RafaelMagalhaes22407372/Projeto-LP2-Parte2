@@ -193,7 +193,7 @@ public class GameManager {
         lista.sort(Comparator.comparingInt(Jogador::getId));
 
         // calcular índice baseado no turno
-        int ordIndex = turno;
+        int ordIndex = turno - 1;
         while (ordIndex >= lista.size()) {
             ordIndex -= lista.size();
         }
@@ -518,9 +518,6 @@ public class GameManager {
             throw new InvalidFileException("Erro genérico: " + e.getMessage());
         }
     }
-
-
-
 
     public boolean saveGame(File file) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
