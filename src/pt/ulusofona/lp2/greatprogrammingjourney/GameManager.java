@@ -66,6 +66,7 @@ public class GameManager {
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         players = new ArrayList<>();
+        valoresDoDado = new ArrayList<>();
         turno = 1;
         tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, null);
