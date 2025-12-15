@@ -193,7 +193,7 @@ public class GameManager {
         lista.sort(Comparator.comparingInt(Jogador::getId));
 
         // calcular índice baseado no turno
-        int ordIndex = turno - 1;
+        int ordIndex = turno;
         while (ordIndex >= lista.size()) {
             ordIndex -= lista.size();
         }
@@ -372,7 +372,7 @@ public class GameManager {
         results.add("THE GREAT PROGRAMMING JOURNEY");
         results.add("");
         results.add("NR. DE TURNOS");
-        results.add((turno - 1) + "");
+        results.add(turno + "");
         results.add("");
         results.add("VENCEDOR");
 
