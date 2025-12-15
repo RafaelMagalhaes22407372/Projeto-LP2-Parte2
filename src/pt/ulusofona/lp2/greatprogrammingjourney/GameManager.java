@@ -43,19 +43,19 @@ public class GameManager {
                 abimosEFerramentas.add(new Casa(i)); // criamos uma casa "normal"
             }
 
-            for (String[] item : abyssesAndTools) {
-                if (item.length != 3) return false;
-                int tipo = Integer.parseInt(item[0]); // 0 = Abismo, 1 = Ferramenta
-                int id = Integer.parseInt(item[1]);
-                int posicao = Integer.parseInt(item[2]);
+            CriacaoAbismos criadorAbismos = new CriacaoAbismos();
+            CriacaoFerramentas criadorFerramentas = new CriacaoFerramentas();
 
-                Casa casa = abimosEFerramentas.get(posicao);
-                CriacaoAbismos abismos = new CriacaoAbismos();
-                CriacaoFerramentas ferramentas = new CriacaoFerramentas();
+            for (int i = 0; i < abyssesAndTools.length; i++) {
+                int tipo = Integer.parseInt(abyssesAndTools[i][0]); // 0 = Abismo, 1 = Ferramenta
+                int id = Integer.parseInt(abyssesAndTools[i][1]);
+                int posicao = Integer.parseInt(abyssesAndTools[i][2]);
+
+                Casa casa = abimosEFerramentas.get(posicao - 1);
                 if (tipo == 0) {
-                    casa.setAbismo(id, abismos);
+                    casa.setAbismo(id, criadorAbismos);
                 } else if (tipo == 1) {
-                    casa.setFerramenta(id, ferramentas);
+                    casa.setFerramenta(id, criadorFerramentas);
                 }
             }
             return true;

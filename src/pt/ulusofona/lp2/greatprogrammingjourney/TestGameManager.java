@@ -61,11 +61,39 @@ public class TestGameManager {
         String[] jogador2 =  {"2", "Bruh2", "Java2", "Purple"};
         jogadores[0] =  jogador;
         jogadores[1] = jogador2;
-        String[][] vazio = new String[0][0];
+        String[][] vazio = new String[2][3];
+        String[] abismo = {"0", "0", "3"};
+        String[] ferramenta = {"1", "4", "5"};
+        vazio[0] = abismo;
+        vazio[1] = ferramenta;
 
         System.out.println(manager.createInitialBoard(jogadores, 20, vazio));
 
-        assertTrue(manager.createInitialBoard(jogadores, 4, vazio));
+        assertTrue(manager.createInitialBoard(jogadores, 6, vazio));
+    }
+
+    @Test
+    public void testCriacaoAbismosEFeramentas() {
+        GameManager manager = new GameManager();
+
+        // Corrigido: Inicializar e preencher o array jogadores
+        String[][] jogadores = new String[2][4]; // Corrigido para [2][4] se apenas precisar de 4 campos
+        String[] jogador =  {"1", "Pedro", "Java", "Blue"};
+        String[] jogador2 =  {"2", "Bruh2", "Java2", "Purple"};
+
+        jogadores[0] = jogador; // Adicionar o primeiro jogador
+        jogadores[1] = jogador2; // Adicionar o segundo jogador
+
+        String[][] vazio = new String[2][3];
+        String[] abismo = {"0", "0", "3"}; // Tipo=0 (Abismo), ID=0, Posição=3
+        String[] ferramenta = {"1", "4", "5"}; // Tipo=1 (Ferramenta), ID=4, Posição=5
+        vazio[0] = abismo;
+        vazio[1] = ferramenta;
+
+        manager.createInitialBoard(jogadores, 20, vazio);
+        for (int i = 0; i < manager.abimosEFerramentas.size(); i++ ){
+            System.out.printf(manager.abimosEFerramentas.get(i).toString());
+        }
     }
 
     @Test
