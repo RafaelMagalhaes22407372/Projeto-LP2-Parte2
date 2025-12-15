@@ -25,7 +25,7 @@ public class GameManager {
     public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
         players = new ArrayList<>();
         valoresDoDado = new ArrayList<>();
-        turno = 1;
+        turno = 0;
         tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, abyssesAndTools);
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificaTabuleiroValido()) {
@@ -67,7 +67,7 @@ public class GameManager {
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
         players = new ArrayList<>();
         valoresDoDado = new ArrayList<>();
-        turno = 1;
+        turno = 0;
         tamanhoFinalTabuleiro = worldSize;
         Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, null);
         if ((worldSize >= playerInfo.length * 2)
