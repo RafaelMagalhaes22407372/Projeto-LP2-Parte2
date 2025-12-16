@@ -8,15 +8,15 @@ import java.io.FileWriter;
 import java.util.*;
 
 public class GameManager {
-    private String[][] informacaoJogadores;
-    private ArrayList<Jogador> jogadores = new ArrayList<>();
-    private int contadorTurnos = 1;
-    private int tamanhoTabuleiro;
-    private Tabuleiro tabuleiro;
-    private HashMap<String, Integer> turnosSaltados = new HashMap<>();
-    private int ultimoLancamentoDado = 0;
-    private String jogadorAtual;
-    private EstadoJogo estadoJogo;
+    String[][] informacaoJogadores;
+    ArrayList<Jogador> jogadores = new ArrayList<>();
+    int contadorTurnos = 1;
+    int tamanhoTabuleiro;
+    Tabuleiro tabuleiro;
+    HashMap<String, Integer> turnosSaltados = new HashMap<>();
+    int ultimoLancamentoDado = 0;
+    String jogadorAtual;
+    EstadoJogo estadoJogo;
 
     public GameManager() {
     }
