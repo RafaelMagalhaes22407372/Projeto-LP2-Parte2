@@ -1,15 +1,14 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
 public abstract class AbismoOuFerramenta {
-
     protected int id;
     protected String nome;
-    protected int posicaon;
+    protected int posicao;
 
-    public AbismoOuFerramenta(int id, String nome, int posicaon) {
+    public AbismoOuFerramenta(int id, String nome, int posicao) {
         this.id = id;
         this.nome = nome;
-        this.posicaon = posicaon;
+        this.posicao = posicao;
     }
 
     public int getId() {
@@ -20,11 +19,10 @@ public abstract class AbismoOuFerramenta {
         return nome;
     }
 
-    public int getPosicaon() {
-        return posicaon;
+    public int getPosicao() {  // Corrigido: estava getPosicaon()
+        return posicao;
     }
 
     public abstract String getTipo();
-
     public abstract String aplicaJogador(Jogador jogador, GameManager gameManager);
 }

@@ -5,102 +5,101 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Jogador {
-    String id;
-    String corAvatar;
-    String nome;
-    String linguagensFavoritas;
-    int posicao = 1;
-    int ultimaPosicao = 1;
-    int penultimaPosicao = 1;
-    ArrayList<Integer> historicoPosicoes = new ArrayList<>();
-    String estado = "Em Jogo";
-    Boolean isAlive = true;
-    List<String> ferramentas = new ArrayList<>();
-    Boolean estaPreso = false;
-
+    private String id;
+    private String corAvatar;
+    private String nome;
+    private String linguagensFavoritas;
+    private int posicao = 1;
+    private int ultimaPosicao = 1;
+    private int penultimaPosicao = 1;
+    private boolean vivo = true;
+    private ArrayList<String> ferramentas = new ArrayList<>();
+    private boolean preso = false;
+    private String estado = "Em Jogo";
 
     public Jogador(String id, String nome, String linguagensFavoritas, String corAvatar) {
         this.id = id;
         this.nome = nome;
         this.linguagensFavoritas = linguagensFavoritas;
-        this.corAvatar = corAvatar; // 3
-        this.historicoPosicoes.add(1);
+        this.corAvatar = corAvatar;
     }
 
-    String getId(){
+    public String getId() {
         return id;
     }
 
-    String getCorAvatar(){
+    public String getCorAvatar() {
         return corAvatar;
     }
 
-    String getNome(){
+    public String getNome() {
         return nome;
     }
 
-    String getLinguagensFavoritas() {
+    public String getLinguagensFavoritas() {
         return linguagensFavoritas;
     }
 
-    public Boolean getAlive() {
-        return isAlive;
+    public boolean estaVivo() {
+        return vivo;
     }
 
-    public void setAlive(Boolean alive) {
-        this.isAlive = alive;
+    public void setVivo(boolean vivo) {
+        this.vivo = vivo;
+        if (!vivo) {
+            this.estado = "Derrotado";
+        }
     }
 
-    int getPosicaoAtual(){
+    public int getPosicao() {
         return posicao;
     }
 
-    int getUltimaPosicao() {
+    public int getUltimaPosicao() {
         return ultimaPosicao;
     }
 
-    int getPenultimaPosicao() {
+    public int getPenultimaPosicao() {
         return penultimaPosicao;
     }
 
-    public List<String> getFerramentas() {
+    public ArrayList<String> getFerramentas() {
         return ferramentas;
+    }
+
+    public void setFerramentas(ArrayList<String> ferramentas) {
+        this.ferramentas = ferramentas;
     }
 
     public String getEstado() {
         return estado;
     }
 
-    public int getPosicaoNTurnosAtras(int n) {
-        int size = historicoPosicoes.size();
-        if (size > n) {
-            return historicoPosicoes.get(size - n - 1);
+    public boolean estaPreso() {
+        return preso;
+    }
+
+    public void setPreso(boolean preso) {
+        this.preso = preso;
+        if (preso) {
+            this.estado = "Preso";
         }
-        return 1;
     }
 
     public void adicionarFerramenta(String ferramenta) {
-        if (ferramenta != null && !ferramenta.contains(ferramenta)) {
+        if (ferramenta != null && !ferramentas.contains(ferramenta)) {
             ferramentas.add(ferramenta);
         }
     }
 
-    public void removerFerramenta(Ferramenta ferramenta) {
-        this.ferramentas.remove(ferramenta);
+    public void removerFerramenta(String ferramenta) {
+        ferramentas.remove(ferramenta);
     }
 
-    void setPosicaoAtual(int novaPosicao) {
+    public void setPosicao(int novaPosicao) {
         this.penultimaPosicao = this.ultimaPosicao;
         this.ultimaPosicao = this.posicao;
         this.posicao = novaPosicao;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public void setEstaPreso(Boolean estaPreso) {
-        this.estaPreso = estaPreso;
     }
 
     public void setUltimaPosicao(int ultimaPosicao) {
@@ -111,30 +110,34 @@ public class Jogador {
         this.penultimaPosicao = penultimaPosicao;
     }
 
-    String getLinguagensOrdenadas() {
+    public String getLinguagensOrdenadas() {
+        if (linguagensFavoritas == null || linguagensFavoritas.isEmpty()) {
+            return "";
+        }
         String[] linguagens = linguagensFavoritas.split(";");
         for (int i = 0; i < linguagens.length; i++) {
             linguagens[i] = linguagens[i].trim();
         }
-
         Arrays.sort(linguagens);
         return String.join("; ", linguagens);
     }
 
-    String[] formatarJogador() {
+    public String[] toArray() {
         String ferramentasStr;
-        if (ferramentas == null || ferramentas.isEmpty()) {
+        if (ferramentas.isEmpty()) {
             ferramentasStr = "No tools";
         } else {
-            ferramentasStr = ferramentas.toString();
+            ferramentasStr = String.join(";", ferramentas);
         }
 
-        if (!getAlive()) {
-            setEstado("Derrotado");
-        }
-
-        return new String[] {id, nome, getLinguagensOrdenadas(), corAvatar, String.valueOf(posicao), ferramentasStr, estado};
+        return new String[] {
+                id,
+                nome,
+                getLinguagensOrdenadas(),
+                corAvatar,
+                String.valueOf(posicao),
+                ferramentasStr,
+                estado
+        };
     }
-
-
 }
