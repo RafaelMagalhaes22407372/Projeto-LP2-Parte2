@@ -2,19 +2,22 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Tabuleiro {
 
     int boardSize;
     String[][] jogadores;
-    String[][] abismosEFerramentas;
+    String[][] abyssesAndTools;
+    ArrayList<String>[] tabuleiro;
+    HashMap<String, Integer> positions = new HashMap<>();
+    AbismoOuFerramenta[] abismoOuFerramentas;
 
-
-    public Tabuleiro(String[][] jogadores, int boardSize, String[][] abismosEFerramentas) {
+    public Tabuleiro(String[][] jogadores, int boardSize, String[][] abyssesAndTools) {
         this.jogadores = jogadores;
         this.boardSize = boardSize;
-        this.abismosEFerramentas = abismosEFerramentas;
+        this.abyssesAndTools = abyssesAndTools;
     }
 
     boolean verificarIdsValidosERepetidos(String[][] playerInfo) {
@@ -92,8 +95,8 @@ public class Tabuleiro {
     }
 
     boolean verificaTiposValidos() {
-        for (int i = 0; i < abismosEFerramentas.length; i++) {
-            int temp = Integer.parseInt(abismosEFerramentas[i][0]);
+        for (int i = 0; i < abyssesAndTools.length; i++) {
+            int temp = Integer.parseInt(abyssesAndTools[i][0]);
             if (temp != 0 && temp != 1) {
                 return false;
             }
@@ -102,9 +105,9 @@ public class Tabuleiro {
     }
 
     boolean verificaIdsValidos() {
-        for (int i = 0; i < abismosEFerramentas.length; i++) {
-            int tipo = Integer.parseInt(abismosEFerramentas[i][0]);
-            int id = Integer.parseInt(abismosEFerramentas[i][1]);
+        for (int i = 0; i < abyssesAndTools.length; i++) {
+            int tipo = Integer.parseInt(abyssesAndTools[i][0]);
+            int id = Integer.parseInt(abyssesAndTools[i][1]);
             if (tipo == 1) {
                 if (id < 0 || id > 5) {
                     return false;
@@ -121,8 +124,8 @@ public class Tabuleiro {
     }
 
     boolean verificaPosicoesInvalidas() {
-        for (int i = 0; i < abismosEFerramentas.length; i++) {
-            int pos = Integer.parseInt(abismosEFerramentas[i][2]);
+        for (int i = 0; i < abyssesAndTools.length; i++) {
+            int pos = Integer.parseInt(abyssesAndTools[i][2]);
             if (pos < 0 || pos >= boardSize) {
                 return false;
             }
@@ -134,5 +137,21 @@ public class Tabuleiro {
         return verificarCores(jogadores) && verificarNomesValidos(jogadores)
                 && verificarIdsValidosERepetidos(jogadores) && verificaIdsValidos()
                 && verificaTiposValidos() && verificaPosicoesInvalidas();
+    }
+
+    public void adicionarJogador(Jogador jogador) {
+        tabuleiro[0].add(jogador.getId());
+        positions.put(jogador.getId(), 1);
+    }
+
+    public AbismoOuFerramenta getAbismoOuFerramenta(int posicao) {
+        if (posicao < 1 || posicao > boardSize) {
+            return null;
+        }
+        return abismoOuFerramentas[posicao - 1];
+    }
+
+    public void posicionaAbismoEposicionaFerramenta(AbismoOuFerramenta abismoOuFerramenta) {
+        this.abismoOuFerramentas[abismoOuFerramenta.getPosicaon() - 1] = abismoOuFerramenta;
     }
 }

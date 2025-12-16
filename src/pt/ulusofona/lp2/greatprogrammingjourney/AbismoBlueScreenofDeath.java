@@ -7,7 +7,7 @@ public class AbismoBlueScreenofDeath extends Abismo{
 
     @Override
     void aplicarEfeito(Jogador jogador) {
-        jogador.setEstaEmJogo("Derrotado");
+        jogador.setEstado("Derrotado");
         jogador.setAlive(false);
     }
 }

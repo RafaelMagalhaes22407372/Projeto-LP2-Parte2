@@ -10,7 +10,7 @@ public class Abismo extends AbismoOuFerramenta{
     }
 
     @Override
-    public String get() {
+    public String getTipo() {
         return "Abismo";
     }
 

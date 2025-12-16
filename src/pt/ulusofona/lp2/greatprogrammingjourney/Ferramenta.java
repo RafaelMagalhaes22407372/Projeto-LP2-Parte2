@@ -1,21 +1,24 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
-public abstract class Ferramenta {
-    private int id;
-    private String nome;
+public class Ferramenta extends AbismoOuFerramenta {
 
-    public Ferramenta(int id, String nome) {
-        this.id = id;
-        this.nome = nome;
+
+    public Ferramenta(int id, String nome, int posicaon) {
+        super(id, nome, posicaon);
     }
 
-    public int getId() {
-        return id;
+
+    @Override
+    public String getTipo() {
+        return "Tool";
     }
 
-    public String getNome() {
-        return nome;
+    @Override
+    public String aplicaJogador(Jogador jogador, GameManager gameManager) {
+        if (jogador.getFerramentas().contains(this.nome)) {
+            return "Já possui " + this.nome + ", não apanhou novamente.";
+        }
+        jogador.adicionarFerramenta(this.nome);
+        return "Apanhou Ferramenta: " + this.nome;
     }
-
-    public abstract Boolean podeNeutralizarAbismo(int id);
 }

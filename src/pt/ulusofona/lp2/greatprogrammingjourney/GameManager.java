@@ -11,24 +11,30 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 public class GameManager {
+    String[][] playerInfo;
     ArrayList<Jogador> players;
-    int turno;
+    int turno = 1;
     int tamanhoFinalTabuleiro;
     ArrayList<Casa> abimosEFerramentas = new ArrayList<>();
-    ArrayList<Integer> valoresDoDado;
+    Tabuleiro tabuleiro;
+    private HashMap<String, Integer> turnosSaltados = new HashMap<>();
     int ultimoDadoJogado = 0;
+    String playerAtual;
+    EstadoDoJogo estadoDoJogo;
 
     public GameManager() {
     }
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
         players = new ArrayList<>();
-        valoresDoDado = new ArrayList<>();
         turno = 1;
         tamanhoFinalTabuleiro = worldSize;
-        Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, abyssesAndTools);
+        this.playerInfo = playerInfo;
+        tabuleiro = new Tabuleiro(playerInfo, worldSize, abyssesAndTools);
+        turnosSaltados.clear();
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificaTabuleiroValido()) {
             for (int i = 0; i < playerInfo.length; i++) {
                 int id = Integer.parseInt(playerInfo[i][0]);
@@ -36,56 +42,106 @@ public class GameManager {
                 String linguagens = playerInfo[i][2];
                 String cor = playerInfo[i][3];
 
-                players.add(new Jogador(id, nome, linguagens, cor));
+                Jogador jogador = new Jogador(id, nome, linguagens, cor);
+                jogador.setAlive(true);
+                players.add(jogador);
+                tabuleiro.adicionarJogador(jogador);
+
             }
+            players.sort(Comparator.comparingInt(jogador -> Integer.parseInt(jogador.getId())));
+            playerAtual = players.get(0).getId();
+            estadoDoJogo = EstadoDoJogo.EM_CURSO;
+            turno = 1;
 
-            // Cria casas do tabuleiro
-            abimosEFerramentas = new ArrayList<>();
-            for (int i = 1; i <= worldSize; i++) {
-                abimosEFerramentas.add(new Casa(i)); // criamos uma casa "normal"
-            }
+            if (abyssesAndTools != null) {
+                for (String[] linha : abyssesAndTools) {
+                    if (linha == null || linha.length != 3) {
+                        return false;
+                    }
+                    try {
+                        int id = Integer.parseInt(linha[0]);
+                        int tipo = Integer.parseInt(linha[1]);
+                        int posicao = Integer.parseInt(linha[2]);
 
-            CriacaoAbismos criadorAbismos = new CriacaoAbismos();
-            CriacaoFerramentas criadorFerramentas = new CriacaoFerramentas();
+                        // Verifica se há 1 ferramenta ou 1 abismo na casa, caso exista return falso
+                        if (tabuleiro.getAbismoOuFerramenta(posicao) != null) {
+                            return false;
+                        }
 
-            for (int i = 0; i < abyssesAndTools.length; i++) {
-                int tipo = Integer.parseInt(abyssesAndTools[i][0]); // 0 = Abismo, 1 = Ferramenta
-                int id = Integer.parseInt(abyssesAndTools[i][1]);
-                int posicao = Integer.parseInt(abyssesAndTools[i][2]);
-
-                Casa casa = abimosEFerramentas.get(posicao - 1);
-                if (tipo == 0) {
-                    casa.setAbismo(id, criadorAbismos);
-                } else if (tipo == 1) {
-                    casa.setFerramenta(id, criadorFerramentas);
+                        if (id == 0) {
+                            String nome = getNomeAbismo(tipo);
+                            if (nome == null) {
+                                return false;
+                            }
+                            Abismo abismo = new Abismo(id, nome, posicao);
+                            tabuleiro.posicionaAbismoEposicionaFerramenta(abismo);
+                        } else if (id == 1) {
+                            String nome = getNomeDaFerramenta(tipo);
+                            if (nome == null) {
+                                return false;
+                            }
+                            Ferramenta ferramenta = new Ferramenta(id, nome, posicao);
+                            tabuleiro.posicionaAbismoEposicionaFerramenta(ferramenta);
+                        } else {
+                            return false;
+                        }
+                    }catch (NumberFormatException e) {
+                        return false;
+                    }
                 }
             }
-            return true;
         }
         return false;
     }
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize) {
-        players = new ArrayList<>();
-        valoresDoDado = new ArrayList<>();
-        turno = 1;
-        tamanhoFinalTabuleiro = worldSize;
-        Tabuleiro tabuleiro = new Tabuleiro(playerInfo, worldSize, null);
-        if ((worldSize >= playerInfo.length * 2)
-                && tabuleiro.verificarCores(playerInfo)
-                && tabuleiro.verificarNomesValidos(playerInfo)
-                && tabuleiro.verificarIdsValidosERepetidos(playerInfo)) {
-            for (int i = 0; i < playerInfo.length; i++) {
-                int id = Integer.parseInt(playerInfo[i][0]);
-                String nome = playerInfo[i][1];
-                String linguagens = playerInfo[i][2];
-                String cor = playerInfo[i][3];
+        return createInitialBoard(playerInfo, worldSize, null);
+    }
 
-                players.add(new Jogador(id, nome, linguagens, cor));
-            }
-            return true;
+    private String getNomeAbismo(int id) {
+        switch (id) {
+            case 0:
+                return "Erro de sintaxe";
+            case 1:
+                return "Erro de lógica";
+            case 2:
+                return "Exception";
+            case 3:
+                return "FileNotFoundException";
+            case 4:
+                return "Crash";
+            case 5:
+                return "Código duplicado";
+            case 6:
+                return "Efeitos secundários";
+            case 7:
+                return "Blue Screen of Death";
+            case 8:
+                return "Ciclo infinito";
+            case 9:
+                return "Segmentation fault";
+            default:
+                return null;
         }
-        return false;
+    }
+
+    private String getNomeDaFerramenta(int id) {
+        switch (id) {
+            case 0:
+                return "Herança";
+            case 1:
+                return "Programação Funcional";
+            case 2:
+                return "Testes Unitários";
+            case 3:
+                return "Tratamento de Excepções";
+            case 4:
+                return "IDE";
+            case 5:
+                return "Ajuda Do Professor";
+            default:
+                return null;
+        }
     }
 
     public String getImagePng(int nrSquare) {
@@ -96,39 +152,51 @@ public class GameManager {
     }
 
     public String[] getProgrammerInfo(int id) {
-        for (Jogador player : players) {
-            if (player != null && player.getId() == id) {
-                String[] info = new String[4];
-                info[0] = String.valueOf(player.getId());
-                info[1] = player.getNome();
-                info[2] = player.getLinguagensFavoritas();
-                info[3] = player.getCorAvatar();
-                return info;
+        for (Jogador jogador : players) {
+            if (Integer.parseInt(jogador.getId()) == id) {
+                return jogador.formatarJogador();
             }
         }
         return null;
     }
 
     public String getProgrammersInfo() {
-        String info = "";
+        List<String> info = new ArrayList<>();
         for (Jogador player : players) {
             if (player != null && player.getAlive()) {
-                info += player.getNome() + " : ";
-                for (Ferramenta ferramenta : player.getFerramentas()) {
-                    info += ferramenta + ";";
+                String nome = player.getNome();
+                List<String> ferramentas = player.getFerramentas();
+                String resultado;
+                if (ferramentas.isEmpty()) {
+                    resultado = "No tools";
+                } else {
+                    resultado = String.join(";", ferramentas);
                 }
+                info.add(nome + " : " + resultado);
             }
         }
-        return info;
+        return String.join(" | ", info);
     }
 
     public String getProgrammerInfoAsStr(int id) {
-        for (Jogador player : players) {
-            if (player != null && player.getId() == id) {
-                return player.formatarJogador();
-            }
+        Jogador jogador = getJogadorId(String.valueOf(id));
+        if (jogador == null) {
+            return null;
         }
-        return null;
+        String ferramentas = jogador.getFerramentas().isEmpty() ? "No tools"
+                : String.join("; ", jogador.getFerramentas());
+
+        String estado;
+        if (!jogador.getAlive()) {
+            estado = "Derrotado";
+        } else if (turnosSaltados.containsKey(jogador.getId()) && turnosSaltados.get(jogador.getId()) > 0) {
+            estado = "Preso";
+        } else {
+            estado = "Em Jogo";
+        }
+
+        return jogador.getId() + " | " + jogador.getNome() + " | " + jogador.getPosicaoAtual() + " | " + ferramentas
+                + " | " + jogador.getLinguagensOrdenadas() + " | " + estado;
     }
 
     public String[] getSlotInfo(int position) {
@@ -267,7 +335,7 @@ public class GameManager {
         Jogador jogadorAtual = null;
         for (Jogador jogador : players) {
             if (jogador.getId() == idJogadorAtual &&
-                    ("Em Jogo".equals(jogador.getEstaEmJogo()))) {
+                    ("Em Jogo".equals(jogador.getEstado()))) {
                 jogadorAtual = jogador;
                 break;
             }
@@ -591,5 +659,14 @@ public class GameManager {
 
     public int getUltimoDadoJogado() {
         return ultimoDadoJogado;
+    }
+
+    public Jogador getJogadorId(String id) {
+        for (Jogador jogador : players) {
+            if (jogador.getId().equals(id)) {
+                return jogador;
+            }
+        }
+        return null;
     }
 }

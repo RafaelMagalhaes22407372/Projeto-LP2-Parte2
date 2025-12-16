@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Jogador {
-    int id;
+    String id;
     String corAvatar;
     String nome;
     String linguagensFavoritas;
@@ -13,7 +13,7 @@ public class Jogador {
     int ultimaPosicao = 1;
     int penultimaPosicao = 1;
     ArrayList<Integer> historicoPosicoes = new ArrayList<>();
-    String estaEmJogo = "Em Jogo";
+    String estado = "Em Jogo";
     Boolean isAlive = true;
     List<String> ferramentas = new ArrayList<>();
     Boolean estaPreso = false;
@@ -27,7 +27,7 @@ public class Jogador {
         this.historicoPosicoes.add(1);
     }
 
-    int getId(){
+    String getId(){
         return id;
     }
 
@@ -67,8 +67,8 @@ public class Jogador {
         return ferramentas;
     }
 
-    public String getEstaEmJogo() {
-        return estaEmJogo;
+    public String getEstado() {
+        return estado;
     }
 
     public int getPosicaoNTurnosAtras(int n) {
@@ -95,8 +95,8 @@ public class Jogador {
         this.posicao = novaPosicao;
     }
 
-    public void setEstaEmJogo(String estaEmJogo) {
-        this.estaEmJogo = estaEmJogo;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public void setEstaPreso(Boolean estaPreso) {
@@ -111,16 +111,17 @@ public class Jogador {
         this.penultimaPosicao = penultimaPosicao;
     }
 
-    String formatarJogador() {
+    String getLinguagensOrdenadas() {
         String[] linguagens = linguagensFavoritas.split(";");
         for (int i = 0; i < linguagens.length; i++) {
             linguagens[i] = linguagens[i].trim();
         }
 
         Arrays.sort(linguagens);
+        return String.join("; ", linguagens);
+    }
 
-        linguagensFavoritas = String.join("; ", linguagens);
-
+    String[] formatarJogador() {
         String ferramentasStr;
         if (ferramentas == null || ferramentas.isEmpty()) {
             ferramentasStr = "No tools";
@@ -128,6 +129,12 @@ public class Jogador {
             ferramentasStr = ferramentas.toString();
         }
 
-        return id + " | " + nome + " | " + posicao + " | " + ferramentasStr + " | " + linguagensFavoritas + " | " + estaEmJogo;
+        if (!getAlive()) {
+            setEstado("Derrotado");
+        }
+
+        return new String[] {id, nome, getLinguagensOrdenadas(), corAvatar, String.valueOf(posicao), ferramentasStr, estado};
     }
+
+
 }
