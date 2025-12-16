@@ -4,6 +4,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class Tabuleiro {
 
@@ -153,5 +154,57 @@ public class Tabuleiro {
 
     public void posicionaAbismoEposicionaFerramenta(AbismoOuFerramenta abismoOuFerramenta) {
         this.abismoOuFerramentas[abismoOuFerramenta.getPosicaon() - 1] = abismoOuFerramenta;
+    }
+
+    public String[] getSlotInfo(int position) {
+        if (tabuleiro == null || position < 1 || position > boardSize) {
+            return new String[]{"", "", ""};
+        }
+        List<String> ids = tabuleiro[position - 1];
+        String jogador = "";
+        if (!ids.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ids.size(); i++) {
+                sb.append(ids.get(i));
+                if (i < ids.size() - 1) {
+                    sb.append(",");
+                }
+            }
+            jogador = sb.toString();
+        }
+
+        AbismoOuFerramenta conjuntos = abismoOuFerramentas[position - 1];
+        String nomeConjunto = "";
+        String atributosDoConjunto = "";
+
+        if (conjuntos != null) {
+            nomeConjunto = conjuntos.getNome();
+            String conjuntoId = String.valueOf(conjuntos.getId());
+            if (conjuntos.getTipo().equals("Abyss")) {
+                atributosDoConjunto = "A:" + conjuntoId;
+            }else if (conjuntos.getTipo().equals("Tool")) {
+                atributosDoConjunto = "T:" + conjuntoId;
+            }
+        }
+        return new String[]{jogador, nomeConjunto, atributosDoConjunto};
+    }
+
+    public void moverJogadorNoTabueleiro(Jogador jogador, int nrSpaces) {
+        int jogadorAtual = positions.get(jogador.getId());
+        int posicaoAposMover = jogadorAtual + nrSpaces;
+
+        if (posicaoAposMover > boardSize) {
+            int excesso = posicaoAposMover - boardSize;
+            posicaoAposMover = boardSize - excesso;
+        }
+
+        tabuleiro[jogadorAtual - 1].remove(jogador.getId());
+        tabuleiro[posicaoAposMover - 1].add(jogador.getId());
+        positions.put(jogador.getId(),posicaoAposMover);
+        jogador.setPosicaoAtual(posicaoAposMover);
+    }
+
+    public boolean verificaFinal(Jogador jogador) {
+        return positions.get(jogador.getId()) == boardSize;
     }
 }

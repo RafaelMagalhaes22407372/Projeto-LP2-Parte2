@@ -18,7 +18,6 @@ public class GameManager {
     ArrayList<Jogador> players;
     int turno = 1;
     int tamanhoFinalTabuleiro;
-    ArrayList<Casa> abimosEFerramentas = new ArrayList<>();
     Tabuleiro tabuleiro;
     private HashMap<String, Integer> turnosSaltados = new HashMap<>();
     int ultimoDadoJogado = 0;
@@ -200,246 +199,74 @@ public class GameManager {
     }
 
     public String[] getSlotInfo(int position) {
-        if (position < 1 || position > tamanhoFinalTabuleiro) {
-            return null;
-        }
-
-        String[] resultado = new String[3];
-
-        StringBuilder idsBuilder = new StringBuilder();
-        boolean primeiroId = true;
-
-        for (Jogador jogador : players) {
-            if (jogador != null && jogador.getPosicaoAtual() == position) {
-                if (primeiroId) {
-                    idsBuilder.append(jogador.getId());
-                    primeiroId = false;
-                } else {
-                    idsBuilder.append(",").append(jogador.getId());
-                }
-            }
-        }
-        resultado[0] = idsBuilder.toString();
-
-        Casa casa = null;
-        for (Casa casa1 : abimosEFerramentas) {
-            if (casa1 != null && casa1.getPosicao() == position) {
-                casa = casa1;
-                break;
-            }
-        }
-
-        if (casa == null || (!casa.temAbismo() && !casa.temFerramenta())) {
-            resultado[1] = "";
-            resultado[2] = "";
-
-        } else if (casa.temAbismo()) {
-            Abismo abismo = casa.getAbismo();
-            resultado[1] = abismo.getTitulo();
-            resultado[2] = "A:" + abismo.getId();
-
-        } else {
-            Ferramenta ferramenta = casa.getFerramenta();
-            resultado[1] = ferramenta.getNome();
-            resultado[2] = "T:" + ferramenta.getId();
-        }
-
-        return resultado;
+        return tabuleiro.getSlotInfo(position);
     }
 
     public int getCurrentPlayerID() {
-        if (players == null || players.isEmpty()) {
-            return -1;
-        }
-
-        // construir lista apenas com jogadores não nulos
-        ArrayList<Jogador> lista = new ArrayList<>();
-        for (Jogador jogador : players) {
-            lista.add(jogador);
-        }
-
-        // ordenar por ID crescente
-        lista.sort(Comparator.comparingInt(Jogador::getId));
-
-        // calcular índice baseado no turno
-        int ordIndex = turno - 1;
-        while (ordIndex >= lista.size()) {
-            ordIndex -= lista.size();
-        }
-
-        // devolver o ID correspondente
-        return lista.get(ordIndex).getId();
+        return Integer.parseInt(playerAtual);
     }
 
-
-
-
     public boolean moveCurrentPlayer(int nrSpaces) {
-        // validação do número de casas
         if (nrSpaces < 1 || nrSpaces > 6) {
             return false;
         }
 
-        //Adiciona o numero do dado para depois ir buscar com numero do turno
-        valoresDoDado.add(nrSpaces);
-
-        // obter o ID do jogador actual
-        int idAtual = getCurrentPlayerID();
-        if (idAtual == -1) {
+        if (estadoDoJogo == EstadoDoJogo.ACABADO || tabuleiro == null || playerAtual == null) {
             return false;
         }
 
-        // encontrar o jogador no ArrayList players
-        Jogador jogadorAtual = null;
-        int indiceOriginal = -1;
-        for (int i = 0; i < players.size(); i++) {
-            Jogador player = players.get(i);
-            if (player != null && player.getId() == idAtual) {
-                jogadorAtual = player;
-                indiceOriginal = i;
-                break;
+
+        Jogador jogadorAtual = getJogadorId(playerAtual);
+        if (jogadorAtual == null || !jogadorAtual.isAlive) {
+            proximoPlayer();
+            return false;
+        }
+
+        Integer pular = turnosSaltados.getOrDefault(jogadorAtual.getId(), 0);
+        if (pular > 0) {
+            turnosSaltados.put(jogadorAtual.getId(), pular - 1);
+            if (turnosSaltados.get(jogadorAtual.getId()) == 0) {
+                turnosSaltados.remove(jogadorAtual.getId());
             }
-        }
-
-        if (jogadorAtual == null) {
-            return false;
-        }
-
-        //Não se move caso esteja preso no abismo cicloInfinito
-        if (jogadorAtual.estaPreso) {
-            jogadorAtual.setEstaPreso(false);
-            // Turno avanca para o proximo jogador que nao jogou
             turno++;
+            proximoPlayer();
             return false;
         }
 
-        // mover o jogador
-        int posTentativa = jogadorAtual.getPosicaoAtual() + nrSpaces;
+        String linguagemProgramador = jogadorAtual.getLinguagensOrdenadas();
+        if (linguagemProgramador != null && !linguagemProgramador.isEmpty()) {
+            String primeira = linguagemProgramador;
+            if (linguagemProgramador.contains(";")){
+                primeira = linguagemProgramador.split(";")[0].trim();
+            }
+            if (primeira.equals("C") && nrSpaces >= 4) {
+                return false;
+            }
 
-        if (posTentativa > tamanhoFinalTabuleiro) {
-            int excesso = posTentativa - tamanhoFinalTabuleiro;
-            posTentativa = tamanhoFinalTabuleiro - excesso; // volta para trás
+            if (primeira.equals("Assembly") && nrSpaces >= 3) {
+                return false;
+            }
+
+            tabuleiro.moverJogadorNoTabueleiro(jogadorAtual, nrSpaces);
+            ultimoDadoJogado = nrSpaces;
+            turno++;
+
+            if (tabuleiro.verificaFinal(jogadorAtual)) {
+                estadoDoJogo = EstadoDoJogo.ACABADO;
+                return true;
+            }
+            return true;
+
         }
-        jogadorAtual.setPosicaoAtual(posTentativa);
 
 
-        return true;
     }
 
     public String reactToAbyssOrTool() {
-        int idJogadorAtual = getCurrentPlayerID();
-        if (idJogadorAtual == -1) {
-            return null;
-        }
-
-        Jogador jogadorAtual = null;
-        for (Jogador jogador : players) {
-            if (jogador.getId() == idJogadorAtual &&
-                    ("Em Jogo".equals(jogador.getEstado()))) {
-                jogadorAtual = jogador;
-                break;
-            }
-        }
-
-        if (jogadorAtual == null) {
-            return null;
-        }
-
-        int posicaoAtual = jogadorAtual.getPosicaoAtual();
-        Casa casaAtual = null;
-
-        for (Casa casa : abimosEFerramentas) {
-            if (casa.getPosicao() == posicaoAtual) {
-                casaAtual = casa;
-                break;
-            }
-        }
-
-        if (casaAtual == null || (!casaAtual.temFerramenta() && !casaAtual.temAbismo())) {
-            return null;
-        }
-
-        String mensagem = "";
-
-        if (casaAtual.temFerramenta()) {
-            Ferramenta ferramenta = casaAtual.getFerramenta();
-            int tipoFerramenta = ferramenta.getId();
-
-            boolean jaTemEsteTipo = false;
-            for (Ferramenta ferramenta1 : jogadorAtual.getFerramentas()) {
-                if (ferramenta1.getId() == tipoFerramenta) {
-                    jaTemEsteTipo = true;
-                    break;
-                }
-            }
-
-            if (jaTemEsteTipo) {
-                mensagem = "O jogador " + jogadorAtual.getNome() +
-                        " já tem uma ferramenta do tipo " + tipoFerramenta +
-                        ", não pode recolher outra";
-            } else {
-                jogadorAtual.adicionarFerramenta(ferramenta);
-                mensagem = "O jogador " + jogadorAtual.getNome() +
-                        " recolheu a ferramenta: " + ferramenta.getNome();
-            }
-
-        } else {
-            Abismo abismo = casaAtual.getAbismo();
-
-            boolean abismoNeutralizado = false;
-            ArrayList<Ferramenta> ferramentasDoJogador = jogadorAtual.getFerramentas();
-
-            for (Ferramenta ferramenta : ferramentasDoJogador) {
-                if (ferramenta.podeNeutralizarAbismo(abismo.getId())) {
-                    jogadorAtual.removerFerramenta(ferramenta);
-                    mensagem = "O jogador " + jogadorAtual.getNome() +
-                            " usou " + ferramenta.getNome() +
-                            " para neutralizar " + abismo.getTitulo();
-                    abismoNeutralizado = true;
-                    break;
-                }
-            }
-            if (!abismoNeutralizado) {
-                int valorDoDado = 0;
-                try {
-                    if (turno > 0 && valoresDoDado.size() >= turno) {
-                        valorDoDado = valoresDoDado.get(turno - 1);
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    valorDoDado = 0;
-                }
-
-                if (abismo.getId() == 1) {
-                    int recuo = valorDoDado / 2;
-                    int novaPosicao = jogadorAtual.getPosicaoAtual() - recuo;
-                    if (novaPosicao < 1) {
-                        novaPosicao = 1;
-                    }
-                    jogadorAtual.setPosicaoAtual(novaPosicao);
-
-                    mensagem = "O jogador " + jogadorAtual.getNome() +
-                            " caiu no abismo: " + abismo.getTitulo() +
-                            ". Recuou " + recuo + " casa(s) para a posição " + novaPosicao;
-
-                } else {
-                    abismo.aplicarEfeito(jogadorAtual);
-                    mensagem = "O jogador " + jogadorAtual.getNome() +
-                            " caiu no abismo: " + abismo.getTitulo();
-                }
-            }
-        }
-
-        turno++;
-        return mensagem;
     }
 
     public boolean gameIsOver() {
-        for (Jogador player : players) {
-            if (player.posicaoAtual == tamanhoFinalTabuleiro) {
-                return true;
-            }
-        }
-        return false;
+        return estadoDoJogo == EstadoDoJogo.ACABADO;
     }
 
     public ArrayList<String> getGameResults() {
@@ -668,5 +495,32 @@ public class GameManager {
             }
         }
         return null;
+    }
+
+    private void proximoPlayer() {
+        if (players.isEmpty()) {
+            playerAtual = null;
+            return;
+        }
+
+        int indice = 0;
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getId().equals(playerAtual)) {
+                indice = i;
+                break;
+            }
+        }
+
+        for (int i = 1; i <= players.size(); i++) {
+            int nextIndex = (indice + i) % players.size();
+            Jogador nextPlayer = players.get(nextIndex);
+
+            if (nextPlayer.getAlive()) {
+                playerAtual = nextPlayer.getId();
+                return;
+            }
+        }
+        playerAtual = null;
+        estadoDoJogo = EstadoDoJogo.ACABADO;
     }
 }

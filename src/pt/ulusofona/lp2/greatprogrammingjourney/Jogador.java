@@ -19,7 +19,7 @@ public class Jogador {
     Boolean estaPreso = false;
 
 
-    public Jogador(int id, String nome, String linguagensFavoritas, String corAvatar) {
+    public Jogador(String id, String nome, String linguagensFavoritas, String corAvatar) {
         this.id = id;
         this.nome = nome;
         this.linguagensFavoritas = linguagensFavoritas;
