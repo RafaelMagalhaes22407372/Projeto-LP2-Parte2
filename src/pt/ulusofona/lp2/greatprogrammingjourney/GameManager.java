@@ -238,6 +238,9 @@ public class GameManager {
 
         //Não se move caso esteja preso no abismo cicloInfinito
         if (jogadorAtual.estaPreso) {
+            jogadorAtual.setEstaPreso(false);
+            // Turno avanca para o proximo jogador que nao jogou
+            turno++;
             return false;
         }
 
