@@ -9,6 +9,7 @@ import java.util.*;
 
 public class GameManager {
     private String[][] informacaoJogadores;
+    private String[][] abismosEFerramentas;
     private ArrayList<Jogador> jogadores = new ArrayList<>();
     private int contadorTurnos = 1;
     private int tamanhoTabuleiro;
@@ -29,6 +30,7 @@ public class GameManager {
         if (tamanhoMundo < (2 * informacaoJogadores.length)) {
             return false;
         }
+        this.abismosEFerramentas = abismosEFerramentas;
         this.nomesDosPNG = new NomesDosPNG();
         this.informacaoJogadores = informacaoJogadores;
         this.tamanhoTabuleiro = tamanhoMundo;
@@ -137,24 +139,33 @@ public class GameManager {
             return null;
         }
 
-        AbismoOuFerramenta objeto = tabuleiro.getAbismoOuFerramenta(nrSquare);
-
-        if (objeto != null) {
-            int id = objeto.getId();
-            String nomeFicheiro = null;
-
-            // 1. Tenta Abismo, usando a instância
-            nomeFicheiro = nomesDosPNG.getNomeFicheiroAbismo(id);
-
-            // 2. Se não encontrou Abismo, tenta Ferramenta
-            if (nomeFicheiro == null) {
-                // Usa a instância
-                nomeFicheiro = nomesDosPNG.getNomeFicheiroFerramenta(id);
-            }
-
-            return nomeFicheiro;
+        if (nrSquare == tamanhoTabuleiro) {
+            return "glory.png";
         }
 
+        if (this.abismosEFerramentas != null) {
+            String posicaoProcurada = String.valueOf(nrSquare);
+
+            // Percorre o array de configuração inicial
+            for (String[] item : this.abismosEFerramentas) {
+
+                // Verifica se a posição do item no array corresponde ao nrSquare
+                if (item.length == 3 && item[2].equals(posicaoProcurada)) {
+
+                    // Encontrou o item na posição nrSquare
+                    int tipo = Integer.parseInt(item[0]);      // 0 ou 1
+                    int idSubtipo = Integer.parseInt(item[1]); // ID
+
+                    if (tipo == 0) { // Abismo
+                        return nomesDosPNG.getNomeFicheiroAbismo(idSubtipo);
+                    } else if (tipo == 1) { // Ferramenta
+                        return nomesDosPNG.getNomeFicheiroFerramenta(idSubtipo);
+                    }
+                }
+            }
+        }
+
+        // Retorna null se não houver Abismo/Ferramenta nessa posição no array inicial
         return null;
     }
 
