@@ -18,6 +18,7 @@ public class GameManager {
     int tamanhoFinalTabuleiro;
     ArrayList<Casa> abimosEFerramentas = new ArrayList<>();
     ArrayList<Integer> valoresDoDado;
+    int ultimoDadoJogado = 0;
 
     public GameManager() {
     }
@@ -586,5 +587,9 @@ public class GameManager {
 
     public HashMap<String, String> customizeBoard() {
         return new HashMap<String, String>();
+    }
+
+    public int getUltimoDadoJogado() {
+        return ultimoDadoJogado;
     }
 }
