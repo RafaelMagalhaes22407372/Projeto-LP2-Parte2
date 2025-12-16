@@ -36,7 +36,7 @@ public class GameManager {
         turnosSaltados.clear();
         if ((worldSize >= playerInfo.length * 2) && tabuleiro.verificaTabuleiroValido()) {
             for (int i = 0; i < playerInfo.length; i++) {
-                int id = Integer.parseInt(playerInfo[i][0]);
+                String id = playerInfo[i][0];
                 String nome = playerInfo[i][1];
                 String linguagens = playerInfo[i][2];
                 String cor = playerInfo[i][3];
