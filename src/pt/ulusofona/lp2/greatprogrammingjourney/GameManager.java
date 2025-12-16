@@ -246,59 +246,56 @@ public class GameManager {
             return false;
         }
 
-        // Verificar se jogador está preso
         Integer saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
         if (saltos > 0) {
             turnosSaltados.put(atual.getId(), saltos - 1);
+
             if (turnosSaltados.get(atual.getId()) == 0) {
                 turnosSaltados.remove(atual.getId());
             }
+
+            contadorTurnos++;
             avancarParaProximoJogador();
             return false;
         }
 
-        // Validar número de espaços
         if (numeroEspacos < 1 || numeroEspacos > 6) {
             return false;
         }
 
-        String linguagens = atual.getLinguagensFavoritas();
-        if (linguagens != null && !linguagens.isEmpty()) {
-            String primeiraLinguagem = linguagens.split(";")[0].trim();
+        String linguagem = atual.getLinguagensFavoritas();
 
-            if (primeiraLinguagem.equalsIgnoreCase("C") && numeroEspacos >= 4) {
+        if (linguagem != null && !linguagem.isEmpty()) {
+            String primeiraLinguagem = linguagem;
+            if (linguagem.contains(";")) {
+                primeiraLinguagem = linguagem.split(";")[0];
+            }
+            String primeiraLinguagemTrimmada = primeiraLinguagem.trim();
+
+            if (primeiraLinguagemTrimmada.equalsIgnoreCase("C") && numeroEspacos >= 4) {
                 return false;
             }
-            if (primeiraLinguagem.equalsIgnoreCase("Assembly") && numeroEspacos >= 3) {
+
+            if (primeiraLinguagemTrimmada.equalsIgnoreCase("Assembly") && numeroEspacos >= 3) {
                 return false;
             }
         }
 
-        // Mover jogador
         tabuleiro.moverJogador(atual, numeroEspacos);
         this.ultimoLancamentoDado = numeroEspacos;
-
         contadorTurnos++;
 
-        // Verificar se chegou ao final
         if (tabuleiro.verificaFinal(atual)) {
             estadoJogo = EstadoJogo.TERMINADO;
             return true;
         }
 
-        // Avançar para próximo jogador
-        avancarParaProximoJogador();
         return true;
     }
 
     public String reactToAbyssOrTool() {
-        if (estadoJogo == EstadoJogo.TERMINADO) {
-            return null;
-        }
-
         Jogador jogador = getJogadorById(jogadorAtual);
-        if (jogador == null || !jogador.estaVivo()) {
-            avancarParaProximoJogador();
+        if (jogador == null) {
             return null;
         }
 
@@ -333,7 +330,7 @@ public class GameManager {
         resultados.add("THE GREAT PROGRAMMING JOURNEY");
         resultados.add("");
         resultados.add("NR. DE TURNOS");
-        resultados.add(String.valueOf(contadorTurnos - 1));
+        resultados.add(String.valueOf(contadorTurnos));
         resultados.add("");
         resultados.add("VENCEDOR");
 
@@ -355,13 +352,7 @@ public class GameManager {
             }
         }
 
-        restantes.sort((a, b) -> {
-            int posDiff = b.getPosicao() - a.getPosicao();
-            if (posDiff != 0) {
-                return posDiff;
-            }
-            return a.getNome().compareTo(b.getNome());
-        });
+        restantes.sort((a, b) -> b.getPosicao() - a.getPosicao());
 
         for (Jogador jogador : restantes) {
             resultados.add(jogador.getNome() + " " + jogador.getPosicao());
@@ -557,16 +548,12 @@ public class GameManager {
             return;
         }
 
-        int indiceInicial = -1;
+        int indiceInicial = 0;
         for (int i = 0; i < jogadores.size(); i++) {
             if (jogadores.get(i).getId().equals(jogadorAtual)) {
                 indiceInicial = i;
                 break;
             }
-        }
-
-        if (indiceInicial == -1) {
-            indiceInicial = 0;
         }
 
         for (int i = 1; i <= jogadores.size(); i++) {
@@ -578,7 +565,6 @@ public class GameManager {
                 return;
             }
         }
-
         jogadorAtual = null;
         estadoJogo = EstadoJogo.TERMINADO;
     }
@@ -587,7 +573,6 @@ public class GameManager {
         if (jogador == null || n <= 0) {
             return;
         }
-
         turnosSaltados.put(jogador.getId(), turnosSaltados.getOrDefault(jogador.getId(), 0) + n);
     }
 
