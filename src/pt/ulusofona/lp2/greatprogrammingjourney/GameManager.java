@@ -677,4 +677,28 @@ public class GameManager {
         }
         jogadores.sort(Comparator.comparingInt(j -> Integer.parseInt(j.getId())));
     }
+
+    public String getJogadorAtual() {
+        return jogadorAtual;
+    }
+
+    public int getTamanhoTabuleiro() {
+        return tamanhoTabuleiro;
+    }
+
+    public int getContadorTurnos() {
+        return contadorTurnos;
+    }
+
+    public ArrayList<Jogador> getJogadores() {
+        return jogadores;
+    }
+
+    public EstadoJogo getEstadoJogo() {
+        return estadoJogo;
+    }
+
+    public void setEstadoJogo(EstadoJogo estadoJogo) {
+        this.estadoJogo = estadoJogo;
+    }
 }

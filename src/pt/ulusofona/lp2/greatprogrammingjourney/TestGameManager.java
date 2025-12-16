@@ -14,7 +14,6 @@ public class TestGameManager {
                 {"2", "Bob", "Python", "Green"}
         };
 
-        // Tamanho menor que 2*n jogadores (2*2=4, precisa de pelo menos 4)
         assertFalse(gm.createInitialBoard(jogadores, 3, null));
     }
 
@@ -22,7 +21,7 @@ public class TestGameManager {
     public void testCreateInitialBoard_NumeroJogadoresInvalido() {
         GameManager gm = new GameManager();
         String[][] jogadores = {
-                {"1", "Alice", "Java", "Blue"}  // Apenas 1 jogador
+                {"1", "Alice", "Java", "Blue"}
         };
 
         assertFalse(gm.createInitialBoard(jogadores, 10, null));
@@ -37,23 +36,19 @@ public class TestGameManager {
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
-        // Jogador 1 move 3 casas
         assertTrue(gm.moveCurrentPlayer(3));
-        assertEquals("1", gm.jogadorAtual); // Deve passar para próximo jogador
+        assertEquals("1", gm.getJogadorAtual()); // Usar getter
     }
 
     @Test
     public void testMoveCurrentPlayer_MovimentoInvalido() {
         GameManager gm = new GameManager();
         String[][] jogadores = {
-                {"1", "Alice", "C", "Blue"},  // Linguagem C não pode mover >=4
+                {"1", "Alice", "C", "Blue"},
                 {"2", "Bob", "Python", "Green"}
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
-        // Tenta mover 4 casas com linguagem C (não permitido)
         assertFalse(gm.moveCurrentPlayer(4));
     }
 
@@ -66,12 +61,10 @@ public class TestGameManager {
         };
 
         String[][] objetos = {
-                {"1", "0", "3"}  // Ferramenta "Herança" na posição 3
+                {"1", "0", "3"}
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, objetos));
-
-        // Move jogador para posição com ferramenta
         gm.moveCurrentPlayer(2);
         String resultado = gm.reactToAbyssOrTool();
         assertNotNull(resultado);
@@ -87,7 +80,6 @@ public class TestGameManager {
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
         ArrayList<String> resultados = gm.getGameResults();
         assertTrue(resultados.isEmpty());
     }
@@ -101,13 +93,10 @@ public class TestGameManager {
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
         Jogador alice = gm.getJogadorById("1");
         gm.skipTurns(alice, 2);
-
-        // Alice deve pular seu turno
-        gm.moveCurrentPlayer(3); // Bob move
-        assertEquals("2", gm.jogadorAtual); // Ainda é Bob
+        gm.moveCurrentPlayer(3);
+        assertEquals("2", gm.getJogadorAtual()); // Usar getter
     }
 
     @Test
@@ -120,12 +109,10 @@ public class TestGameManager {
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
         Jogador bob = gm.getJogadorById("2");
         gm.eliminatePlayer(bob);
-
         assertFalse(bob.estaVivo());
-        assertEquals("1", gm.jogadorAtual); // Continua com Alice
+        assertEquals("1", gm.getJogadorAtual()); // Usar getter
     }
 
     @Test
@@ -137,15 +124,14 @@ public class TestGameManager {
         };
 
         String[][] objetos = {
-                {"0", "2", "5"}  // Abismo Exception na posição 5
+                {"0", "2", "5"}
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, objetos));
-
         String[] slotInfo = gm.getSlotInfo(5);
         assertEquals(3, slotInfo.length);
-        assertEquals("Exception", slotInfo[1]); // Nome do abismo
-        assertEquals("A:2", slotInfo[2]); // Tipo e ID
+        assertEquals("Exception", slotInfo[1]);
+        assertEquals("A:2", slotInfo[2]);
     }
 
     @Test
@@ -157,7 +143,6 @@ public class TestGameManager {
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
         String info = gm.getProgrammerInfoAsStr(1);
         assertNotNull(info);
         assertTrue(info.contains("Alice"));
@@ -179,27 +164,22 @@ public class TestGameManager {
         };
 
         assertTrue(gm1.createInitialBoard(jogadores, 10, objetos));
-
-        // Move alguns jogadores
         gm1.moveCurrentPlayer(2);
         gm1.reactToAbyssOrTool();
 
         try {
-            // Salva o jogo
             java.io.File tempFile = java.io.File.createTempFile("test_save", ".txt");
             assertTrue(gm1.saveGame(tempFile));
 
-            // Carrega em outro GameManager
             GameManager gm2 = new GameManager();
             gm2.loadGame(tempFile);
 
-            // Verifica se os dados são os mesmos
-            assertEquals(gm1.tamanhoTabuleiro, gm2.tamanhoTabuleiro);
-            assertEquals(gm1.contadorTurnos, gm2.contadorTurnos);
-            assertEquals(gm1.jogadores.size(), gm2.jogadores.size());
+            // Usar getters
+            assertEquals(gm1.getTamanhoTabuleiro(), gm2.getTamanhoTabuleiro());
+            assertEquals(gm1.getContadorTurnos(), gm2.getContadorTurnos());
+            assertEquals(gm1.getJogadores().size(), gm2.getJogadores().size());
 
             tempFile.delete();
-
         } catch (Exception e) {
             fail("Exceção lançada: " + e.getMessage());
         }
@@ -214,7 +194,6 @@ public class TestGameManager {
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
         String info = gm.getProgrammersInfo();
         assertNotNull(info);
         assertTrue(info.contains("Alice"));
@@ -231,11 +210,9 @@ public class TestGameManager {
         };
 
         assertTrue(gm.createInitialBoard(jogadores, 10, null));
-
         assertFalse(gm.gameIsOver());
 
-        // Simula término do jogo
-        gm.estadoJogo = EstadoJogo.TERMINADO;
+        gm.setEstadoJogo(EstadoJogo.TERMINADO); // Usar setter
         assertTrue(gm.gameIsOver());
     }
 }
