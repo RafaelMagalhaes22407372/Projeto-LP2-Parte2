@@ -8,15 +8,16 @@ import java.io.FileWriter;
 import java.util.*;
 
 public class GameManager {
-    String[][] informacaoJogadores;
-    ArrayList<Jogador> jogadores = new ArrayList<>();
-    int contadorTurnos = 1;
-    int tamanhoTabuleiro;
-    Tabuleiro tabuleiro;
-    HashMap<String, Integer> turnosSaltados = new HashMap<>();
-    int ultimoLancamentoDado = 0;
-    String jogadorAtual;
-    EstadoJogo estadoJogo;
+    private String[][] informacaoJogadores;
+    private ArrayList<Jogador> jogadores = new ArrayList<>();
+    private int contadorTurnos = 1;
+    private int tamanhoTabuleiro;
+    private Tabuleiro tabuleiro;
+    private HashMap<String, Integer> turnosSaltados = new HashMap<>();
+    private int ultimoLancamentoDado = 0;
+    private String jogadorAtual;
+    private EstadoJogo estadoJogo;
+    private NomesDosPNG nomesDosPNG;
 
     public GameManager() {
     }
@@ -28,7 +29,7 @@ public class GameManager {
         if (tamanhoMundo < (2 * informacaoJogadores.length)) {
             return false;
         }
-
+        this.nomesDosPNG = new NomesDosPNG();
         this.informacaoJogadores = informacaoJogadores;
         this.tamanhoTabuleiro = tamanhoMundo;
         this.tabuleiro = new Tabuleiro(tamanhoMundo);
@@ -132,10 +133,29 @@ public class GameManager {
     }
 
     public String getImagePng(int nrSquare) {
-        if (nrSquare < 1 || nrSquare > tamanhoTabuleiro) {
+        if (nrSquare < 1 || nrSquare > tamanhoTabuleiro || tabuleiro == null) {
             return null;
         }
-        return nrSquare == tamanhoTabuleiro ? "final.png" : "imagem" + nrSquare + ".png";
+
+        AbismoOuFerramenta objeto = tabuleiro.getAbismoOuFerramenta(nrSquare);
+
+        if (objeto != null) {
+            int id = objeto.getId();
+            String nomeFicheiro = null;
+
+            // 1. Tenta Abismo, usando a instância
+            nomeFicheiro = nomesDosPNG.getNomeFicheiroAbismo(id);
+
+            // 2. Se não encontrou Abismo, tenta Ferramenta
+            if (nomeFicheiro == null) {
+                // Usa a instância
+                nomeFicheiro = nomesDosPNG.getNomeFicheiroFerramenta(id);
+            }
+
+            return nomeFicheiro;
+        }
+
+        return null;
     }
 
     public String[] getProgrammerInfo(int id) {
