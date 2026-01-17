@@ -64,7 +64,9 @@ public class Jogador {
     }
 
     public ArrayList<String> getFerramentas() {
-        return ferramentas;
+        ArrayList<String> ferramentasOrg = new ArrayList<>(ferramentas);
+        ferramentasOrg.sort(String::compareTo);
+        return ferramentasOrg;
     }
 
     public void setFerramentas(ArrayList<String> ferramentas) {
