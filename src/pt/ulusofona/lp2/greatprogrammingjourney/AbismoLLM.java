@@ -10,7 +10,8 @@ public class AbismoLLM extends AbismoPai{
     public String aplicaJogador(Jogador jogador, GameManager gestorJogo) {
         int turnoAtual = gestorJogo.getContadorTurnos();
         int posicaoAnterior = jogador.getUltimaPosicao();
-        int avanco = gestorJogo.getLastDiceRoll();
+        int posicaoAtual = jogador.getPosicao();
+        int avanco = posicaoAtual - posicaoAnterior;
         int posicaoAposAvanco = jogador.getPosicao() + avanco;
 
         if (turnoAtual > 3) {
