@@ -346,6 +346,39 @@ public class GameManager {
             return resultados;
         }
 
+        if (!existeJogadorEmJogo()) {
+            resultados.add("THE GREAT PROGRAMMING JOURNEY");
+            resultados.add("");
+            resultados.add("NR. DE TURNOS");
+            resultados.add(String.valueOf(contadorTurnos));
+            resultados.add("");
+            resultados.add("O jogo terminou empatado.");
+            resultados.add("");
+            resultados.add("Participantes:");
+
+            ArrayList<Jogador> participantes = new ArrayList<>();
+
+            for (Jogador jogador : jogadores) {
+                participantes.add(jogador);
+            }
+
+            participantes.sort((a, b) -> b.getPosicao() - a.getPosicao());
+
+            for (Jogador jogador : participantes) {
+                int ultimaPos = jogador.getPosicao();
+                AbismoOuFerramenta slot = tabuleiro.getAbismoOuFerramenta(ultimaPos);
+
+                String nomeUltimoAbismo = "";
+
+                if (slot != null && slot.getTipo().equals("Abismo")) {
+                    nomeUltimoAbismo = slot.getNome();
+                }
+
+                resultados.add(jogador.getNome() + " : " + jogador.getPosicao() + " : " + nomeUltimoAbismo);
+            }
+            return resultados;
+        }
+
         resultados.add("THE GREAT PROGRAMMING JOURNEY");
         resultados.add("");
         resultados.add("NR. DE TURNOS");
