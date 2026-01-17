@@ -26,6 +26,8 @@ public class CriacaoAbismo {
                 return new AbismoCicloInfinito(id, nome, posicao);
             case 9:
                 return new AbismoSegmentationFault(id, nome, posicao);
+            case 20:
+                return new AbismoLLM(id, nome, posicao);
             default:
                 return null;
         }
@@ -43,6 +45,7 @@ public class CriacaoAbismo {
             case 7: return "Blue Screen of Death";
             case 8: return "Ciclo infinito";
             case 9: return "Segmentation fault";
+            case 20: return "LLM";
             default: return null;
         }
     }

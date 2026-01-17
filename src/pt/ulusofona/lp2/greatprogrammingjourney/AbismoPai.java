@@ -22,6 +22,7 @@ public abstract class AbismoPai extends AbismoOuFerramenta {
         anulacoes.put(7, "Ajuda Do Professor");
         anulacoes.put(8, "Programação Funcional");
         anulacoes.put(9, "IDE");
+        anulacoes.put(20, "Ajuda Do Professor");
     }
 
     @Override
