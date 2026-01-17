@@ -310,6 +310,12 @@ public class GameManager {
 
         String resultado = objeto.aplicaJogador(jogador, this);
 
+        if (!existeJogadorEmJogo()) {
+            estadoJogo = EstadoJogo.TERMINADO;
+            jogadorAtual = null;
+            return resultado;
+        }
+
         if (estadoJogo != EstadoJogo.TERMINADO && jogador.estaVivo()) {
             avancarParaProximoJogador();
         }
@@ -320,6 +326,18 @@ public class GameManager {
     public boolean gameIsOver() {
         return estadoJogo == EstadoJogo.TERMINADO;
     }
+
+    public boolean existeJogadorEmJogo() {
+        for (Jogador jogador : jogadores) {
+            if (jogador.estaVivo()
+                    && (!turnosSaltados.containsKey(jogador.getId())
+                    || turnosSaltados.get(jogador.getId()) == 0)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public ArrayList<String> getGameResults() {
         ArrayList<String> resultados = new ArrayList<>();
