@@ -627,14 +627,19 @@ public class GameManager {
             int proximoIndice = (indiceInicial + i) % jogadores.size();
             Jogador proximoJogador = jogadores.get(proximoIndice);
 
-            if (proximoJogador.estaVivo()) {
+            if (proximoJogador.estaVivo()
+                    && (!turnosSaltados.containsKey(proximoJogador.getId())
+                    || turnosSaltados.get(proximoJogador.getId()) == 0)) {
+
                 jogadorAtual = proximoJogador.getId();
                 return;
             }
         }
+
         jogadorAtual = null;
         estadoJogo = EstadoJogo.TERMINADO;
     }
+
 
     public void skipTurns(Jogador jogador, int n) {
         if (jogador == null || n <= 0) {
