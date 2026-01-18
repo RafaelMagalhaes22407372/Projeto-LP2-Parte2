@@ -8,7 +8,6 @@ public class AbismoLLM extends AbismoPai{
 
     @Override
     public String aplicaJogador(Jogador jogador, GameManager gestorJogo) {
-        int turnoAtual = gestorJogo.getContadorTurnos();
         int posicaoAnterior = jogador.getUltimaPosicao();
         int posicaoAtual = jogador.getPosicao();
         int avanco = posicaoAtual - posicaoAnterior;
