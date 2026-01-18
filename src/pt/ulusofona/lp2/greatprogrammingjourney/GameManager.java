@@ -304,7 +304,9 @@ public class GameManager {
         AbismoOuFerramenta objeto = tabuleiro.getAbismoOuFerramenta(pos);
 
         if (objeto == null) {
-            avancarParaProximoJogador();
+            if (existeOutroJogadorEmJogo(jogador)) {
+                avancarParaProximoJogador();
+            }
             return null;
         }
 
@@ -340,7 +342,7 @@ public class GameManager {
         return false;
     }
 
-    private boolean existeOutroJogadorEmJogo(Jogador atual) {
+    public boolean existeOutroJogadorEmJogo(Jogador atual) {
         for (Jogador jogador : jogadores) {
             if (!jogador.getId().equals(atual.getId())
                     && jogador.estaVivo()
