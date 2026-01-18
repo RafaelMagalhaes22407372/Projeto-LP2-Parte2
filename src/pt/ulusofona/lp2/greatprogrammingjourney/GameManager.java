@@ -213,7 +213,7 @@ public class GameManager {
         String estado;
         if (!jogador.estaVivo()) {
             estado = "Derrotado";
-        } else if (turnosSaltados.containsKey(jogador.getId()) && turnosSaltados.get(jogador.getId()) > 0) {
+        } else if (turnosSaltados.containsKey(jogador.getId()) && turnosSaltados.get(jogador.getId()) > 0 || jogador.estaPreso()) {
             estado = "Preso";
         } else {
             estado = "Em Jogo";
@@ -247,15 +247,7 @@ public class GameManager {
             return false;
         }
 
-        Integer saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
-        if (saltos > 0) {
-            turnosSaltados.put(atual.getId(), saltos - 1);
-
-            if (turnosSaltados.get(atual.getId()) == 0) {
-                turnosSaltados.remove(atual.getId());
-            }
-
-            contadorTurnos++;
+        if (atual.estaPreso()) {
             avancarParaProximoJogador();
             return false;
         }
@@ -304,9 +296,7 @@ public class GameManager {
         AbismoOuFerramenta objeto = tabuleiro.getAbismoOuFerramenta(pos);
 
         if (objeto == null) {
-            if (existeOutroJogadorEmJogo(jogador)) {
-                avancarParaProximoJogador();
-            }
+            avancarParaProximoJogador();
             return null;
         }
 
@@ -319,9 +309,7 @@ public class GameManager {
         }
 
         if (estadoJogo != EstadoJogo.TERMINADO && jogador.estaVivo()) {
-            if (existeOutroJogadorEmJogo(jogador)) {
-                avancarParaProximoJogador();
-            }
+            avancarParaProximoJogador();
         }
 
         return resultado;
@@ -342,17 +330,17 @@ public class GameManager {
         return false;
     }
 
-    public boolean existeOutroJogadorEmJogo(Jogador atual) {
+    public Jogador getJogadorPresoNaPosicao(int posicao) {
         for (Jogador jogador : jogadores) {
-            if (!jogador.getId().equals(atual.getId())
-                    && jogador.estaVivo()
-                    && (!turnosSaltados.containsKey(jogador.getId())
-                    || turnosSaltados.get(jogador.getId()) == 0)) {
-                return true;
+            if (jogador.estaVivo()
+                    && jogador.estaPreso()
+                    && jogador.getPosicao() == posicao) {
+                return jogador;
             }
         }
-        return false;
+        return null;
     }
+
 
     public ArrayList<String> getGameResults() {
         ArrayList<String> resultados = new ArrayList<>();
@@ -627,19 +615,14 @@ public class GameManager {
             int proximoIndice = (indiceInicial + i) % jogadores.size();
             Jogador proximoJogador = jogadores.get(proximoIndice);
 
-            if (proximoJogador.estaVivo()
-                    && (!turnosSaltados.containsKey(proximoJogador.getId())
-                    || turnosSaltados.get(proximoJogador.getId()) == 0)) {
-
+            if (proximoJogador.estaVivo()) {
                 jogadorAtual = proximoJogador.getId();
                 return;
             }
         }
-
         jogadorAtual = null;
         estadoJogo = EstadoJogo.TERMINADO;
     }
-
 
     public void skipTurns(Jogador jogador, int n) {
         if (jogador == null || n <= 0) {

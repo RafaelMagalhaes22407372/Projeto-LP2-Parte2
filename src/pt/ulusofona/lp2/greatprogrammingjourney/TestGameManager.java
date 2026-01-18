@@ -215,4 +215,35 @@ public class TestGameManager {
         gm.setEstadoJogo(EstadoJogo.TERMINADO); // Usar setter
         assertTrue(gm.gameIsOver());
     }
+
+    @Test
+    public void testAvancarIgnoraJogadorPreso_Debug() {
+
+        GameManager gm = new GameManager();
+
+        String[][] jogadores = {
+                {"1", "Alice", "Java", "Blue"},
+                {"2", "Bob", "Python", "Green"},
+                {"3", "Charlie", "C", "Red"}
+        };
+
+        assertTrue(gm.createInitialBoard(jogadores, 10, null));
+
+        assertEquals("1", gm.getJogadorAtual());
+
+        assertTrue(gm.moveCurrentPlayer(2));
+        gm.reactToAbyssOrTool();
+
+        Jogador bob = gm.getJogadorById("2");
+        bob.setPreso(true);
+        gm.reactToAbyssOrTool();
+
+        assertEquals("3", gm.getJogadorAtual());
+
+        assertTrue(gm.moveCurrentPlayer(2));
+        gm.reactToAbyssOrTool();
+
+        assertEquals("1", gm.getJogadorAtual());
+    }
+
 }
