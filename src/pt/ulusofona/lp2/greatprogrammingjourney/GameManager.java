@@ -19,6 +19,7 @@ public class GameManager {
     private String jogadorAtual;
     private EstadoJogo estadoJogo;
     private NomesDosPNG nomesDosPNG;
+    private Map<String, Integer> turnosPorJogador = new HashMap<>();
 
     public GameManager() {
     }
@@ -282,6 +283,9 @@ public class GameManager {
         }
 
         tabuleiro.moverJogador(atual, espacosEfetivos);
+
+        turnosPorJogador.put(atual.getId(), turnosPorJogador.getOrDefault(atual.getId(), 0) + 1);
+
         this.ultimoLancamentoDado = espacosEfetivos;
         contadorTurnos++;
 
@@ -291,6 +295,10 @@ public class GameManager {
         }
 
         return true;
+    }
+
+    public Map<String, Integer> getTurnosPorJogador() {
+        return turnosPorJogador;
     }
 
     public String reactToAbyssOrTool() {

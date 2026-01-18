@@ -13,8 +13,9 @@ public class AbismoLLM extends AbismoPai{
         int posicaoAtual = jogador.getPosicao();
         int avanco = posicaoAtual - posicaoAnterior;
         int posicaoAposAvanco = jogador.getPosicao() + avanco;
+        int turnosDoJogador = gestorJogo.getTurnosPorJogador().getOrDefault(jogador.getId(), 0);
 
-        if (turnoAtual > 3) {
+        if (turnosDoJogador > 3) {
             gestorJogo.setPlayerPosition(jogador, posicaoAposAvanco);
             return "Caiu no " + nome + " mas já tem experiência! Avança tantas casas como a do último movimento";
         }
