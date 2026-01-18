@@ -344,13 +344,18 @@ public class GameManager {
     }
 
     public void prenderJogador(Jogador jogador) {
-        if (jogador == null) return;
+        if (jogador == null) {
+            return;
+        }
+
         jogador.setPreso(true);
         turnosSaltados.put(jogador.getId(), 999);
     }
 
     public void libertarJogador(Jogador jogador) {
-        if (jogador == null) return;
+        if (jogador == null) {
+            return;
+        }
         jogador.setPreso(false);
         turnosSaltados.remove(jogador.getId());
     }
