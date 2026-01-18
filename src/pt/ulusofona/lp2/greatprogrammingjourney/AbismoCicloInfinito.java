@@ -1,6 +1,7 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
 public class AbismoCicloInfinito extends AbismoPai {
+    private Jogador jogadorPresoAtualmente = null;
 
     public AbismoCicloInfinito(int id, String nome, int posicao) {
         super(id, nome, posicao);
@@ -8,22 +9,17 @@ public class AbismoCicloInfinito extends AbismoPai {
 
     @Override
     public String aplicaJogador(Jogador jogador, GameManager gestorJogo) {
-
-        int posicao = jogador.getPosicao();
-
         if (anularComFerramenta(jogador)) {
-            return nome + " anulado por " + anulacoes.get(id);
+            return this.nome + " anulado por " + anulacoes.get(id);
         }
 
-        Jogador presoAtual = gestorJogo.getJogadorPresoNaPosicao(posicao);
-
-        if (presoAtual != null) {
-            presoAtual.setPreso(false);
+        if (jogadorPresoAtualmente != null && jogadorPresoAtualmente != jogador) {
+            gestorJogo.libertarJogador(jogadorPresoAtualmente);
         }
 
-        jogador.setPreso(true);
+        this.jogadorPresoAtualmente = jogador;
+        gestorJogo.prenderJogador(jogador);
 
-        return "Caiu em " + nome;
+        return "Caiu em " + nome + ". Ficaste preso num Ciclo Infinito!";
     }
-
 }

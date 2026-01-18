@@ -213,7 +213,7 @@ public class GameManager {
         String estado;
         if (!jogador.estaVivo()) {
             estado = "Derrotado";
-        } else if (turnosSaltados.containsKey(jogador.getId()) && turnosSaltados.get(jogador.getId()) > 0 || jogador.estaPreso()) {
+        } else if (turnosSaltados.containsKey(jogador.getId()) && turnosSaltados.get(jogador.getId()) > 0) {
             estado = "Preso";
         } else {
             estado = "Em Jogo";
@@ -248,34 +248,47 @@ public class GameManager {
         }
 
         if (atual.estaPreso()) {
+            contadorTurnos++;
             avancarParaProximoJogador();
             return false;
         }
 
-        if (numeroEspacos < 1 || numeroEspacos > 6) {
+        Integer saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
+        if (saltos > 0) {
+            turnosSaltados.put(atual.getId(), saltos - 1);
+            if (turnosSaltados.get(atual.getId()) == 0) {
+                turnosSaltados.remove(atual.getId());
+            }
+            contadorTurnos++;
+            avancarParaProximoJogador();
             return false;
         }
 
-        String linguagem = atual.getLinguagensFavoritas();
+        boolean isEasterEgg = numeroEspacos < 0;
+        int espacosEfetivos = isEasterEgg ? Math.abs(numeroEspacos) : numeroEspacos;
 
-        if (linguagem != null && !linguagem.isEmpty()) {
-            String primeiraLinguagem = linguagem;
-            if (linguagem.contains(";")) {
-                primeiraLinguagem = linguagem.split(";")[0];
-            }
-            String primeiraLinguagemTrimmada = primeiraLinguagem.trim();
-
-            if (primeiraLinguagemTrimmada.equalsIgnoreCase("C") && numeroEspacos >= 4) {
+        if (!isEasterEgg) {
+            if (numeroEspacos < 1 || numeroEspacos > 6) {
                 return false;
             }
 
-            if (primeiraLinguagemTrimmada.equalsIgnoreCase("Assembly") && numeroEspacos >= 3) {
-                return false;
+            String linguagem = atual.getLinguagensFavoritas();
+            if (linguagem != null && !linguagem.isEmpty()) {
+                String primeiraLinguagem = linguagem.contains(";") ? linguagem.split(";")[0] : linguagem;
+                String primeiraLinguagemTrimmada = primeiraLinguagem.trim();
+
+                if (primeiraLinguagemTrimmada.equalsIgnoreCase("C") && numeroEspacos >= 4) {
+                    return false;
+                }
+
+                if (primeiraLinguagemTrimmada.equalsIgnoreCase("Assembly") && numeroEspacos >= 3) {
+                    return false;
+                }
             }
         }
 
-        tabuleiro.moverJogador(atual, numeroEspacos);
-        this.ultimoLancamentoDado = numeroEspacos;
+        tabuleiro.moverJogador(atual, espacosEfetivos);
+        this.ultimoLancamentoDado = espacosEfetivos;
         contadorTurnos++;
 
         if (tabuleiro.verificaFinal(atual)) {
@@ -330,17 +343,17 @@ public class GameManager {
         return false;
     }
 
-    public Jogador getJogadorPresoNaPosicao(int posicao) {
-        for (Jogador jogador : jogadores) {
-            if (jogador.estaVivo()
-                    && jogador.estaPreso()
-                    && jogador.getPosicao() == posicao) {
-                return jogador;
-            }
-        }
-        return null;
+    public void prenderJogador(Jogador jogador) {
+        if (jogador == null) return;
+        jogador.setPreso(true);
+        turnosSaltados.put(jogador.getId(), 999);
     }
 
+    public void libertarJogador(Jogador jogador) {
+        if (jogador == null) return;
+        jogador.setPreso(false);
+        turnosSaltados.remove(jogador.getId());
+    }
 
     public ArrayList<String> getGameResults() {
         ArrayList<String> resultados = new ArrayList<>();
