@@ -43,7 +43,7 @@ public class CriacaoAbismo {
             case 5: return "Código duplicado";
             case 6: return "Efeitos secundários";
             case 7: return "Blue Screen of Death";
-            case 8: return "Ciclo infinito";
+            case 8: return "Ciclo Infinito";
             case 9: return "Segmentation fault";
             case 20: return "LLM";
             default: return null;
