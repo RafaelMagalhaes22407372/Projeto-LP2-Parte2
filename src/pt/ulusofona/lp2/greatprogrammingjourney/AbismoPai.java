@@ -32,12 +32,15 @@ public abstract class AbismoPai extends AbismoOuFerramenta {
 
     protected boolean anularComFerramenta(Jogador jogador) {
         String ferramentaNecessaria = anulacoes.get(id);
-        if (ferramentaNecessaria != null && jogador.getFerramentas().contains(ferramentaNecessaria)) {
-            jogador.getFerramentas().remove(ferramentaNecessaria);
-            return true;
+        if (ferramentaNecessaria != null) {
+            if (jogador.getFerramentas().contains(ferramentaNecessaria)) {
+                jogador.removerFerramenta(ferramentaNecessaria);
+                return true;
+            }
         }
         return false;
     }
+
 
     @Override
     public abstract String aplicaJogador(Jogador jogador, GameManager gestorJogo);
