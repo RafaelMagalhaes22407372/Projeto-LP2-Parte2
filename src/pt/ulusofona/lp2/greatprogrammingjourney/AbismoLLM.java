@@ -14,14 +14,15 @@ public class AbismoLLM extends AbismoPai{
         int avanco = posicaoAtual - posicaoAnterior;
         int posicaoAposAvanco = jogador.getPosicao() + avanco;
         int turnosDoJogador = gestorJogo.getTurnosPorJogador().getOrDefault(jogador.getId(), 0);
+        Boolean experiente = turnosDoJogador > 3;
 
-        if (turnosDoJogador > 3) {
-            gestorJogo.setPlayerPosition(jogador, posicaoAposAvanco);
-            return "Caiu no " + nome + " mas já tem experiência! Avança tantas casas como a do último movimento";
+        if (!experiente && anularComFerramenta(jogador)) {
+            return this.nome + " anulado por " + anulacoes.get(id);
         }
 
-        if (anularComFerramenta(jogador)) {
-            return this.nome + " anulado por " + anulacoes.get(id);
+        if (experiente) {
+            gestorJogo.setPlayerPosition(jogador, posicaoAposAvanco);
+            return "Caiu no " + nome + " mas já tem experiência! Avança tantas casas como a do último movimento";
         }
 
         gestorJogo.setPlayerPosition(jogador, posicaoAnterior);
