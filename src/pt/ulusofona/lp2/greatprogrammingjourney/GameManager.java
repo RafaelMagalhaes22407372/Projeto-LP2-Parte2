@@ -247,12 +247,6 @@ public class GameManager {
             return false;
         }
 
-        if (atual.estaPreso()) {
-            contadorTurnos++;
-            avancarParaProximoJogador();
-            return false;
-        }
-
         Integer saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
         if (saltos > 0) {
             turnosSaltados.put(atual.getId(), saltos - 1);
@@ -321,7 +315,7 @@ public class GameManager {
             return resultado;
         }
 
-        if (estadoJogo != EstadoJogo.TERMINADO) {
+        if (estadoJogo != EstadoJogo.TERMINADO && jogador.estaVivo()) {
             avancarParaProximoJogador();
         }
 
@@ -341,23 +335,6 @@ public class GameManager {
             }
         }
         return false;
-    }
-
-    public void prenderJogador(Jogador jogador) {
-        if (jogador == null) {
-            return;
-        }
-
-        jogador.setPreso(true);
-        turnosSaltados.put(jogador.getId(), 999);
-    }
-
-    public void libertarJogador(Jogador jogador) {
-        if (jogador == null) {
-            return;
-        }
-        jogador.setPreso(false);
-        turnosSaltados.remove(jogador.getId());
     }
 
     public ArrayList<String> getGameResults() {
