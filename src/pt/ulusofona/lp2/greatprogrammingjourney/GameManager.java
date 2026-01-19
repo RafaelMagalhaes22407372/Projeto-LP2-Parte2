@@ -627,7 +627,7 @@ public class GameManager {
         return null;
     }
 
-    private void avancarParaProximoJogador() {
+    public void avancarParaProximoJogador() {
         if (jogadores.isEmpty()) {
             jogadorAtual = null;
             return;
@@ -643,25 +643,17 @@ public class GameManager {
 
         for (int i = 1; i <= jogadores.size(); i++) {
             int proximoIndice = (indiceInicial + i) % jogadores.size();
-            Jogador proximo = jogadores.get(proximoIndice);
+            Jogador proximoJogador = jogadores.get(proximoIndice);
 
-            if (!proximo.estaVivo()) {
-                continue;
+            if (proximoJogador.estaVivo()) {
+                jogadorAtual = proximoJogador.getId();
+                return;
             }
-
-            int preso = turnosSaltados.getOrDefault(proximo.getId(), 0);
-            if (preso > 0) {
-                continue;
-            }
-
-            jogadorAtual = proximo.getId();
-            return;
         }
 
-        estadoJogo = EstadoJogo.TERMINADO;
         jogadorAtual = null;
+        estadoJogo = EstadoJogo.TERMINADO;
     }
-
 
     public void skipTurns(Jogador jogador, int n) {
         if (jogador == null || n <= 0) {
