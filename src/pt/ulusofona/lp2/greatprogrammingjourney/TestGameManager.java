@@ -246,4 +246,44 @@ public class TestGameManager {
         assertEquals("1", gm.getJogadorAtual());
     }
 
+    @Test
+    public void testDebug_turnosSaltados_quando_jogador_4_nao_devia_estar_preso() {
+
+        GameManager gm = new GameManager();
+
+        String[][] jogadores = {
+                {"1", "A", "Java", "Blue"},
+                {"2", "B", "Java", "Red"},
+                {"3", "C", "Java", "Green"},
+                {"4", "D", "Java", "Yellow"}
+        };
+
+        String[][] objetos = {
+                {"0", "8", "3"},
+                {"1", "1", "5"}
+        };
+
+        assertTrue(gm.createInitialBoard(jogadores, 10, objetos));
+
+        gm.eliminatePlayer(gm.getJogadorById("1"));
+        gm.eliminatePlayer(gm.getJogadorById("2"));
+
+        gm.moveCurrentPlayer(2);
+        gm.reactToAbyssOrTool();
+
+        gm.moveCurrentPlayer(4);
+        gm.reactToAbyssOrTool();
+
+        gm.moveCurrentPlayer(1);
+
+        gm.moveCurrentPlayer(2);
+        String r = gm.reactToAbyssOrTool();
+
+        System.out.println("DEBUG turnosSaltados = " + gm.getTurnosSaltados());
+
+        assertNotNull(r);
+    }
+
+
+
 }

@@ -248,19 +248,24 @@ public class GameManager {
             return false;
         }
 
-        String idAtual = normId(atual.getId());
-
-        int saltos = turnosSaltados.getOrDefault(idAtual, 0);
+        int saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
         if (saltos > 0) {
             saltos--;
 
             if (saltos <= 0) {
-                turnosSaltados.remove(idAtual);
+                turnosSaltados.remove(atual.getId());
             } else {
-                turnosSaltados.put(idAtual, saltos);
+                turnosSaltados.put(atual.getId(), saltos);
             }
 
             contadorTurnos++;
+
+            if (!existeJogadorEmJogo()) {
+                estadoJogo = EstadoJogo.TERMINADO;
+                jogadorAtual = null;
+                return false;
+            }
+
             avancarParaProximoJogador();
             return false;
         }
@@ -290,10 +295,9 @@ public class GameManager {
 
         tabuleiro.moverJogador(atual, espacosEfetivos);
 
-        int turnos = turnosPorJogador.getOrDefault(idAtual, 0);
-        turnosPorJogador.put(idAtual, turnos + 1);
+        turnosPorJogador.put(atual.getId(), turnosPorJogador.getOrDefault(atual.getId(), 0) + 1);
 
-        this.ultimoLancamentoDado = espacosEfetivos;
+        ultimoLancamentoDado = espacosEfetivos;
         contadorTurnos++;
 
         if (tabuleiro.verificaFinal(atual)) {
@@ -348,10 +352,9 @@ public class GameManager {
                 continue;
             }
 
-            String id = normId(jogador.getId());
-            int preso = turnosSaltados.getOrDefault(id, 0);
+            Integer preso = turnosSaltados.get(jogador.getId());
 
-            if (preso <= 0) {
+            if (preso == null || preso <= 0) {
                 return true;
             }
         }
@@ -362,11 +365,11 @@ public class GameManager {
         if (jogador == null) {
             return;
         }
-        turnosSaltados.remove(normId(jogador.getId()));
+        turnosSaltados.remove(jogador.getId());
     }
 
-    public String normId(String id) {
-        return id == null ? null : id.trim();
+    public HashMap<String, Integer> getTurnosSaltados() {
+        return turnosSaltados;
     }
 
     public ArrayList<String> getGameResults() {
@@ -640,25 +643,31 @@ public class GameManager {
 
         for (int i = 1; i <= jogadores.size(); i++) {
             int proximoIndice = (indiceInicial + i) % jogadores.size();
-            Jogador proximoJogador = jogadores.get(proximoIndice);
+            Jogador proximo = jogadores.get(proximoIndice);
 
-            if (proximoJogador.estaVivo()) {
-                jogadorAtual = proximoJogador.getId();
-                return;
+            if (!proximo.estaVivo()) {
+                continue;
             }
+
+            int preso = turnosSaltados.getOrDefault(proximo.getId(), 0);
+            if (preso > 0) {
+                continue;
+            }
+
+            jogadorAtual = proximo.getId();
+            return;
         }
-        jogadorAtual = null;
+
         estadoJogo = EstadoJogo.TERMINADO;
+        jogadorAtual = null;
     }
+
 
     public void skipTurns(Jogador jogador, int n) {
         if (jogador == null || n <= 0) {
             return;
         }
-
-        String id = normId(jogador.getId());
-        int atual = turnosSaltados.getOrDefault(id, 0);
-        turnosSaltados.put(id, atual + n);
+        turnosSaltados.put(jogador.getId(), turnosSaltados.getOrDefault(jogador.getId(), 0) + n);
     }
 
     public void eliminatePlayer(Jogador jogador) {
