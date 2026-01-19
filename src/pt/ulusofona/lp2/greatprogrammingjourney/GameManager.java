@@ -251,7 +251,7 @@ public class GameManager {
             return false;
         }
 
-        if (estaPresoNoCiclo(atual)) {
+        if (jogadorEstaPresoNoCiclo(atual.getId())) {
             contadorTurnos++;
             avancarParaProximoJogador();
             return false;
@@ -260,7 +260,6 @@ public class GameManager {
         int saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
         if (saltos > 0) {
             saltos--;
-
             if (saltos <= 0) {
                 turnosSaltados.remove(atual.getId());
             } else {
@@ -282,14 +281,14 @@ public class GameManager {
 
             String linguagem = atual.getLinguagensFavoritas();
             if (linguagem != null && !linguagem.isEmpty()) {
-                String primeiraLinguagem = linguagem.contains(";") ? linguagem.split(";")[0] : linguagem;
-                String primeiraLinguagemTrimmada = primeiraLinguagem.trim();
+                String primeira = linguagem.contains(";") ? linguagem.split(";")[0] : linguagem;
+                primeira = primeira.trim();
 
-                if (primeiraLinguagemTrimmada.equalsIgnoreCase("C") && numeroEspacos >= 4) {
+                if (primeira.equalsIgnoreCase("C") && numeroEspacos >= 4) {
                     return false;
                 }
 
-                if (primeiraLinguagemTrimmada.equalsIgnoreCase("Assembly") && numeroEspacos >= 3) {
+                if (primeira.equalsIgnoreCase("Assembly") && numeroEspacos >= 3) {
                     return false;
                 }
             }
@@ -297,7 +296,10 @@ public class GameManager {
 
         tabuleiro.moverJogador(atual, espacosEfetivos);
 
-        turnosPorJogador.put(atual.getId(), turnosPorJogador.getOrDefault(atual.getId(), 0) + 1);
+        turnosPorJogador.put(
+                atual.getId(),
+                turnosPorJogador.getOrDefault(atual.getId(), 0) + 1
+        );
 
         ultimoLancamentoDado = espacosEfetivos;
         contadorTurnos++;
@@ -310,16 +312,13 @@ public class GameManager {
         return true;
     }
 
-
     public Map<String, Integer> getTurnosPorJogador() {
         return turnosPorJogador;
     }
 
     public String reactToAbyssOrTool() {
         Jogador jogador = getJogadorById(jogadorAtual);
-        if (jogador == null) {
-            return null;
-        }
+        if (jogador == null) return null;
 
         int pos = jogador.getPosicao();
         AbismoOuFerramenta objeto = tabuleiro.getAbismoOuFerramenta(pos);
@@ -328,22 +327,10 @@ public class GameManager {
             if (estadoJogo != EstadoJogo.TERMINADO && jogador.estaVivo()) {
                 avancarParaProximoJogador();
             }
-
-            if (!existeJogadorEmJogo()) {
-                estadoJogo = EstadoJogo.TERMINADO;
-                jogadorAtual = null;
-            }
-
             return null;
         }
 
         String resultado = objeto.aplicaJogador(jogador, this);
-
-        if (!existeJogadorEmJogo()) {
-            estadoJogo = EstadoJogo.TERMINADO;
-            jogadorAtual = null;
-            return resultado;
-        }
 
         if (estadoJogo != EstadoJogo.TERMINADO && jogador.estaVivo()) {
             avancarParaProximoJogador();
@@ -352,7 +339,6 @@ public class GameManager {
         return resultado;
     }
 
-
     public boolean gameIsOver() {
         if (getVencedorNome() != null) {
             return true;
@@ -360,7 +346,6 @@ public class GameManager {
 
         return !existeJogadorEmJogo();
     }
-
 
     public boolean existeJogadorEmJogo() {
         for (Jogador j : jogadores) {
@@ -687,17 +672,27 @@ public class GameManager {
 
         for (int i = 1; i <= jogadores.size(); i++) {
             int proximoIndice = (indiceInicial + i) % jogadores.size();
-            Jogador proximoJogador = jogadores.get(proximoIndice);
+            Jogador proximo = jogadores.get(proximoIndice);
 
-            if (proximoJogador.estaVivo()) {
-                jogadorAtual = proximoJogador.getId();
-                return;
+            if (!proximo.estaVivo()) {
+                continue;
             }
+
+            boolean presoTurnos = turnosSaltados.getOrDefault(proximo.getId(), 0) > 0;
+            boolean presoCiclo  = jogadorEstaPresoNoCiclo(proximo.getId());
+
+            if (presoTurnos || presoCiclo) {
+                continue;
+            }
+
+            jogadorAtual = proximo.getId();
+            return;
         }
 
         jogadorAtual = null;
         estadoJogo = EstadoJogo.TERMINADO;
     }
+
 
     public void skipTurns(Jogador jogador, int n) {
         if (jogador == null || n <= 0) {
