@@ -312,7 +312,9 @@ public class GameManager {
 
     public String reactToAbyssOrTool() {
         Jogador jogador = getJogadorById(jogadorAtual);
-        if (jogador == null) return null;
+        if (jogador == null) {
+            return null;
+        }
 
         int pos = jogador.getPosicao();
         AbismoOuFerramenta objeto = tabuleiro.getAbismoOuFerramenta(pos);
@@ -666,26 +668,18 @@ public class GameManager {
 
         for (int i = 1; i <= jogadores.size(); i++) {
             int proximoIndice = (indiceInicial + i) % jogadores.size();
-            Jogador proximo = jogadores.get(proximoIndice);
+            Jogador proximoJogador = jogadores.get(proximoIndice);
 
-            if (!proximo.estaVivo()) {
-                continue;
+            if (proximoJogador.estaVivo()) {
+                jogadorAtual = proximoJogador.getId();
+                return;
             }
-
-            boolean presoTurnos = turnosSaltados.getOrDefault(proximo.getId(), 0) > 0;
-            boolean presoCiclo  = jogadorEstaPresoNoCiclo(proximo.getId());
-
-            if (presoTurnos || presoCiclo) {
-                continue;
-            }
-
-            jogadorAtual = proximo.getId();
-            return;
         }
 
         jogadorAtual = null;
         estadoJogo = EstadoJogo.TERMINADO;
     }
+
 
 
     public void skipTurns(Jogador jogador, int n) {

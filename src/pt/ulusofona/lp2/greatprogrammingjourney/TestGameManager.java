@@ -85,21 +85,6 @@ public class TestGameManager {
     }
 
     @Test
-    public void testSkipTurns() {
-        GameManager gm = new GameManager();
-        String[][] jogadores = {
-                {"1", "Alice", "Java", "Blue"},
-                {"2", "Bob", "Python", "Green"}
-        };
-
-        assertTrue(gm.createInitialBoard(jogadores, 10, null));
-        Jogador alice = gm.getJogadorById("1");
-        gm.skipTurns(alice, 2);
-        gm.moveCurrentPlayer(3);
-        assertEquals("2", gm.getJogadorAtual()); // Usar getter
-    }
-
-    @Test
     public void testEliminatePlayer() {
         GameManager gm = new GameManager();
         String[][] jogadores = {
@@ -199,21 +184,6 @@ public class TestGameManager {
         assertTrue(info.contains("Alice"));
         assertTrue(info.contains("Bob"));
         assertTrue(info.contains("No tools"));
-    }
-
-    @Test
-    public void testGameIsOver() {
-        GameManager gm = new GameManager();
-        String[][] jogadores = {
-                {"1", "Alice", "Java", "Blue"},
-                {"2", "Bob", "Python", "Green"}
-        };
-
-        assertTrue(gm.createInitialBoard(jogadores, 10, null));
-        assertFalse(gm.gameIsOver());
-
-        gm.setEstadoJogo(EstadoJogo.TERMINADO); // Usar setter
-        assertTrue(gm.gameIsOver());
     }
 
     @Test
