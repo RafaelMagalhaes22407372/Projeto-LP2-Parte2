@@ -247,13 +247,11 @@ public class GameManager {
         Jogador atual = getJogadorById(jogadorAtual);
 
         if (atual == null || !atual.estaVivo()) {
-            avancarParaProximoJogador();
             return false;
         }
 
         if (jogadorEstaPresoNoCiclo(atual.getId())) {
             contadorTurnos++;
-            avancarParaProximoJogador();
             return false;
         }
 
@@ -265,9 +263,7 @@ public class GameManager {
             } else {
                 turnosSaltados.put(atual.getId(), saltos);
             }
-
             contadorTurnos++;
-            avancarParaProximoJogador();
             return false;
         }
 
@@ -296,10 +292,7 @@ public class GameManager {
 
         tabuleiro.moverJogador(atual, espacosEfetivos);
 
-        turnosPorJogador.put(
-                atual.getId(),
-                turnosPorJogador.getOrDefault(atual.getId(), 0) + 1
-        );
+        turnosPorJogador.put(atual.getId(), turnosPorJogador.getOrDefault(atual.getId(), 0) + 1);
 
         ultimoLancamentoDado = espacosEfetivos;
         contadorTurnos++;
@@ -311,6 +304,7 @@ public class GameManager {
 
         return true;
     }
+
 
     public Map<String, Integer> getTurnosPorJogador() {
         return turnosPorJogador;
