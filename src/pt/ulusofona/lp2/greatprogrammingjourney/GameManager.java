@@ -20,6 +20,7 @@ public class GameManager {
     private EstadoJogo estadoJogo;
     private NomesDosPNG nomesDosPNG;
     private Map<String, Integer> turnosPorJogador = new HashMap<>();
+    private HashMap<Integer, String> presoNoCicloPorPosicao = new HashMap<>();
 
     public GameManager() {
     }
@@ -38,6 +39,8 @@ public class GameManager {
         this.tabuleiro = new Tabuleiro(tamanhoMundo);
         this.jogadores.clear();
         this.turnosSaltados.clear();
+        this.presoNoCicloPorPosicao.clear();
+        this.turnosPorJogador.clear();
 
         for (String[] jogadorInfo : informacaoJogadores) {
             if (jogadorInfo == null || jogadorInfo.length != 4) {
@@ -214,7 +217,7 @@ public class GameManager {
         String estado;
         if (!jogador.estaVivo()) {
             estado = "Derrotado";
-        } else if (turnosSaltados.containsKey(jogador.getId()) && turnosSaltados.get(jogador.getId()) > 0) {
+        } else if ((turnosSaltados.getOrDefault(jogador.getId(), 0) > 0) || estaPresoNoCiclo(jogador)) {
             estado = "Preso";
         } else {
             estado = "Em Jogo";
@@ -248,6 +251,12 @@ public class GameManager {
             return false;
         }
 
+        if (estaPresoNoCiclo(atual)) {
+            contadorTurnos++;
+            avancarParaProximoJogador();
+            return false;
+        }
+
         int saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
         if (saltos > 0) {
             saltos--;
@@ -259,13 +268,6 @@ public class GameManager {
             }
 
             contadorTurnos++;
-
-            if (!existeJogadorEmJogo()) {
-                estadoJogo = EstadoJogo.TERMINADO;
-                jogadorAtual = null;
-                return false;
-            }
-
             avancarParaProximoJogador();
             return false;
         }
@@ -323,7 +325,15 @@ public class GameManager {
         AbismoOuFerramenta objeto = tabuleiro.getAbismoOuFerramenta(pos);
 
         if (objeto == null) {
-            avancarParaProximoJogador();
+            if (estadoJogo != EstadoJogo.TERMINADO && jogador.estaVivo()) {
+                avancarParaProximoJogador();
+            }
+
+            if (!existeJogadorEmJogo()) {
+                estadoJogo = EstadoJogo.TERMINADO;
+                jogadorAtual = null;
+            }
+
             return null;
         }
 
@@ -342,23 +352,52 @@ public class GameManager {
         return resultado;
     }
 
+
     public boolean gameIsOver() {
         return estadoJogo == EstadoJogo.TERMINADO;
     }
 
     public boolean existeJogadorEmJogo() {
-        for (Jogador jogador : jogadores) {
-            if (!jogador.estaVivo()) {
+        for (Jogador j : jogadores) {
+            if (!j.estaVivo()) {
                 continue;
             }
 
-            Integer preso = turnosSaltados.get(jogador.getId());
+            int presoTurnos = turnosSaltados.getOrDefault(j.getId(), 0);
+            boolean presoCiclo = estaPresoNoCiclo(j);
 
-            if (preso == null || preso <= 0) {
+            if (presoTurnos <= 0 && !presoCiclo) {
                 return true;
             }
         }
         return false;
+    }
+
+
+    public boolean estaPresoNoCiclo(Jogador jogador) {
+        return jogador != null && jogadorEstaPresoNoCiclo(jogador.getId());
+    }
+
+    public void prenderNoCiclo(int posicao, String jogadorId) {
+        if (jogadorId == null) {
+            return;
+        }
+        presoNoCicloPorPosicao.put(posicao, jogadorId);
+    }
+
+    public void libertarPresoDoCiclo(int posicao) {
+        presoNoCicloPorPosicao.remove(posicao);
+    }
+
+    public String getPresoDoCiclo(int posicao) {
+        return presoNoCicloPorPosicao.get(posicao);
+    }
+
+    public boolean jogadorEstaPresoNoCiclo(String jogadorId) {
+        if (jogadorId == null) {
+            return false;
+        }
+        return presoNoCicloPorPosicao.containsValue(jogadorId);
     }
 
     public void limparTurnosSaltados(Jogador jogador) {

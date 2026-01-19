@@ -9,13 +9,25 @@ public class AbismoCicloInfinito extends AbismoPai {
     @Override
     public String aplicaJogador(Jogador jogador, GameManager gestorJogo) {
 
+        // Se tem ferramenta: não fica preso e não liberta quem já estava preso
         if (anularComFerramenta(jogador)) {
-            gestorJogo.limparTurnosSaltados(jogador);
             return this.nome + " anulado por " + anulacoes.get(id);
         }
 
-        gestorJogo.skipTurns(jogador, 3);
+        int pos = this.getPosicao();
+
+        String presoAtual = gestorJogo.getPresoDoCiclo(pos);
+
+        // ✅ Só liberta se estava lá OUTRO jogador preso
+        if (presoAtual != null && !presoAtual.equals(jogador.getId())) {
+            gestorJogo.libertarPresoDoCiclo(pos);
+        }
+
+        // ✅ Agora este jogador fica preso
+        gestorJogo.prenderNoCiclo(pos, jogador.getId());
+
         return "Caiu em " + nome;
     }
+
 
 }
