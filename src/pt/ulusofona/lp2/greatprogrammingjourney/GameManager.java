@@ -248,12 +248,18 @@ public class GameManager {
             return false;
         }
 
-        Integer saltos = turnosSaltados.getOrDefault(atual.getId(), 0);
+        String idAtual = normId(atual.getId());
+
+        int saltos = turnosSaltados.getOrDefault(idAtual, 0);
         if (saltos > 0) {
-            turnosSaltados.put(atual.getId(), saltos - 1);
-            if (turnosSaltados.get(atual.getId()) == 0) {
-                turnosSaltados.remove(atual.getId());
+            saltos--;
+
+            if (saltos <= 0) {
+                turnosSaltados.remove(idAtual);
+            } else {
+                turnosSaltados.put(idAtual, saltos);
             }
+
             contadorTurnos++;
             avancarParaProximoJogador();
             return false;
@@ -284,7 +290,8 @@ public class GameManager {
 
         tabuleiro.moverJogador(atual, espacosEfetivos);
 
-        turnosPorJogador.put(atual.getId(), turnosPorJogador.getOrDefault(atual.getId(), 0) + 1);
+        int turnos = turnosPorJogador.getOrDefault(idAtual, 0);
+        turnosPorJogador.put(idAtual, turnos + 1);
 
         this.ultimoLancamentoDado = espacosEfetivos;
         contadorTurnos++;
@@ -296,6 +303,7 @@ public class GameManager {
 
         return true;
     }
+
 
     public Map<String, Integer> getTurnosPorJogador() {
         return turnosPorJogador;
@@ -340,9 +348,10 @@ public class GameManager {
                 continue;
             }
 
-            Integer preso = turnosSaltados.get(jogador.getId());
+            String id = normId(jogador.getId());
+            int preso = turnosSaltados.getOrDefault(id, 0);
 
-            if (preso == null || preso <= 0) {
+            if (preso <= 0) {
                 return true;
             }
         }
@@ -350,8 +359,14 @@ public class GameManager {
     }
 
     public void limparTurnosSaltados(Jogador jogador) {
-        if (jogador == null) return;
-        turnosSaltados.remove(jogador.getId());
+        if (jogador == null) {
+            return;
+        }
+        turnosSaltados.remove(normId(jogador.getId()));
+    }
+
+    public String normId(String id) {
+        return id == null ? null : id.trim();
     }
 
     public ArrayList<String> getGameResults() {
@@ -640,7 +655,10 @@ public class GameManager {
         if (jogador == null || n <= 0) {
             return;
         }
-        turnosSaltados.put(jogador.getId(), turnosSaltados.getOrDefault(jogador.getId(), 0) + n);
+
+        String id = normId(jogador.getId());
+        int atual = turnosSaltados.getOrDefault(id, 0);
+        turnosSaltados.put(id, atual + n);
     }
 
     public void eliminatePlayer(Jogador jogador) {
