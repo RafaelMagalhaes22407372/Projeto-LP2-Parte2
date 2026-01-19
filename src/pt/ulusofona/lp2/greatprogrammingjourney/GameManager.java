@@ -354,8 +354,13 @@ public class GameManager {
 
 
     public boolean gameIsOver() {
-        return estadoJogo == EstadoJogo.TERMINADO;
+        if (getVencedorNome() != null) {
+            return true;
+        }
+
+        return !existeJogadorEmJogo();
     }
+
 
     public boolean existeJogadorEmJogo() {
         for (Jogador j : jogadores) {
