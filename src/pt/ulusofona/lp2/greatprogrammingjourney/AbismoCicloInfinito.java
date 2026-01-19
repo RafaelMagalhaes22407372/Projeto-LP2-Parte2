@@ -8,11 +8,14 @@ public class AbismoCicloInfinito extends AbismoPai {
 
     @Override
     public String aplicaJogador(Jogador jogador, GameManager gestorJogo) {
+
         if (anularComFerramenta(jogador)) {
+            gestorJogo.limparTurnosSaltados(jogador);
             return this.nome + " anulado por " + anulacoes.get(id);
         }
 
         gestorJogo.skipTurns(jogador, 3);
         return "Caiu em " + nome;
     }
+
 }

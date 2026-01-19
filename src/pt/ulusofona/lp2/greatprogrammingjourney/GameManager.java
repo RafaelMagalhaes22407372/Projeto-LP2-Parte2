@@ -336,13 +336,22 @@ public class GameManager {
 
     public boolean existeJogadorEmJogo() {
         for (Jogador jogador : jogadores) {
-            if (jogador.estaVivo()
-                    && (!turnosSaltados.containsKey(jogador.getId())
-                    || turnosSaltados.get(jogador.getId()) == 0)) {
+            if (!jogador.estaVivo()) {
+                continue;
+            }
+
+            Integer preso = turnosSaltados.get(jogador.getId());
+
+            if (preso == null || preso <= 0) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void limparTurnosSaltados(Jogador jogador) {
+        if (jogador == null) return;
+        turnosSaltados.remove(jogador.getId());
     }
 
     public ArrayList<String> getGameResults() {
